@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+python-multipart
+
+numpy
+
+opencv-contrib-python-headless==5.0.0.93
