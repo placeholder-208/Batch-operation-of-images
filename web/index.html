@@ -27,8 +27,130 @@
             margin-top: 0;
         }
 
-        #fileInput {
+        .drop-zone {
             margin-bottom: 20px;
+            padding: 24px 20px;
+            border: 2px dashed #c9cfd8;
+            border-radius: 12px;
+            background: white;
+            text-align: center;
+            transition:
+                border-color 0.15s ease,
+                background 0.15s ease;
+        }
+
+        .drop-zone.drag-over {
+            border-color: #1677ff;
+            background: #f0f7ff;
+        }
+
+        .drop-zone-text {
+            margin-bottom: 16px;
+            font-size: 15px;
+            color: #444;
+        }
+
+        .drop-zone-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .drop-zone-hint {
+            font-size: 13px;
+            color: #777;
+        }
+
+        .action-button {
+            min-height: 38px;
+            padding: 0 18px;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
+            background: white;
+            color: #222;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .action-button:hover:not(:disabled) {
+            background: #f5f5f5;
+        }
+
+        .action-button:disabled {
+            color: #aaa;
+            cursor: not-allowed;
+        }
+
+        .action-button.primary {
+            border-color: #1677ff;
+            background: #1677ff;
+            color: white;
+        }
+
+        .action-button.primary:hover:not(:disabled) {
+            background: #0958d9;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .notice {
+            margin-bottom: 20px;
+            padding: 10px 14px;
+            border: 1px solid #ffe1a8;
+            border-radius: 8px;
+            background: #fff8e6;
+            color: #7a5b00;
+            font-size: 14px;
+        }
+
+        .result-warning {
+            margin-top: 12px;
+            padding: 12px 14px;
+            border: 1px solid #ffe1a8;
+            border-radius: 8px;
+            background: #fff8e6;
+            color: #7a5b00;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .result-error {
+            margin-top: 12px;
+            padding: 12px 14px;
+            border: 1px solid #ffccc7;
+            border-radius: 8px;
+            background: #fff1f0;
+            color: #a8071a;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .empty-state {
+            padding: 20px 22px;
+            border: 1px solid #ffe1a8;
+            border-radius: 12px;
+            background: #fff8e6;
+            color: #7a5b00;
+        }
+
+        .empty-state h2 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+
+        .empty-state ul {
+            margin: 8px 0 0;
+            padding-left: 20px;
+            line-height: 1.7;
         }
 
         .result {
@@ -233,25 +355,72 @@
 
     <h1>ZXing WASM Test</h1>
 
-    <div>
-        <label for="fileInput">选择图片：</label>
-        <input
-            id="fileInput"
-            type="file"
-            accept="image/*"
-            multiple
-        >
-        <div style="margin-bottom: 20px;">
-            <label>
-                <input id="zipOutput" type="checkbox">
-                输出切割后图片 ZIP
-            </label>
+    <div id="dropZone" class="drop-zone">
+        <div class="drop-zone-text">
+            把图片拖到这里，或者使用下面的方式添加
+        </div>
 
-            <button id="downloadAllZip" type="button" disabled>
-                下载全部裁剪结果 ZIP
+        <div class="drop-zone-actions">
+            <button
+                id="pickFilesButton"
+                type="button"
+                class="action-button primary"
+            >
+                选择图片
+            </button>
+
+            <button
+                id="pickFolderButton"
+                type="button"
+                class="action-button"
+            >
+                选择文件夹
+            </button>
+
+            <button
+                id="clearButton"
+                type="button"
+                class="action-button"
+                disabled
+            >
+                清空 / 重新开始
             </button>
         </div>
+
+        <div class="drop-zone-hint">
+            支持拖入图片或整个文件夹，也可以按 Ctrl + V
+            粘贴剪贴板里的图片；重复选择会累加，需要重新开始时点「清空」
+        </div>
     </div>
+
+    <input
+        id="fileInput"
+        type="file"
+        accept="image/*"
+        multiple
+        hidden
+    >
+
+    <input
+        id="folderInput"
+        type="file"
+        webkitdirectory
+        multiple
+        hidden
+    >
+
+    <div class="toolbar">
+        <label>
+            <input id="zipOutput" type="checkbox">
+            输出切割后图片 ZIP
+        </label>
+
+        <button id="downloadAllZip" type="button" disabled>
+            下载全部裁剪结果 ZIP
+        </button>
+    </div>
+
+    <div id="notice" class="notice" hidden></div>
 
     <div id="results"></div>
 
