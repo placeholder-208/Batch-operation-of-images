@@ -22,3 +22,6 @@ Thumbs.db
 
 # Temporary files
 *.tmp
+
+# test files
+test.py
