@@ -1,6 +1,6 @@
 import {
-    decodeCurvedCandidates
-} from "./curved-decoder.js";
+    decodeWechatFallback
+} from "./wechat-decoder.js";
 
 const ZXING_CONFIG = {
     overrides: {
@@ -219,9 +219,13 @@ export async function decodeQRCode(
 
     const uniqueDecoded = deduplicateResults(decoded);
 
-    const uniqueCandidates = deduplicateCandidates(
-        candidates
-    );
+    try {
+        const recovered = await decodeWechatFallback(sourceCanvas, uniqueDecoded);
 
-    return deduplicateResults(uniqueDecoded);
+        return deduplicateResults([...uniqueDecoded, ...recovered]);
+    } catch (error) {
+        console.error("WeChat 检测兜底失败", error);
+
+        return uniqueDecoded;
+    }
 }
