@@ -1,3 +1,4 @@
+import { report } from "./runtime-status.js";
 import { detectWechatRegions } from "./wechat-detector.js";
 import { decodeCurvedRegion, analyzeCurvedImage } from "./curved-region.js";
 
@@ -123,6 +124,8 @@ export async function decodeWechatFallback(sourceCanvas, existing = []) {
         // 每张图片最多校正两个失败区域，每个区域最多尝试十二种采样结果。
         if (curvedAttempted >= 2) { curvedBudgetSkipped++; continue; }
         curvedAttempted++;
+        report("curved", "正在校正第 " + curvedAttempted + " 个区域…");
+        const curvedStarted = performance.now();
         try {
             const corrected = await decodeCurvedRegion(canvas, {
                 maxPixels: 360000,
@@ -130,10 +133,12 @@ export async function decodeWechatFallback(sourceCanvas, existing = []) {
                 geometryMs: 2000,
                 moduleSizeHint
             });
+            report("curved", "校正解码 " + corrected.length + " 个 · " + Math.round(performance.now() - curvedStarted) + " ms", "ready");
             for (const result of corrected) {
                 decoded.push(translateResult(result, left, top));
             }
         } catch (error) {
+            report("curved", "校正失败：" + error.message, "error");
             console.warn("[局部曲面校正失败]", error);
         }
     }

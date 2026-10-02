@@ -6,14 +6,14 @@ export async function processFile(file) {
     canvas.width = bitmap.width;
     canvas.height = bitmap.height;
 
-    const context = canvas.getContext("2d");
+    const context = canvas.getContext("2d", { willReadFrequently: true });
 
-    context.drawImage(bitmap, 0, 0);
+    try { context.drawImage(bitmap, 0, 0); } finally { bitmap.close(); }
 
     return {
         image: canvas.toDataURL("image/png"),
-        width: bitmap.width,
-        height: bitmap.height,
+width: canvas.width,
+        height: canvas.height,
         canvas: canvas
     };
 }

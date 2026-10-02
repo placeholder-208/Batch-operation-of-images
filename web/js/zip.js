@@ -62,6 +62,7 @@ export async function createImageZip(result) {
 
 export async function createAllZip(results) {
     const totalZip = new JSZip();
+    const usedNames = new Set();
 
     for (const result of results) {
         const imageZip = await createImageZip(result);
@@ -71,8 +72,12 @@ export async function createAllZip(results) {
             ""
         );
 
+        let archiveName = `${baseName}.zip`;
+        let suffix = 2;
+        while (usedNames.has(archiveName)) archiveName = `${baseName}-${suffix++}.zip`;
+        usedNames.add(archiveName);
         totalZip.file(
-            `${baseName}.zip`,
+            archiveName,
             imageZip
         );
     }

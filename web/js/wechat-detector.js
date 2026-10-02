@@ -1,3 +1,4 @@
+import { report } from "./runtime-status.js";
 const MODEL_URL = new URL(
     "../models/detect-web.onnx",
     import.meta.url
@@ -75,10 +76,12 @@ async function fetchRuntimeBinary() {
         header: Array.from(bytes.subarray(0, 8))
     });
 
+    report("wechat", "WASM 下载完成：" + bytes.byteLength + " 字节");
     return bytes;
 }
 
 async function loadDetector() {
+    report("wechat", "加载配置与运行库…");
     const runtime = globalThis.ort;
 
     if (!runtime) {
@@ -111,6 +114,7 @@ async function loadDetector() {
     runtime.env.wasm.wasmBinary =
         await fetchRuntimeBinary();
 
+    report("wechat", "正在创建检测会话…");
     console.log("[WeChat] 开始创建检测会话");
 
     const session = await runtime.InferenceSession.create(
@@ -121,6 +125,7 @@ async function loadDetector() {
         }
     );
 
+    report("wechat", "检测会话已就绪", "ready");
     console.log("[WeChat] 检测会话创建成功");
 
     return {
@@ -134,6 +139,7 @@ function getDetector() {
     if (!detectorPromise) {
         detectorPromise = loadDetector().catch(function (error) {
             detectorPromise = null;
+            report("wechat", "加载失败：" + (error.message || String(error)), "error");
             throw error;
         });
     }
@@ -438,6 +444,7 @@ export async function detectWechatRegions(sourceCanvas) {
     const startedAt = performance.now();
     const { config, session } = await getDetector();
 
+    report("wechat", "正在检测候选区域…");
     const input = prepareInput(
         sourceCanvas,
         config.inputSize
@@ -473,6 +480,7 @@ export async function detectWechatRegions(sourceCanvas) {
             boxes: regions
         });
 
+        report("wechat", "候选 " + regions.length + " 个 · " + Math.round(performance.now() - startedAt) + " ms", "ready");
         return regions;
     } finally {
         input.dispose();

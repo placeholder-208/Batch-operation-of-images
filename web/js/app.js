@@ -1,204 +1,80 @@
-import { decodeQRCode } from "./decoder.js";
 import { processFile } from "./image.js";
 import { perspectiveCrop } from "./crop.js";
 import { createDecodeVariants } from "./preprocess.js";
-import {
-    createImageZip,
-    createAllZip
-} from "./zip.js";
+import { createImageZip, createAllZip } from "./zip.js";
+import { createUI, downloadBlob } from "./ui.js";
+import { report } from "./runtime-status.js";
 
-import {
-    fileInput,
-    progressText,
-    progressBar,
-    resultsContainer,
-    zipOutput,
-    downloadAllZip,
-    updateDownloadButtonState,
-    updateProgress,
-    renderResult
-} from "./ui.js";
+let running = false, exporting = false, decoderPromise = null;
+const tick = () => new Promise(resolve => setTimeout(resolve, 0));
+const ui = createUI({scan, export: exportResults, isExporting: () => exporting});
+report("zxing", window.ZXingWASM ? "脚本已加载，等待首次解码" : "脚本加载失败", window.ZXingWASM ? "info" : "error");
+report("wechat", globalThis.ort ? "运行库脚本已加载，模型按需加载" : "ONNX Runtime 脚本加载失败", globalThis.ort ? "info" : "error");
+report("curved", "等待任务");
 
-
-let currentResults = [];
-
-
-function assignIds(qrcodes) {
-    return qrcodes.map(function (qr, index) {
-        return {
-            ...qr,
-            id: index + 1
-        };
+async function loadDecoder() {
+    if (!decoderPromise) decoderPromise = import("./decoder.js").catch(error => {
+        decoderPromise = null;
+        report("zxing", "模块加载失败：" + error.message, "error");
+        throw error;
     });
+    return decoderPromise;
 }
-
-
-function downloadBlob(blob, filename) {
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-
-    link.href = url;
-    link.download = filename;
-
-    document.body.appendChild(link);
-
-    link.click();
-    link.remove();
-
-    URL.revokeObjectURL(url);
-}
-
-
-async function downloadImageZip(result) {
-    const blob = await createImageZip(result);
-
-    const baseName = result.filename.replace(
-        /\.[^/.]+$/,
-        ""
-    );
-
-    downloadBlob(blob, `${baseName}.zip`);
-}
-
-
-async function processQRCodeFile(file) {
-    const imageData = await processFile(file);
-
-    const variants = createDecodeVariants(imageData.canvas);
-
-    const detected = await decodeQRCode(
-        variants,
-        imageData.canvas
-    );
-
-    const qrcodes = assignIds(detected);
-
-    const crops = qrcodes.map(function (qr) {
-        const cropCanvas = perspectiveCrop(
-            imageData.canvas,
-            qr.points,
-            20
-        );
-
-        return {
-            id: qr.id,
-            canvas: cropCanvas,
-            image: cropCanvas.toDataURL("image/png")
-        };
-    });
-
-    return {
-        filename: file.name,
-        width: imageData.width,
-        height: imageData.height,
-        image: imageData.image,
-        count: qrcodes.length,
-        qrcodes: qrcodes,
-        crops: crops
-    };
-}
-
-
-fileInput.addEventListener("change", async function () {
-    const files = Array.from(fileInput.files);
-
-    if (!files.length) {
-        return;
-    }
-
-    resultsContainer.innerHTML = "";
-    currentResults = [];
-
-    progressText.textContent = "准备识别...";
-    progressBar.style.width = "0%";
-
-    updateDownloadButtonState(false);
-
+async function scan(items) {
+    if (running || exporting || !items.length) return;
+    running = true; ui.busy(true); ui.progress(0, items.length);
+    const began = performance.now(); let succeeded = 0, failed = 0, totalCount = 0;
     try {
-        let totalCount = 0;
-
-        for (let index = 0; index < files.length; index++) {
-            const file = files[index];
-
-            updateProgress(
-                index + 1,
-                files.length,
-                file.name
-            );
-
-            const result = await processQRCodeFile(file);
-
-            totalCount += result.count;
-
-            currentResults.push(result);
-
-            renderResult(
-                file,
-                result,
-                downloadImageZip
-            );
+        const {decodeQRCode} = await loadDecoder();
+        for (let index = 0; index < items.length; index++) {
+            const item = items[index]; item.processing = true; item.error = null;
+            ui.tell("正在识别第 " + (index+1) + " / " + items.length + " 张：" + item.file.name, "qr");
+            ui.detail("正在读取图片…"); ui.refresh(); await tick();
+            const started = performance.now();
+            try {
+                const source = await processFile(item.file);
+                ui.detail("正在生成图像预处理版本…"); await tick();
+                const variants = createDecodeVariants(source.canvas);
+                ui.detail("正在执行 " + variants.length + " 个解码版本与检测兜底…"); await tick();
+                const detected = await decodeQRCode(variants, source.canvas);
+                const qrcodes = detected.map((qr,index)=>({...qr,id:index+1}));
+                const crops = []; let cropFailed = 0;
+                ui.detail("正在生成二维码裁切图片…"); await tick();
+                for (const qr of qrcodes) {
+                    try {
+                        const canvas = perspectiveCrop(source.canvas,qr.points,20);
+                        crops.push({id:qr.id,canvas,image:canvas.toDataURL("image/png")});
+                    } catch(error) {cropFailed++;console.warn("二维码 #"+qr.id+" 裁切失败",error);}
+                }
+                item.result = {filename:item.file.name,width:source.width,height:source.height,image:item.url,
+                    count:qrcodes.length,qrcodes,crops};
+                item.elapsedMs = Math.round(performance.now()-started);
+                totalCount += qrcodes.length; succeeded++;
+                ui.detail("本图 " + item.elapsedMs + " ms · 识别 " + qrcodes.length + " 个" + (cropFailed ? " · "+cropFailed+" 个裁切失败，内容已保留" : ""));
+                // 原图使用文件 URL 预览；不在结果中长期缓存原图 Canvas 或大体积 data URL。
+            } catch(error) {
+                failed++;item.error=error.message||String(error);ui.detail("本图失败："+item.error);console.error(error);
+            } finally {
+                item.processing=false;ui.progress(index+1,items.length);ui.refresh();await tick();
+            }
         }
-
-        progressText.textContent =
-            `识别完成：${files.length} 张图片，共识别 ${totalCount} 个二维码`;
-
-        progressBar.style.width = "100%";
-
-        updateDownloadButtonState(
-            currentResults.length > 0
-        );
-    } catch (error) {
-        console.error(error);
-
-        progressText.textContent =
-            "识别失败：" +
-            (error.message || String(error));
-
-        progressBar.style.width = "0%";
-
-        updateDownloadButtonState(
-            currentResults.length > 0
-        );
-    }
-});
-
-
-zipOutput.addEventListener("change", function () {
-    updateDownloadButtonState(
-        currentResults.length > 0
-    );
-});
-
-
-downloadAllZip.addEventListener("click", async function () {
-    if (!zipOutput.checked || !currentResults.length) {
-        return;
-    }
-
-    try {
-        downloadAllZip.disabled = true;
-        downloadAllZip.textContent = "正在生成 ZIP...";
-
-        const blob = await createAllZip(currentResults);
-
-        downloadBlob(blob, "qrcode_results.zip");
-    } catch (error) {
-        console.error(error);
-
-        alert(
-            "生成 ZIP 失败：\n" +
-            (error.message || String(error))
-        );
+        ui.tell("本次完成：" + succeeded + " 张图片，共识别 " + totalCount + " 个二维码" +
+            (failed ? "；"+failed+" 张失败，可再次识别" : "") + " · " + Math.round(performance.now()-began) + " ms","qr");
+    } catch(error) {
+        ui.tell("识别初始化失败："+(error.message||String(error)),"qr");
     } finally {
-        updateDownloadButtonState(
-            currentResults.length > 0
-        );
-
-        downloadAllZip.textContent =
-            "下载全部裁剪结果 ZIP";
+        running=false;ui.busy(false);ui.refresh();
     }
-});
+}
+async function exportResults(results, single = false) {
+    if (running || exporting || !results.length) return;
+    if (!window.JSZip) {ui.tell("ZIP 库加载失败，请检查 jszip.min.js。","qr");return;}
+    exporting=true;ui.busy(false);ui.tell("正在生成 ZIP…","qr");await tick();
+    try {
+        const blob=await (single?createImageZip(results[0]):createAllZip(results));
+        downloadBlob(blob,single?results[0].filename.replace(/\.[^.]+$/,"")+".zip":"qrcode_results.zip");
+        ui.tell("ZIP 已生成，已发起下载。","qr");
+    } catch(error){ui.tell("生成 ZIP 失败："+error.message,"qr");console.error(error);}
+    finally {exporting=false;ui.busy(false);ui.refresh();}
+}
 
-
-updateDownloadButtonState(false);
