@@ -6,3 +6,6 @@ node_modules/
 package.json
 package-lock.json
 *.log
+# Retired assets: exclude from deployment even before repository cleanup.
+opencv/
+js/curved-decoder.js
