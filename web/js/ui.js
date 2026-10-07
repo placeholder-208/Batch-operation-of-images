@@ -1,5 +1,6 @@
 import { subscribe } from "./runtime-status.js";
 import { canvasToBlob } from "./image.js";
+import { parseWebURL, createLinkPreview, cancelLinkPreviews } from './link-preview.js';
 export const $ = id => document.getElementById(id);
 export function downloadBlob(blob, filename) {
     const url = URL.createObjectURL(blob), link = document.createElement("a");
@@ -15,6 +16,14 @@ export function createUI(actions) {
     const current = () => queues[mode][positions[mode]];
     const tell = (text, target = mode) => { $(target + "Status").textContent = text; };
     const notice = text => { $("imageNotice").hidden = !text; $("imageNotice").textContent = text; };
+    const linkControls = document.createElement('div'); linkControls.className='link-controls';
+    const linkLabel=document.createElement('label'), linkEnabled=document.createElement('input');
+    linkEnabled.type='checkbox';linkEnabled.checked=false;
+    linkLabel.append(linkEnabled,document.createTextNode(' 联网获取网页标题和图标'));
+    const linkNote=document.createElement('div');linkNote.className='small';
+    linkNote.textContent='开启后会将网址发送给本站服务并访问目标网页；核销、一次性或含凭证的链接请勿开启。图片不上传。';
+    linkControls.append(linkLabel,linkNote);$('qrDetail').after(linkControls);
+    linkEnabled.onchange=()=>{if(!linkEnabled.checked)cancelLinkPreviews();showResults();};
     subscribe(({module, text, level}) => {
         const node = $(module + "State");
         if (node) { node.textContent = text; node.className = level === "ready" ? "ready" : level === "error" ? "error-note" : ""; }
@@ -79,8 +88,11 @@ export function createUI(actions) {
             button("定位",()=>{ selectedQR=qr.id; draw(); showResults(); });
             button("复制",async event=>{try{await navigator.clipboard.writeText(qr.text);event.target.textContent="已复制";}catch{tell("复制失败，请选中结果中的文字手动复制。","qr");}});
             if (crop) button("下载 PNG",async()=>{try{downloadBlob(await canvasToBlob(crop.canvas),item.file.name.replace(/\.[^.]+$/,"")+"-qr-"+qr.id+".png");}catch(error){tell("下载失败："+error.message,"qr");}});
-            try { const url = new URL(qr.text); if (["http:","https:"].includes(url.protocol)) { const a=document.createElement("a");a.href=url.href;a.target="_blank";a.rel="noopener noreferrer";a.textContent="打开链接";buttons.append(a); } } catch {}
-            card.append(title,meta,text,buttons); root.append(card);
+            const url=parseWebURL(qr.text);
+            if(url){const a=document.createElement('a');a.href=url.href;a.target='_blank';a.rel='noopener noreferrer';a.textContent='打开链接';buttons.append(a);}
+            card.append(title,meta);
+            if(url)card.append(createLinkPreview(url,linkEnabled.checked));
+            card.append(text,buttons); root.append(card);
         }
         const exportable = queues.qr.some(item=>item.result), checked = $("zipOutput").checked;
         $("downloadAllZip").disabled = busy || !checked || !exportable || actions.isExporting();
