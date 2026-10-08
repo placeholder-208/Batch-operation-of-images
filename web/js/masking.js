@@ -1,5 +1,5 @@
 import { canvasToBlob } from './image.js';
-import { downloadBlob, updateWorkspaceDescription } from './ui.js';
+import { downloadBlob } from './ui.js';
 import { subscribe } from './runtime-status.js';
 
 // All masks use original-image coordinates. Solid rectangles also cover curved edges.
@@ -170,20 +170,6 @@ export function createMaskUI(actions) {
     $('maskColor').onchange=$('maskMargin').oninput=$('maskOriginal').onchange=draw;
     $('maskStart').onclick=detect;$('maskDownload').onclick=()=>exportImages(false);$('maskZip').onclick=()=>exportImages(true);
     for(const name of ['zxing','wechat','curved'])subscribe(state=>{if(state.module===name)$('mask-'+name+'State').textContent=state.text;});
-    $('maskTab').onclick=()=>{
-        updateWorkspaceDescription('mask');
-        $('normalWorkspace').hidden=true;$('maskWorkspace').hidden=false;
-        for(const name of ['qr','mask']){$(name+'Tab').setAttribute('aria-selected',String(name==='mask'));$(name+'Tab').tabIndex=name==='mask'?0:-1;}
-        update();draw();
-    };
-    $('qrTab').onclick=()=>{updateWorkspaceDescription('qr');$('normalWorkspace').hidden=false;$('maskWorkspace').hidden=true;$('maskTab').setAttribute('aria-selected','false');$('maskTab').tabIndex=-1;$('qrTab').setAttribute('aria-selected','true');$('qrTab').tabIndex=0;};
-    // Capture navigation so both tabs form a single keyboard-accessible group.
-    const tabs=['qr','mask'];
-    for(const name of tabs)$(name+'Tab').addEventListener('keydown',event=>{
-        if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
-        event.preventDefault();event.stopImmediatePropagation();const index=tabs.indexOf(name);
-        const next=event.key==='Home'?tabs[0]:event.key==='End'?tabs[1]:tabs[(index+1)%2];
-        $(next+'Tab').click();$(next+'Tab').focus();
-    },true);
+    // The shared three-tab navigation is installed by barcode-ui.js.
     update();return {refresh:update,isBusy:()=>busy};
 }

@@ -5,13 +5,17 @@ import { createImageZip, createAllZip } from "./zip.js";
 import { createUI, downloadBlob } from "./ui.js";
 import { report } from "./runtime-status.js";
 import { createMaskUI } from "./masking.js";
+import { createBarcodeUI } from "./barcode-ui.js";
+import { createSemanticUI } from "./semantic-ui.js";
+import { setupWorkspaceTabs } from "./workspace-tabs.js";
 
 let running = false, exporting = false, decoderPromise = null;
+let barcodeUI = null, semanticUI = null;
 const tick = () => new Promise(resolve => setTimeout(resolve, 0));
 const ui = createUI({scan, export: exportResults, isExporting: () => exporting});
 const maskUI = createMaskUI({
-    isBlocked: () => running || exporting,
-    onBusy: value => ui.busy(value),
+    isBlocked: () => running || exporting || Boolean(barcodeUI?.isBusy()) || Boolean(semanticUI?.isBusy()),
+    onBusy: value => { ui.busy(value); barcodeUI?.refresh(); semanticUI?.refresh(); },
     async detect(file) {
         const source = await processFile(file), warnings = [];
         let qrcodes = [], regions = [];
@@ -27,6 +31,17 @@ const maskUI = createMaskUI({
         return { width: source.width, height: source.height, qrcodes, regions, warnings };
     }
 });
+barcodeUI = createBarcodeUI({
+    isBlocked: () => running || exporting || maskUI.isBusy() || Boolean(semanticUI?.isBusy()),
+    prepare: loadDecoder,
+    onBusy: value => { ui.busy(value); maskUI.refresh(); semanticUI?.refresh(); },
+    refresh: () => { ui.refresh(); maskUI.refresh(); }
+});
+semanticUI = createSemanticUI({
+    isBlocked: () => running || exporting || maskUI.isBusy() || barcodeUI.isBusy(),
+    onBusy: value => { ui.busy(value); maskUI.refresh(); barcodeUI.refresh(); }
+});
+setupWorkspaceTabs(() => { ui.refresh(); maskUI.refresh(); barcodeUI.refresh(); semanticUI.refresh(); });
 report("zxing", window.ZXingWASM ? "脚本已加载，等待首次解码" : "脚本加载失败", window.ZXingWASM ? "info" : "error");
 report("wechat", globalThis.ort ? "运行库脚本已加载，模型按需加载" : "ONNX Runtime 脚本加载失败", globalThis.ort ? "info" : "error");
 report("curved", "等待任务");
@@ -40,8 +55,8 @@ async function loadDecoder() {
     return decoderPromise;
 }
 async function scan(items) {
-    if (running || exporting || maskUI.isBusy() || !items.length) return;
-    running = true; ui.busy(true); maskUI.refresh(); ui.progress(0, items.length);
+    if (running || exporting || maskUI.isBusy() || barcodeUI.isBusy() || semanticUI.isBusy() || !items.length) return;
+    running = true; ui.busy(true); maskUI.refresh(); barcodeUI.refresh(); semanticUI.refresh(); ui.progress(0, items.length);
     const began = performance.now(); let succeeded = 0, failed = 0, totalCount = 0;
     try {
         const {decodeQRCode} = await loadDecoder();
@@ -82,18 +97,18 @@ async function scan(items) {
     } catch(error) {
         ui.tell("识别初始化失败："+(error.message||String(error)),"qr");
     } finally {
-        running=false;ui.busy(false);ui.refresh();maskUI.refresh();
+        running=false;ui.busy(false);ui.refresh();maskUI.refresh();barcodeUI.refresh();semanticUI.refresh();
     }
 }
 async function exportResults(results, single = false) {
-    if (running || exporting || maskUI.isBusy() || !results.length) return;
+    if (running || exporting || maskUI.isBusy() || barcodeUI.isBusy() || semanticUI.isBusy() || !results.length) return;
     if (!window.JSZip) {ui.tell("ZIP 库加载失败，请检查 jszip.min.js。","qr");return;}
-    exporting=true;ui.busy(false);maskUI.refresh();ui.tell("正在生成 ZIP…","qr");await tick();
+    exporting=true;ui.busy(false);maskUI.refresh();barcodeUI.refresh();semanticUI.refresh();ui.tell("正在生成 ZIP…","qr");await tick();
     try {
         const blob=await (single?createImageZip(results[0]):createAllZip(results));
         downloadBlob(blob,single?results[0].filename.replace(/\.[^.]+$/,"")+".zip":"qrcode_results.zip");
         ui.tell("ZIP 已生成，已发起下载。","qr");
     } catch(error){ui.tell("生成 ZIP 失败："+error.message,"qr");console.error(error);}
-    finally {exporting=false;ui.busy(false);ui.refresh();maskUI.refresh();}
+    finally {exporting=false;ui.busy(false);ui.refresh();maskUI.refresh();barcodeUI.refresh();semanticUI.refresh();}
 }
 

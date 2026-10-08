@@ -329,7 +329,7 @@ function createCylindricalVariant(
     };
 }
 
-export function createDecodeVariants(canvas) {
+export function createDecodeVariants(canvas, { curved = true } = {}) {
     const original = getCanvasImageData(canvas);
 
     const contrast = toGrayscaleContrast(original);
@@ -342,12 +342,12 @@ export function createDecodeVariants(canvas) {
 
     const adaptive = adaptiveThreshold(contrast);
 
-    const curvedHorizontal = createCylindricalVariant(
+    const curvedHorizontal = curved && createCylindricalVariant(
         contrast,
         "horizontal"
     );
 
-    const curvedVertical = createCylindricalVariant(
+    const curvedVertical = curved && createCylindricalVariant(
         contrast,
         "vertical"
     );
@@ -383,7 +383,7 @@ export function createDecodeVariants(canvas) {
             scaleX: 1,
             scaleY: 1
         },
-        {
+        ...(curved ? [{
             name: "cylindrical-horizontal",
             imageData: curvedHorizontal.imageData,
             scaleX: 1,
@@ -396,6 +396,6 @@ export function createDecodeVariants(canvas) {
             scaleX: 1,
             scaleY: 1,
             mapPoint: curvedVertical.mapPoint
-        }
+        }] : [])
     ];
 }

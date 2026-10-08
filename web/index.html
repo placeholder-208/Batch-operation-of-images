@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>心裁 · 二维码识别</title>
-<meta name="description" content="心裁提供图片二维码批量识别、单码裁图与导出，以及二维码遮盖功能。图片在浏览器本地处理。">
+<meta name="description" content="心裁提供二维码与条形码识别、裁图与 CSV 批量导出、二维码遮盖，以及云端语义裁剪测试。本地识码；语义检测经确认后发送缩图至 Groq。">
 <meta name="theme-color" content="#365ee8">
 <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png?v=xincai-1">
 <link rel="icon" type="image/svg+xml" sizes="any" href="./favicon.svg?v=xincai-1">
@@ -20,7 +20,7 @@
 </head>
 <body>
 <div class="shell">
-<header><div class="brand"><img src="./favicon.svg?v=xincai-1" width="36" height="36" alt="">心裁</div><div class="header-note">让二维码处理更直接</div></header>
+<header><div class="brand"><img src="./favicon.svg?v=xincai-1" width="36" height="36" alt="">心裁</div><div class="header-note">图片中的内容，批量整理</div></header>
 <section class="intro"><div><h1 id="introTitle">批量识别二维码，整理成单码图片。</h1><p id="introDescription">适合活动二维码材料、多码截图和标签照片：定位二维码、查看内容，并将每个二维码分别裁出，支持单张下载与 ZIP 打包。</p></div><span class="badge" id="introBadge">图片本地处理 · 网页信息按需联网</span></section>
 <div class="tabs" role="tablist" aria-label="处理方式"><button class="tab" id="qrTab" role="tab" aria-selected="true" aria-controls="qrMode">二维码识别</button><button class="tab" id="maskTab" role="tab" aria-selected="false" aria-controls="maskWorkspace" tabindex="-1">二维码遮盖</button></div>
 <main class="workspace" id="normalWorkspace">
@@ -44,7 +44,7 @@
 <div class="divider"></div><h2>当前图片</h2><div class="notice" id="maskSummary">等待添加图片</div><div class="mask-warning" id="maskReview">自动检测可能漏检。请逐张检查，必要时拖动补框。</div>
 <div class="export-actions"><button class="secondary full" id="maskDownload" disabled>下载当前遮盖图 PNG</button><button class="primary full" id="maskZip" disabled>批量下载遮盖图 ZIP</button></div><div class="notice">保留原图尺寸。ZIP 只包含设置了遮盖的图片，不包含原图、二维码内容或二维码裁图。未设置遮盖的图片不会导出；导出不代表全部二维码已不可识别。</div>
 </div></aside></section>
-<footer><span>心裁 · 二维码处理工作台</span><span id="footerNote">图片本地识别 · 单码裁图按原图像素输出</span></footer>
+<footer><span>心裁 · 图片处理工作台</span><span id="footerNote">图片本地识别 · 单码裁图按原图像素输出</span></footer>
 </div><input type="file" id="file" accept="image/jpeg,image/png,image/webp" multiple hidden><input type="file" id="maskFile" accept="image/jpeg,image/png,image/webp" multiple hidden>
 <script src="./zxing/index.js"></script>
 <script src="./jszip.min.js"></script>

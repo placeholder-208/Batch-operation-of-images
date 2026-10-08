@@ -11,5 +11,9 @@
     "name": "LINK_PREVIEW_LIMITER",
     "namespace_id": "61006001",
     "simple": {"limit": 120, "period": 60}
+  }, {
+    "name": "SEMANTIC_LIMITER",
+    "namespace_id": "61008002",
+    "simple": {"limit": 3, "period": 60}
   }]
 }

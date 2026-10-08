@@ -1,3 +1,5 @@
+import { semanticRoute } from './server/semantic.js';
+
 // Public-page metadata only. Never forward cookies, authorization, or upstream HTML.
 export function publicURL(value) {
     const url = new URL(value);
@@ -100,9 +102,10 @@ export default {
         const here=new URL(request.url);
         if(!here.pathname.startsWith('/api/')) {
             // Never publish deployment source as an asset, even if exclusions are misconfigured.
-            if(/^\/(?:worker\.js|wrangler\.(?:jsonc?|toml)|\.assetsignore|package(?:-lock)?\.json)$/.test(here.pathname))return new Response('Not found',{status:404});
+            if(here.pathname.startsWith('/server/')||/^\/(?:worker\.js|wrangler\.(?:jsonc?|toml)|\.assetsignore|package(?:-lock)?\.json|\.dev\.vars(?:\..*)?)$/.test(here.pathname))return new Response('Not found',{status:404});
             return env.ASSETS.fetch(request);
         }
+        if(here.pathname==='/api/semantic-detect')return semanticRoute(request,env);
         if(here.pathname!=='/api/link-preview')return json({error:'接口不存在'},404);
         if(request.method!=='POST')return json({error:'仅支持 POST'},405);
         if(request.headers.get('origin')!==here.origin||request.headers.get('sec-fetch-site')==='cross-site')return json({error:'仅接受本站请求'},403);

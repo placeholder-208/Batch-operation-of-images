@@ -3,6 +3,20 @@ import { canvasToBlob } from "./image.js";
 import { parseWebURL, createLinkPreview, cancelLinkPreviews } from './link-preview.js';
 export const $ = id => document.getElementById(id);
 export function updateWorkspaceDescription(mode) {
+    if(mode === 'semantic') {
+        $('introTitle').textContent='描述一个对象，批量裁出对应区域。';
+        $('introDescription').textContent='适合从一批照片中提取相同对象：输入名称、颜色或位置描述，通过 Groq 检测目标，再从原图生成矩形裁图。测试结果需要核对。';
+        $('introBadge').textContent='云端检测 · 裁图本地生成';
+        $('footerNote').textContent='检测缩图与描述发送至 Groq · 非透明抠图';
+        document.title='心裁 · 语义裁剪测试';return;
+    }
+    if(mode === 'barcode') {
+        $('introTitle').textContent='批量识别条形码，保留内容与裁图。';
+        $('introDescription').textContent='适合商品包装、标签和资料图片：识别常见条形码、查看码制与原文，批量导出裁图和 CSV，便于后续整理与格式化输入。';
+        $('introBadge').textContent='条形码图片在本机处理';
+        $('footerNote').textContent='图片本地识别 · CSV 保留原始解码内容';
+        document.title='心裁 · 条形码识别';return;
+    }
     const mask = mode === 'mask';
     $('introTitle').textContent = mask ? '遮盖二维码，保留图片其余内容。' : '批量识别二维码，整理成单码图片。';
     $('introDescription').textContent = mask
