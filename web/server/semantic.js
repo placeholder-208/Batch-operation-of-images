@@ -1,6 +1,18 @@
 // Server-only module. Never expose API credentials or forward arbitrary image URLs.
 const MAX_BODY = 2_000_000;
 const MODEL = 'qwen/qwen3.8-27b';
+export function detectionResponseFormat(model) {
+    // Only enable strict mode for the verified vision model, not arbitrary overrides.
+    if(model!==MODEL)return {type:'json_object'};
+    return {type:'json_schema',json_schema:{name:'normalized_object_boxes',strict:true,schema:{
+        type:'object',additionalProperties:false,required:['objects'],properties:{objects:{
+            type:'array',maxItems:20,items:{type:'object',additionalProperties:false,required:['label','bbox'],properties:{
+                label:{type:'string',description:'Short name of a visible matching object'},
+                bbox:{type:'array',minItems:4,maxItems:4,items:{type:'number',minimum:0,maximum:1000},description:'[xmin,ymin,xmax,ymax], normalized independently to 0..1000 along each image axis'}
+            }}
+        }}
+    }}};
+}
 const SYSTEM = `You locate visible objects in an image according to a user's natural-language request.
 Return only JSON: {"objects":[{"label":"short object name","bbox":[xmin,ymin,xmax,ymax]}]}.
 Coordinates MUST be relative to the entire supplied image, normalized independently on each axis to 0..1000.
@@ -99,9 +111,16 @@ export async function semanticRoute(request, env) {
         const upstream = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method:'POST', signal:controller.signal,
             headers:{Authorization:'Bearer '+env.GROQ_API_KEY,'Content-Type':'application/json'},
-            body:JSON.stringify({model, response_format:{type:'json_object'}, max_completion_tokens:2048,
+            body:JSON.stringify({model, response_format:detectionResponseFormat(model), max_completion_tokens:2048,
                 messages:[{role:'system',content:SYSTEM},{role:'user',content:[
-                    {type:'text',text:'Find objects for this request: '+input.prompt},
+                    {type:'text',text:'Find objects for this request: '+input.prompt+'\n'+
+                        'The supplied full image is '+input.width+' pixels wide and '+input.height+' pixels high. '+
+                        'Return NORMALIZED coordinates, not pixels. Compute x_normalized = x_pixel / '+input.width+' * 1000; '+
+                        'y_normalized = y_pixel / '+input.height+' * 1000. '+
+                        'Top-left is (0,0); bottom-right is (1000,1000), even for a non-square image. '+
+                        'Every bbox must contain exactly four numbers with 0 <= xmin < xmax <= 1000 and 0 <= ymin < ymax <= 1000. '+
+                        'Use the complete supplied image as the coordinate frame, not image patches or internal model resizing. '+
+                        'Return {"objects":[]} if the requested object is not visible.'},
                     {type:'image_url',image_url:{url:input.image}}
                 ]}]})
         });
@@ -109,7 +128,7 @@ export async function semanticRoute(request, env) {
             await upstream.body?.cancel();
             if (upstream.status === 429) return reply({error:'Groq 速率或免费额度已达上限，本批停止；不会自动重试'},429);
             if (upstream.status === 401 || upstream.status === 403) return reply({error:'Groq 拒绝访问，请检查 Worker 密钥及账户权限'},503);
-            if (upstream.status === 400 || upstream.status === 404) return reply({error:'Groq 模型或请求不受支持，请核对 GROQ_MODEL 和当前视觉模型'},503);
+            if (upstream.status === 400 || upstream.status === 404) return reply({error:'Groq 模型或请求不受支持，请核对 GROQ_MODEL 与结构化输出支持；不会自动降级或重试',errorCode:'upstream-request-rejected',stage:'groq-request',model,responseInfo:{httpStatus:upstream.status,outputMode:detectionResponseFormat(model).type}},503);
             return reply({error:'Groq 服务暂时不可用（HTTP '+upstream.status+'）'},502);
         }
         stage='groq-response-json';
