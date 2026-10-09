@@ -1,6 +1,6 @@
 import { $, downloadBlob } from './ui.js?v=sam-1.8';
 import { canvasToBlob } from './image.js';
-import { detectObjects, semanticCSV } from './semantic-client.js';
+import { detectObjects, semanticCSV } from './semantic-client.js?v=token-fix-1.8.1';
 
 export function createSemanticUI(actions) {
     const tab=document.createElement('button');tab.id='semanticTab';tab.className='tab';tab.textContent='语义裁剪 · 测试';
@@ -73,7 +73,7 @@ export function createSemanticUI(actions) {
             $('semanticDimensions').textContent=img.naturalWidth+' × '+img.naturalHeight;draw();
         } catch(error){if(token===stamp)tell('预览失败：'+error.message);}
     }
-    function releaseResults(item){for(const crop of item.crops||[])URL.revokeObjectURL(crop.url);delete item.crops;delete item.result;delete item.error;delete item.cropError;}
+    function releaseResults(item){for(const crop of item.crops||[])URL.revokeObjectURL(crop.url);delete item.crops;delete item.result;delete item.error;delete item.errorStatus;delete item.cropError;}
     function add(files) {
         if(blocked())return;
         const accepted=files.filter(file=>['image/jpeg','image/png','image/webp'].includes(file.type)&&file.size<=20*1024*1024);
@@ -99,7 +99,7 @@ export function createSemanticUI(actions) {
             for(let i=0;i<pending.length;i++) {
                 const item=pending[i];let bitmap;
                 await waitForSlot(signal);if(signal.aborted)break;
-                item.processing=true;item.error=null;item.attemptPrompt=prompt;tell('正在检测 '+(i+1)+' / '+pending.length+'：'+item.file.name);refresh();
+                item.processing=true;item.error=null;item.errorStatus=null;item.attemptPrompt=prompt;tell('正在检测 '+(i+1)+' / '+pending.length+'：'+item.file.name);refresh();
                 const started=performance.now();
                 try {
                     bitmap=await createImageBitmap(item.file);
@@ -126,11 +126,12 @@ export function createSemanticUI(actions) {
                     }
                 } catch(error) {
                     if(error.name==='AbortError'){item.error='用户停止；已发送请求可能消耗额度';throw error;}
-                    failed++;item.error=error.message;$('semanticEngine').textContent='本图失败';
+                    failed++;item.error=error.message;item.errorStatus=error.status??null;$('semanticEngine').textContent='本图失败';
                     if([401,403,429,503].includes(error.status)){tell(error.message+'；其余图片未继续提交。');return;}
                 } finally {bitmap?.close();item.processing=false;item.elapsedMs=Math.round(performance.now()-started);refresh();}
             }
-            tell('本次检测得到 '+targets+' 个目标'+(failed?'；'+failed+' 张失败':'')+'。请核对预览框。');
+            if(!targets&&failed)tell('本批有 '+failed+' 张处理失败，未获得可用目标。错误：'+(pending.find(item=>item.error)?.error||'未知错误'));
+            else tell('本次检测得到 '+targets+' 个目标'+(failed?'；'+failed+' 张失败':'')+'。请核对预览框。');
         } catch(error) {tell(error.name==='AbortError'?'已停止，完成的结果已保留。':'处理停止：'+error.message);}
         finally {
             busy=false;controller=null;actions.onBusy(false);refresh();
@@ -140,7 +141,7 @@ export function createSemanticUI(actions) {
                     try{await actions.openSam(samTarget.blob,samTarget.filename);tell('首个识别框已完成本地分割。语义裁图与 CSV 仍可导出。');}
                     catch(error){tell('语义结果已保留；本地分割未完成：'+error.message);}
                 }else if(samTarget?.error)tell(samTarget.error+'；语义坐标结果已保留。');
-                else if(!targets)tell('本批没有识别到目标，未转入本地分割。');
+                else if(!targets&&!failed)tell('本批没有识别到目标，未转入本地分割。');
             }
         }
     }
@@ -153,7 +154,7 @@ export function createSemanticUI(actions) {
             downloadBlob(await zip.generateAsync({type:'blob'}),'semantic-crops.zip');tell('已导出 '+count+' 张裁图，文件夹编号对应原始上传顺序。');
         } catch(error){tell('导出失败：'+error.message);}finally{busy=false;actions.onBusy(false);refresh();}
     }
-    function diagnostics(){return {revision:'groq-semantic-v1',createdAt:new Date().toISOString(),items:items.map((item,index)=>({index:index+1,filename:item.file.name,prompt:item.result?.prompt||item.attemptPrompt||null,result:item.result||null,error:item.error||null,cropError:item.cropError||null,elapsedMs:item.elapsedMs||null}))};}
+    function diagnostics(){return {revision:'groq-semantic-sam-v1.8.1',createdAt:new Date().toISOString(),items:items.map((item,index)=>({index:index+1,filename:item.file.name,prompt:item.result?.prompt||item.attemptPrompt||null,result:item.result||null,error:item.error||null,httpStatus:item.errorStatus??null,cropError:item.cropError||null,elapsedMs:item.elapsedMs||null}))};}
     $('semanticAdd').onclick=$('semanticChoose').onclick=()=>input.click();input.onchange=()=>{add([...input.files]);input.value='';};
     $('semanticStage').ondragover=event=>event.preventDefault();$('semanticStage').ondrop=event=>{event.preventDefault();add([...event.dataTransfer.files]);};
     $('semanticReset').onclick=()=>{if(blocked())return;for(const item of items){releaseResults(item);URL.revokeObjectURL(item.url);}items=[];select(-1);tell('已清空图片和结果。');};

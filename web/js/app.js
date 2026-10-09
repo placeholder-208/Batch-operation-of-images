@@ -6,7 +6,7 @@ import { createUI, downloadBlob } from "./ui.js?v=sam-1.8";
 import { report } from "./runtime-status.js";
 import { createMaskUI } from "./masking.js";
 import { createBarcodeUI } from "./barcode-ui.js";
-import { createSemanticUI } from "./semantic-ui.js?v=sam-1.8";
+import { createSemanticUI } from "./semantic-ui.js?v=token-fix-1.8.1";
 import { setupWorkspaceTabs } from "./workspace-tabs.js?v=sam-1.8";
 import { createSamWorkspace } from "./sam-workspace.js?v=sam-1.8";
 

@@ -71,7 +71,12 @@ export async function semanticRoute(request, env) {
         return reply({error:'仅接受本站请求'},403);
     if (!env.GROQ_API_KEY || !env.SEMANTIC_TEST_TOKEN || env.SEMANTIC_TEST_TOKEN.length < 16)
         return reply({error:'测试服务尚未配置：需要 Groq 密钥和至少 16 位的测试口令'},503);
-    const token = request.headers.get('X-Semantic-Token') || '';
+    let token = request.headers.get('X-Semantic-Token') || '';
+    const tokenEncoding=request.headers.get('X-Semantic-Token-Encoding');
+    if(tokenEncoding){
+        if(tokenEncoding!=='uri-v1'||token.length>4096)return reply({error:'测试口令编码格式无效'},400);
+        try {token=decodeURIComponent(token);}catch{return reply({error:'测试口令编码格式无效'},400);}
+    }
     if (token !== env.SEMANTIC_TEST_TOKEN) return reply({error:'测试口令不正确'},401);
     if (!(request.headers.get('content-type')||'').toLowerCase().startsWith('application/json'))
         return reply({error:'需要 JSON 请求'},415);

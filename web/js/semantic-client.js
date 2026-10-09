@@ -6,6 +6,9 @@ export function pixelBox(bbox, width, height) {
     return {left,top,right,bottom,width:right-left,height:bottom-top};
 }
 export async function detectObjects(image, prompt, token, signal) {
+    let encodedToken;
+    try { encodedToken=encodeURIComponent(token); }
+    catch { throw new Error('测试口令包含无法编码的字符，请重新输入与服务端一致的口令'); }
     const scale=Math.min(1,1024/Math.max(image.width,image.height));
     const canvas=document.createElement('canvas');
     canvas.width=Math.max(1,Math.round(image.width*scale));canvas.height=Math.max(1,Math.round(image.height*scale));
@@ -13,7 +16,7 @@ export async function detectObjects(image, prompt, token, signal) {
     ctx.drawImage(image,0,0,canvas.width,canvas.height);
     try {
         const response=await fetch('/api/semantic-detect',{method:'POST',signal,
-            headers:{'Content-Type':'application/json','X-Semantic-Token':token},
+            headers:{'Content-Type':'application/json','X-Semantic-Token':encodedToken,'X-Semantic-Token-Encoding':'uri-v1'},
             body:JSON.stringify({image:canvas.toDataURL('image/jpeg',0.85),prompt,width:canvas.width,height:canvas.height})});
         let data;
         try { data=await response.json(); } catch { throw Object.assign(new Error('接口没有返回 JSON；本地 Python 静态服务器不支持此接口，请在部署后的 Worker 网站测试'),{status:response.status}); }
