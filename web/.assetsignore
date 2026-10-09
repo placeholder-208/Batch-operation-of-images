@@ -11,3 +11,6 @@ opencv/
 js/curved-decoder.js
 server/
 .dev.vars*
+
+sam-test/
+js/sam-workspace.js

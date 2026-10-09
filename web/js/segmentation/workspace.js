@@ -1,15 +1,20 @@
-import { encodeImage, releaseEncoding, segmentBox } from './slimsam.js?v=1.5';
-import { normalizedBox, binaryMask, maskBounds, applyMaskRGBA, cropRelativePrompts, intersectBox } from './mask-utils.js?v=1.5';
-import { hitBox, boxCursor, editBox } from './box-editor.js?v=1.4';
-const $=id=>document.getElementById(id),canvas=$('source'),ctx=canvas.getContext('2d'),resultCanvas=$('result'),resultCtx=resultCanvas.getContext('2d',{willReadFrequently:true});
+import { encodeImage, releaseEncoding, segmentBox } from './inference-client.js';
+import { normalizedBox, binaryMask, maskBounds, applyMaskRGBA, cropRelativePrompts, intersectBox } from './mask-utils.js';
+import { hitBox, boxCursor, editBox } from './box-editor.js';
+export function createSamWorkspace(actions) {
+ const tab=document.createElement('button');tab.id='samTab';tab.className='tab';tab.textContent='本地分割';tab.setAttribute('role','tab');tab.setAttribute('aria-selected','false');tab.tabIndex=-1;document.getElementById('semanticTab').after(tab);
+ const root=document.createElement('section');root.id='samWorkspace';root.className='workspace';root.hidden=true;root.innerHTML="\n<section class=\"panel\"><div class=\"head\"><h2>原图与提示</h2><button id=\"sam-choose\">选择图片</button></div>\n<div class=\"stage\" id=\"sam-stage\"><div id=\"sam-empty\">选择一张 JPEG、PNG 或 WebP 图片，再拖动框选对象。</div><canvas id=\"sam-source\" hidden aria-label=\"拖动框选对象，或点击添加保留与排除点\"></canvas></div>\n<p class=\"caption\">白色裁剪框决定模型输入范围。未画蓝框时，目标提示默认为白框范围；没有白框时默认为原图范围。默认提示不绘制蓝框。手动蓝框提供目标位置，不是裁剪边界。</p>\n<div class=\"tools\"><label for=\"sam-mode\">操作</label><select id=\"sam-mode\"><option value=\"box\">框选 / 编辑框（白色裁剪框）</option><option value=\"prompt\">目标位置框选提示（蓝色提示框）</option><option value=\"positive\">点击保留点 ＋</option><option value=\"negative\">点击排除点 −</option></select><button id=\"sam-undo\" title=\"按添加顺序撤销最近的一个点，保留点与排除点统一排序\" aria-describedby=\"sam-undoHelp\">撤销点</button><button id=\"sam-clearPrompt\">清除目标提示</button><button id=\"sam-clear\">清除全部</button></div>\n<p class=\"caption\">当前模式只编辑对应颜色的框。框内拖动可移动，左右边水平缩放，上下边竖直缩放；四个角按当前宽高比缩放。对应框外拖动或按住 Alt 拖动可重画。修改白框重新编码；修改蓝框或点复用裁剪图编码。</p>\n<p class=\"caption\">在框内右击删除框。两个框重叠时优先删除蓝色目标提示框，再次在白框内右击才删除裁剪框。右击删除框不删除提示点。</p>\n<p class=\"caption\" id=\"sam-undoHelp\">撤销点：每次撤销最近添加的一个点，保留点与排除点按共同的添加顺序依次撤销，与当前操作模式无关。</p>\n<p id=\"sam-filename\" class=\"caption\">未选择图片</p>\n<div class=\"head\"><h2>透明预览</h2><label><input type=\"checkbox\" id=\"sam-overlay\"> 在裁剪图上叠加蒙版</label></div>\n<div class=\"stage checker\"><canvas id=\"sam-result\" hidden aria-label=\"透明背景结果预览\"></canvas><span id=\"sam-resultEmpty\">分割结果显示在这里</span></div>\n<p class=\"caption\">预览只显示白色裁剪范围。棋盘格表示被删除的区域；叠加模式中绿色标记才是保留区域。此版是二值分割，不是精细半透明抠图。</p></section>\n<aside class=\"panel controls\"><p class=\"eyebrow\">SLIMSAM · Q8 · WASM</p><h2>本地分割</h2><p>上传后可直接生成蒙版，也可先用白框裁剪。默认使用当前输入图完整范围作为目标提示，不显示蓝框；如需进一步指定对象，可画蓝框或添加保留点、排除点。完整范围提示不保证自动选中你想要的对象。</p>\n<button class=\"primary\" id=\"sam-segment\" disabled>生成蒙版</button>\n<div class=\"status\" id=\"sam-status\" role=\"status\" aria-live=\"polite\">等待图片与框选</div>\n<dl><div><dt>模型</dt><dd id=\"sam-modelState\">首次分割时加载</dd></div><div><dt>图像编码</dt><dd id=\"sam-encodeState\">等待任务</dd></div><div><dt>蒙版解码</dt><dd id=\"sam-decodeState\">等待任务</dd></div></dl>\n<label for=\"sam-candidate\">候选蒙版</label><select id=\"sam-candidate\" disabled></select>\n<p class=\"small\">默认选择预测 IoU 较高的候选。这是模型估计的蒙版质量，不是“目标正确概率”；可手动比较其他候选。</p>\n<label class=\"check\"><input id=\"sam-invert\" type=\"checkbox\" disabled> 反转保留区域（当前保留了背景时）</label>\n<p class=\"small\">优先比较候选，或在目标上添加保留点、背景上添加排除点后重新生成。反转不会重新推理，会同步影响透明预览和 PNG 导出，也会反转原有空洞。</p>\n<label for=\"sam-threshold\">蒙版阈值 <output id=\"sam-thresholdValue\">0.0</output></label><input id=\"sam-threshold\" type=\"range\" min=\"-3\" max=\"3\" step=\"0.1\" value=\"0\" disabled>\n<p class=\"small\">阈值越高，保留区域通常越少。调节阈值不重新推理；增加点或改框后需再点击生成蒙版。</p>\n<p class=\"small\">默认阈值 0 保留模型输出大于 0 的区域。反转只交换裁剪图内的保留与删除区域，不会恢复白框外图片。</p>\n<p class=\"small\" id=\"sam-maskInfo\" aria-live=\"polite\">等待蒙版</p>\n<label class=\"check\"><input id=\"sam-tight\" type=\"checkbox\" checked> 导出时裁去外围透明留白</label>\n<button id=\"sam-download\" disabled>下载透明 PNG</button><button id=\"sam-maskDownload\" disabled>下载黑白蒙版 PNG</button><button id=\"sam-diagnostic\" disabled>下载诊断 JSON</button>\n<p class=\"small\">量化模型约 13.8 MB，另有专用运行库。当前用单线程 CPU 推理，不需要跨域隔离。首次编码较慢，同图改框和补点可复用编码。</p>\n<p class=\"warning\">背景相似、遮挡、玻璃和细小边缘可能分割不准，请检查导出。原图限制为 1600 万像素；分割工作图长边不超过 1024 像素。</p>\n</aside><input id=\"sam-file\" type=\"file\" accept=\"image/jpeg,image/png,image/webp\" hidden>";document.getElementById('semanticWorkspace').after(root);
+ let publishedBusy=false;
+ const blocked=()=>busy||Boolean(actions.isBlocked?.());
+const $=id=>root.querySelector('#sam-'+id),canvas=$('source'),ctx=canvas.getContext('2d'),resultCanvas=$('result'),resultCtx=resultCanvas.getContext('2d',{willReadFrequently:true});
 let bitmap=null,filename='',crop=null,promptBox=null,points=[],drag=null,busy=false,encoded=null,segmentation=null,currentMask=null,lastDiagnostic=null;
 const tell=text=>{$('status').textContent=text;};
 function refresh(){
-    for(const id of ['choose','file','mode','undo','clear','clearPrompt'])$(id).disabled=busy;
-    $('segment').disabled=busy||!bitmap;
-    for(const id of ['candidate','threshold','invert','download','maskDownload','diagnostic'])$(id).disabled=busy||!segmentation;
-    $('undo').disabled=busy||!points.length;
-    if(window.parent!==window)window.parent.postMessage({type:'xincai-sam-busy',busy},location.origin);
+    for(const id of ['choose','file','mode','undo','clear','clearPrompt','overlay','tight'])$(id).disabled=blocked();
+    $('segment').disabled=blocked()||!bitmap;
+    for(const id of ['candidate','threshold','invert','download','maskDownload','diagnostic'])$(id).disabled=blocked()||!segmentation;
+    $('undo').disabled=blocked()||!points.length;
+    if(busy!==publishedBusy){publishedBusy=busy;actions.onBusy?.(busy);}
 }
 function invalidate(){
     segmentation=null;currentMask=null;lastDiagnostic=null;$('invert').checked=false;$('maskInfo').textContent='等待蒙版';
@@ -42,7 +47,7 @@ function draw(){
 }
 function pointer(event){const rect=canvas.getBoundingClientRect();return {x:Math.max(0,Math.min(bitmap.width,(event.clientX-rect.left)/rect.width*bitmap.width)),y:Math.max(0,Math.min(bitmap.height,(event.clientY-rect.top)/rect.height*bitmap.height))};}
 function actionAt(point){const rect=canvas.getBoundingClientRect();return hitBox(point,activeRect(),8*bitmap.width/rect.width,8*bitmap.height/rect.height);}
-function updateCursor(event){canvas.style.cursor=busy?'wait':(!bitmap?'crosshair':(['box','prompt'].includes($('mode').value)?boxCursor(drag?.action||(event.altKey?'new':actionAt(pointer(event)))):'crosshair'));}
+function updateCursor(event){canvas.style.cursor=blocked()?'wait':(!bitmap?'crosshair':(['box','prompt'].includes($('mode').value)?boxCursor(drag?.action||(event.altKey?'new':actionAt(pointer(event)))):'crosshair'));}
 function dragPosition(point){
     if(drag.kind!=='prompt')return point;
     const c=activeCrop();return {x:Math.max(c[0],Math.min(c[2],point.x)),y:Math.max(c[1],Math.min(c[3],point.y))};
@@ -54,7 +59,7 @@ function editedRect(point){
     return [next[0]+c[0],next[1]+c[1],next[2]+c[0],next[3]+c[1]];
 }
 canvas.onpointerdown=event=>{
-    if(busy||!bitmap||event.button!==0)return;const p=pointer(event),mode=$('mode').value;
+    if(blocked()||!bitmap||event.button!==0)return;const p=pointer(event),mode=$('mode').value;
     if(['box','prompt'].includes(mode)){
         const action=event.altKey?'new':actionAt(p);if(mode==='prompt'&&action==='new'&&!insideCrop(p)){tell('请在白色裁剪范围内添加蓝色提示框。');return;}
         const original=activeRect();drag={kind:mode==='box'?'crop':'prompt',action,start:p,end:p,original:original?[...original]:null,preview:original?[...original]:null};
@@ -86,7 +91,7 @@ canvas.oncontextmenu=event=>{
     const contains=b=>b&&p.x>=b[0]&&p.x<=b[2]&&p.y>=b[1]&&p.y<=b[3];
     const deletePrompt=contains(promptBox),deleteCrop=!deletePrompt&&contains(crop);
     if(!deletePrompt&&!deleteCrop)return;
-    event.preventDefault();if(busy)return;
+    event.preventDefault();if(blocked())return;
     drag=null;
     if(deletePrompt){
         promptBox=null;invalidate();tell('已删除蓝色目标提示框，恢复裁剪图完整范围的默认提示（不显示蓝框）。提示点保留，请重新生成蒙版。');
@@ -97,7 +102,7 @@ canvas.oncontextmenu=event=>{
 };
 $('mode').onchange=()=>{drag=null;canvas.style.cursor='crosshair';draw();};
 async function openFile(file){
-    if(busy||!file)return;if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>20*1024*1024){tell('请选择不超过 20 MiB 的 JPEG、PNG 或 WebP。');return;}
+    if(blocked()||!file)return;if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>20*1024*1024){tell('请选择不超过 20 MiB 的 JPEG、PNG 或 WebP。');return;}
     busy=true;refresh();let next;
     try{
         next=await createImageBitmap(file);if(next.width*next.height>16_000_000)throw new Error('原图最多 1600 万像素，请先缩小图片');
@@ -108,7 +113,7 @@ async function openFile(file){
     }catch(error){tell('读取失败：'+error.message);return false;}finally{next?.close();busy=false;refresh();}
 }
 async function run(){
-    if(busy||!bitmap)return;busy=true;refresh();tell('正在分割裁剪范围内的图片…');
+    if(blocked()||!bitmap)return;busy=true;refresh();tell('正在分割裁剪范围内的图片…');
     const region=[...activeCrop()],cw=region[2]-region[0],ch=region[3]-region[1];
     try{
         if(!encoded){
@@ -125,7 +130,7 @@ async function run(){
         $('decodeState').textContent=segmentation.elapsedMs+' ms';$('modelState').textContent='SlimSAM-77 q8 · WASM';
         const select=$('candidate');select.replaceChildren();for(const candidate of segmentation.order){const option=document.createElement('option');option.value=String(candidate.index);option.textContent='候选 '+(candidate.index+1)+' · 预测 IoU '+(candidate.score===null?'未知':candidate.score.toFixed(3));select.append(option);}
         select.value=String(segmentation.order[0].index);$('threshold').value='0';$('invert').checked=false;
-        lastDiagnostic={revision:'slimsam-local-v1.8',filename,model:'Xenova/slimsam-77-uniform',dtype:'q8',backend:'wasm',threads:1,
+        lastDiagnostic={revision:'xincai-segmentation-v2.0',filename,model:'Xenova/slimsam-77-uniform',dtype:'q8',backend:'wasm',threads:1,
             originalSize:[bitmap.width,bitmap.height],crop:[...region],cropSize:[cw,ch],workingSize:[encoded.width,encoded.height],promptBox:promptBox?[...promptBox]:null,
             promptMode:promptBox?'manual':'default',effectivePromptBox:[...effectivePrompt],localPrompts:prompts,points:points.map(p=>({...p})),encodeMs:encoded.elapsedMs,decodeMs:segmentation.elapsedMs,candidates:segmentation.order};
         render();tell(promptBox?'蒙版已生成，使用手动蓝框作为目标提示。':'蒙版已生成，使用当前输入图的完整范围作为默认目标提示（不显示蓝框）。');return true;
@@ -149,7 +154,7 @@ function render(){
 function save(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 const toBlob=canvas=>new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('PNG 编码失败')),'image/png'));
 async function exportPNG(isMask=false){
-    if(busy||!currentMask||!bitmap)return;const bounds=maskBounds(currentMask,segmentation.width,segmentation.height);if(!bounds){tell('当前蒙版为空，未导出。');return;}
+    if(blocked()||!currentMask||!bitmap)return;const bounds=maskBounds(currentMask,segmentation.width,segmentation.height);if(!bounds){tell('当前蒙版为空，未导出。');return;}
     busy=true;refresh();const output=document.createElement('canvas');let full;
     try{
         if(isMask){output.width=segmentation.width;output.height=segmentation.height;const c=output.getContext('2d'),pixels=c.createImageData(output.width,output.height);
@@ -167,28 +172,21 @@ async function exportPNG(isMask=false){
 }
 $('choose').onclick=()=>$('file').click();$('file').onchange=()=>{openFile($('file').files[0]);$('file').value='';};
 $('stage').ondragover=event=>event.preventDefault();$('stage').ondrop=event=>{event.preventDefault();openFile(event.dataTransfer.files[0]);};
-$('undo').onclick=()=>{if(busy||!points.length)return;const removed=points.pop();invalidate();draw();tell('已撤销最近添加的'+(removed.label===1?'保留点':'排除点')+'，剩余 '+points.length+' 个提示点。请重新生成蒙版。');};
-$('clearPrompt').onclick=()=>{if(busy)return;promptBox=null;points=[];invalidate();draw();tell('手动蓝框和提示点已清除，恢复当前输入图完整范围的默认目标提示。白色裁剪范围不变。');};
-$('clear').onclick=()=>{if(busy)return;crop=null;promptBox=null;points=[];discardEncoding();invalidate();draw();tell('两个框和提示点已清除，模型输入恢复整图。');};
+$('undo').onclick=()=>{if(blocked()||!points.length)return;const removed=points.pop();invalidate();draw();tell('已撤销最近添加的'+(removed.label===1?'保留点':'排除点')+'，剩余 '+points.length+' 个提示点。请重新生成蒙版。');};
+$('clearPrompt').onclick=()=>{if(blocked())return;promptBox=null;points=[];invalidate();draw();tell('手动蓝框和提示点已清除，恢复当前输入图完整范围的默认目标提示。白色裁剪范围不变。');};
+$('clear').onclick=()=>{if(blocked())return;crop=null;promptBox=null;points=[];discardEncoding();invalidate();draw();tell('两个框和提示点已清除，模型输入恢复整图。');};
 $('segment').onclick=run;$('candidate').onchange=$('threshold').oninput=$('overlay').onchange=render;
 $('invert').onchange=()=>{render();tell($('invert').checked?'已反转裁剪图内的保留区域。':'已恢复模型原始保留区域。');};
 $('download').onclick=()=>exportPNG();$('maskDownload').onclick=()=>exportPNG(true);
-$('diagnostic').onclick=()=>{if(!busy&&lastDiagnostic)save(new Blob([JSON.stringify(lastDiagnostic,null,2)],{type:'application/json'}),'slimsam-diagnostics.json');};
-// Only the same-origin embedding parent may supply a crop; never accept arbitrary windows.
-window.addEventListener('message',async event=>{
-    if(window.parent===window||event.source!==window.parent||event.origin!==location.origin)return;
-    const data=event.data;if(!data||typeof data.type!=='string')return;
-    const post=value=>window.parent.postMessage(value,location.origin);
-    if(data.type==='xincai-sam-ping'){post({type:'xincai-sam-ready'});return;}
-    if(data.type!=='xincai-sam-input'||typeof data.id!=='string')return;
-    if(busy){post({type:'xincai-sam-result',id:data.id,ok:false,error:'本地分割正在处理其他任务'});return;}
-    try{
-        if(!(data.blob instanceof Blob)||!data.blob.size)throw new Error('接收的裁图无效');
-        const file=new File([data.blob],typeof data.filename==='string'?data.filename:'semantic-first.png',{type:'image/png'});
-        if(!await openFile(file))throw new Error($('status').textContent||'读取裁图失败');
-        if(!await run())throw new Error($('status').textContent||'自动生成蒙版失败');
-        post({type:'xincai-sam-result',id:data.id,ok:true});
-    }catch(error){post({type:'xincai-sam-result',id:data.id,ok:false,error:error.message});}
-});
-refresh();
-if(window.parent!==window)window.parent.postMessage({type:'xincai-sam-ready'},location.origin);
+$('diagnostic').onclick=()=>{if(!blocked()&&lastDiagnostic)save(new Blob([JSON.stringify(lastDiagnostic,null,2)],{type:'application/json'}),'slimsam-diagnostics.json');};
+
+ refresh();
+ async function openCrop(blob,name) {
+  if(blocked())throw new Error('其他任务正在处理，请稍后转入本地分割');
+  if(!(blob instanceof Blob)||!blob.size)throw new Error('目标裁图不可用');
+  tab.click();
+  if(!await openFile(new File([blob],name||'semantic-first.png',{type:blob.type||'image/png'})))throw new Error($('status').textContent);
+  if(!await run())throw new Error($('status').textContent);
+ }
+ return {refresh,isBusy:()=>busy,openCrop};
+}

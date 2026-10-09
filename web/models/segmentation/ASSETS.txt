@@ -1,4 +1,4 @@
-心裁 SlimSAM 独立测试 v1 · 2026-10-08
+心裁 SlimSAM 主站分割模块 v2 · 2026-10-09
 
 v1.1 运行库修复：实际入口为 vendor/transformers.local.js。
 在原版 transformers.web.js 基础上，仅将两个外部包名引用改为 ./ort.wasm.min.mjs。
@@ -12,18 +12,18 @@ ort.wasm.min.mjs 与已附 WASM / mjs 均为下述确切版本。
 ONNX 文件与配置原样分发，无权重修改。
 基础研究：SlimSAM，Zigeng Chen、Gongfan Fang、Xinyin Ma、Xinchao Wang。
 项目：https://github.com/czg1225/SlimSAM
-许可：Apache-2.0，见 models/slimsam/LICENSE.txt。
+许可：Apache-2.0，见 slimsam/LICENSE.txt。
 
 Transformers.js 3.8.1
 https://github.com/huggingface/transformers.js
 下载：https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1/dist/transformers.web.js
-许可：Apache-2.0，见 vendor/TRANSFORMERS-LICENSE.txt。
+许可：Apache-2.0，见 ../../vendor/segmentation/TRANSFORMERS-LICENSE.txt。
 
 ONNX Runtime Web 1.22.0-dev.20250409-89f8206ba4
 采用 Transformers.js 3.8.1 声明的确切运行库版本，不复用主站的 1.22.0 运行库。
 https://github.com/microsoft/onnxruntime
 下载路径：https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0-dev.20250409-89f8206ba4/dist/
-许可：MIT，见 vendor/ORT-LICENSE.txt。
+许可：MIT，见 ../../vendor/segmentation/ORT-LICENSE.txt。
 
 推理后端：单线程 WASM；没有 WebGPU 请求。图像编码与蒙版解码均在用户浏览器内执行。
 模型、JS 与 WASM 总下载量约 26.7 MB（十进制，压缩传输大小可能不同），浏览器缓存可减少重复下载。
