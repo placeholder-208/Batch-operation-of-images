@@ -20,7 +20,7 @@ export async function detectObjects(image, prompt, token, signal) {
             body:JSON.stringify({image:canvas.toDataURL('image/jpeg',0.85),prompt,width:canvas.width,height:canvas.height})});
         let data;
         try { data=await response.json(); } catch { throw Object.assign(new Error('接口没有返回 JSON；本地 Python 静态服务器不支持此接口，请在部署后的 Worker 网站测试'),{status:response.status}); }
-        if(!response.ok)throw Object.assign(new Error(data.error||'检测失败'),{status:response.status});
+        if(!response.ok)throw Object.assign(new Error(data.error||'检测失败'),{status:response.status,diagnostic:{errorCode:data.errorCode??null,stage:data.stage??null,model:data.model??null,usage:data.usage??null,responseInfo:data.responseInfo??null,detail:data.detail??null}});
         if(data.coordinateSystem!=='normalized-1000'||!Array.isArray(data.objects)||data.objects.length>20)throw new Error('接口坐标格式异常');
         data.objects=data.objects.map(object=>({...object,box:pixelBox(object.bbox,image.width,image.height)}));
         return data;
