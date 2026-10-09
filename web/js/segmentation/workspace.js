@@ -1,22 +1,46 @@
+import { workspaceTemplate } from './workspace-template.js';
+import { interpolatedAlpha, paintStrokes, applyAlphaRGBA } from './postprocess.js';
+import { createMaskBrush } from './mask-brush.js';
+import { findSmallRegions, applyRegionRemoval } from './region-cleanup.js';
 import { encodeImage, releaseEncoding, segmentBox } from './inference-client.js';
-import { normalizedBox, binaryMask, maskBounds, applyMaskRGBA, cropRelativePrompts, intersectBox } from './mask-utils.js';
+import { normalizedBox, maskBounds, cropRelativePrompts, intersectBox } from './mask-utils.js';
 import { hitBox, boxCursor, editBox } from './box-editor.js';
 export function createSamWorkspace(actions) {
  const tab=document.createElement('button');tab.id='samTab';tab.className='tab';tab.textContent='本地分割';tab.setAttribute('role','tab');tab.setAttribute('aria-selected','false');tab.tabIndex=-1;document.getElementById('semanticTab').after(tab);
- const root=document.createElement('section');root.id='samWorkspace';root.className='workspace';root.hidden=true;root.innerHTML="\n<section class=\"panel\"><div class=\"head\"><h2>原图与提示</h2><button id=\"sam-choose\">选择图片</button></div>\n<div class=\"stage\" id=\"sam-stage\"><div id=\"sam-empty\">选择一张 JPEG、PNG 或 WebP 图片，再拖动框选对象。</div><canvas id=\"sam-source\" hidden aria-label=\"拖动框选对象，或点击添加保留与排除点\"></canvas></div>\n<p class=\"caption\">白色裁剪框决定模型输入范围。未画蓝框时，目标提示默认为白框范围；没有白框时默认为原图范围。默认提示不绘制蓝框。手动蓝框提供目标位置，不是裁剪边界。</p>\n<div class=\"tools\"><label for=\"sam-mode\">操作</label><select id=\"sam-mode\"><option value=\"box\">框选 / 编辑框（白色裁剪框）</option><option value=\"prompt\">目标位置框选提示（蓝色提示框）</option><option value=\"positive\">点击保留点 ＋</option><option value=\"negative\">点击排除点 −</option></select><button id=\"sam-undo\" title=\"按添加顺序撤销最近的一个点，保留点与排除点统一排序\" aria-describedby=\"sam-undoHelp\">撤销点</button><button id=\"sam-clearPrompt\">清除目标提示</button><button id=\"sam-clear\">清除全部</button></div>\n<p class=\"caption\">当前模式只编辑对应颜色的框。框内拖动可移动，左右边水平缩放，上下边竖直缩放；四个角按当前宽高比缩放。对应框外拖动或按住 Alt 拖动可重画。修改白框重新编码；修改蓝框或点复用裁剪图编码。</p>\n<p class=\"caption\">在框内右击删除框。两个框重叠时优先删除蓝色目标提示框，再次在白框内右击才删除裁剪框。右击删除框不删除提示点。</p>\n<p class=\"caption\" id=\"sam-undoHelp\">撤销点：每次撤销最近添加的一个点，保留点与排除点按共同的添加顺序依次撤销，与当前操作模式无关。</p>\n<p id=\"sam-filename\" class=\"caption\">未选择图片</p>\n<div class=\"head\"><h2>透明预览</h2><label><input type=\"checkbox\" id=\"sam-overlay\"> 在裁剪图上叠加蒙版</label></div>\n<div class=\"stage checker\"><canvas id=\"sam-result\" hidden aria-label=\"透明背景结果预览\"></canvas><span id=\"sam-resultEmpty\">分割结果显示在这里</span></div>\n<p class=\"caption\">预览只显示白色裁剪范围。棋盘格表示被删除的区域；叠加模式中绿色标记才是保留区域。此版是二值分割，不是精细半透明抠图。</p></section>\n<aside class=\"panel controls\"><p class=\"eyebrow\">SLIMSAM · Q8 · WASM</p><h2>本地分割</h2><p>上传后可直接生成蒙版，也可先用白框裁剪。默认使用当前输入图完整范围作为目标提示，不显示蓝框；如需进一步指定对象，可画蓝框或添加保留点、排除点。完整范围提示不保证自动选中你想要的对象。</p>\n<button class=\"primary\" id=\"sam-segment\" disabled>生成蒙版</button>\n<div class=\"status\" id=\"sam-status\" role=\"status\" aria-live=\"polite\">等待图片与框选</div>\n<dl><div><dt>模型</dt><dd id=\"sam-modelState\">首次分割时加载</dd></div><div><dt>图像编码</dt><dd id=\"sam-encodeState\">等待任务</dd></div><div><dt>蒙版解码</dt><dd id=\"sam-decodeState\">等待任务</dd></div></dl>\n<label for=\"sam-candidate\">候选蒙版</label><select id=\"sam-candidate\" disabled></select>\n<p class=\"small\">默认选择预测 IoU 较高的候选。这是模型估计的蒙版质量，不是“目标正确概率”；可手动比较其他候选。</p>\n<label class=\"check\"><input id=\"sam-invert\" type=\"checkbox\" disabled> 反转保留区域（当前保留了背景时）</label>\n<p class=\"small\">优先比较候选，或在目标上添加保留点、背景上添加排除点后重新生成。反转不会重新推理，会同步影响透明预览和 PNG 导出，也会反转原有空洞。</p>\n<label for=\"sam-threshold\">蒙版阈值 <output id=\"sam-thresholdValue\">0.0</output></label><input id=\"sam-threshold\" type=\"range\" min=\"-3\" max=\"3\" step=\"0.1\" value=\"0\" disabled>\n<p class=\"small\">阈值越高，保留区域通常越少。调节阈值不重新推理；增加点或改框后需再点击生成蒙版。</p>\n<p class=\"small\">默认阈值 0 保留模型输出大于 0 的区域。反转只交换裁剪图内的保留与删除区域，不会恢复白框外图片。</p>\n<p class=\"small\" id=\"sam-maskInfo\" aria-live=\"polite\">等待蒙版</p>\n<label class=\"check\"><input id=\"sam-tight\" type=\"checkbox\" checked> 导出时裁去外围透明留白</label>\n<button id=\"sam-download\" disabled>下载透明 PNG</button><button id=\"sam-maskDownload\" disabled>下载黑白蒙版 PNG</button><button id=\"sam-diagnostic\" disabled>下载诊断 JSON</button>\n<p class=\"small\">量化模型约 13.8 MB，另有专用运行库。当前用单线程 CPU 推理，不需要跨域隔离。首次编码较慢，同图改框和补点可复用编码。</p>\n<p class=\"warning\">背景相似、遮挡、玻璃和细小边缘可能分割不准，请检查导出。原图限制为 1600 万像素；分割工作图长边不超过 1024 像素。</p>\n</aside><input id=\"sam-file\" type=\"file\" accept=\"image/jpeg,image/png,image/webp\" hidden>";document.getElementById('semanticWorkspace').after(root);
+ const root=document.createElement('section');root.id='samWorkspace';root.className='workspace';root.hidden=true;root.innerHTML=workspaceTemplate;document.getElementById('semanticWorkspace').after(root);
  let publishedBusy=false;
  const blocked=()=>busy||Boolean(actions.isBlocked?.());
 const $=id=>root.querySelector('#sam-'+id),canvas=$('source'),ctx=canvas.getContext('2d'),resultCanvas=$('result'),resultCtx=resultCanvas.getContext('2d',{willReadFrequently:true});
 let bitmap=null,filename='',crop=null,promptBox=null,points=[],drag=null,busy=false,encoded=null,segmentation=null,currentMask=null,lastDiagnostic=null;
+let alphaCache=null,areaCleanup=null;
 const tell=text=>{$('status').textContent=text;};
+const brush=createMaskBrush({canvas:resultCanvas,container:$('previewStage'),isBlocked:blocked,
+    getSize:()=>segmentation?{width:segmentation.region[2]-segmentation.region[0],height:segmentation.region[3]-segmentation.region[1]}:null,
+    readRadius:()=>Number($('brushRadius').value),readMode:()=>$('brushMode').value,
+    readTool:()=>$('brushTool').value,onStatus:tell,
+    getAlpha:()=>({alpha:editedAlpha(segmentation.width,segmentation.height),width:segmentation.width,height:segmentation.height}),
+    onMode:mode=>{$('brushMode').value=mode;tell(mode==='add'?'画笔：增加保留区域。':'画笔：删除保留区域。');},
+    onChange:()=>{if(areaCleanup)resetCleanup('画笔已修改，区域清理已撤销；修整完成后可再次清理。');render();},onHistory:refresh});
+function cleanupKey(){return [$('candidate').value,$('threshold').value,$('invert').checked,$('smooth').checked].join('|');}
+function resetCleanup(message='尚未执行区域清理'){
+    areaCleanup=null;$('areaInfo').textContent=message;refresh();
+}
 function refresh(){
     for(const id of ['choose','file','mode','undo','clear','clearPrompt','overlay','tight'])$(id).disabled=blocked();
-    $('segment').disabled=blocked()||!bitmap;
-    for(const id of ['candidate','threshold','invert','download','maskDownload','diagnostic'])$(id).disabled=blocked()||!segmentation;
+    $('segment').disabled=blocked()||brush.isDrawing()||!bitmap;
+    for(const id of ['candidate','threshold','invert','smooth','download','maskDownload','diagnostic','brushTool','brushMode','brushRadius'])$(id).disabled=blocked()||brush.isDrawing()||!segmentation;
+    for(const id of ['curveUndo','curveClear'])$(id).disabled=blocked()||brush.isDrawing()||!brush.getShapes().length;
+    $('curveInfo').textContent=brush.getShapes().length+' 个图形 · 最多 30 个 · 互不重叠';
+    $('circleTools').hidden=$('brushTool').value==='curve';$('curveTools').hidden=$('brushTool').value!=='curve';
+    for(const id of ['brushUndo','brushClear'])$(id).disabled=blocked()||brush.isDrawing()||!brush.getStrokes().length;
+    for(const id of ['minArea','cleanAreas'])$(id).disabled=blocked()||brush.isDrawing()||!segmentation;
+    $('undoAreas').disabled=blocked()||brush.isDrawing()||!areaCleanup;
     $('undo').disabled=blocked()||!points.length;
     if(busy!==publishedBusy){publishedBusy=busy;actions.onBusy?.(busy);}
 }
 function invalidate(){
+    areaCleanup=null;$('areaInfo').textContent='尚未执行区域清理';
+    brush.reset();alphaCache=null;
     segmentation=null;currentMask=null;lastDiagnostic=null;$('invert').checked=false;$('maskInfo').textContent='等待蒙版';
     resultCanvas.hidden=true;$('resultEmpty').hidden=false;$('resultEmpty').textContent='范围或提示已更新，请重新生成蒙版';$('candidate').replaceChildren();refresh();
 }
@@ -113,7 +137,7 @@ async function openFile(file){
     }catch(error){tell('读取失败：'+error.message);return false;}finally{next?.close();busy=false;refresh();}
 }
 async function run(){
-    if(blocked()||!bitmap)return;busy=true;refresh();tell('正在分割裁剪范围内的图片…');
+    if(blocked()||brush.isDrawing()||!bitmap)return;areaCleanup=null;$('areaInfo').textContent='尚未执行区域清理';brush.reset();alphaCache=null;busy=true;refresh();tell('正在分割裁剪范围内的图片…');
     const region=[...activeCrop()],cw=region[2]-region[0],ch=region[3]-region[1];
     try{
         if(!encoded){
@@ -130,44 +154,78 @@ async function run(){
         $('decodeState').textContent=segmentation.elapsedMs+' ms';$('modelState').textContent='SlimSAM-77 q8 · WASM';
         const select=$('candidate');select.replaceChildren();for(const candidate of segmentation.order){const option=document.createElement('option');option.value=String(candidate.index);option.textContent='候选 '+(candidate.index+1)+' · 预测 IoU '+(candidate.score===null?'未知':candidate.score.toFixed(3));select.append(option);}
         select.value=String(segmentation.order[0].index);$('threshold').value='0';$('invert').checked=false;
-        lastDiagnostic={revision:'xincai-segmentation-v2.0',filename,model:'Xenova/slimsam-77-uniform',dtype:'q8',backend:'wasm',threads:1,
+        lastDiagnostic={revision:'xincai-segmentation-v2.4',filename,model:'Xenova/slimsam-77-uniform',dtype:'q8',backend:'wasm',threads:1,
             originalSize:[bitmap.width,bitmap.height],crop:[...region],cropSize:[cw,ch],workingSize:[encoded.width,encoded.height],promptBox:promptBox?[...promptBox]:null,
             promptMode:promptBox?'manual':'default',effectivePromptBox:[...effectivePrompt],localPrompts:prompts,points:points.map(p=>({...p})),encodeMs:encoded.elapsedMs,decodeMs:segmentation.elapsedMs,candidates:segmentation.order};
         render();tell(promptBox?'蒙版已生成，使用手动蓝框作为目标提示。':'蒙版已生成，使用当前输入图的完整范围作为默认目标提示（不显示蓝框）。');return true;
     }catch(error){segmentation=null;currentMask=null;resultCanvas.hidden=true;$('resultEmpty').hidden=false;$('resultEmpty').textContent='分割失败';$('modelState').textContent='任务失败';tell('分割失败：'+error.message);console.error('[SlimSAM 分割]',error);return false;}
     finally{busy=false;refresh();}
 }
+function editedAlpha(width,height,includeCleanup=true){
+    const candidate=segmentation.candidates[Number($('candidate').value)],threshold=Number($('threshold').value),invert=$('invert').checked,smooth=$('smooth').checked;
+    // Cache only the preview base, not full-resolution export data.
+    let alpha;
+    if(width===segmentation.width&&height===segmentation.height){
+        if(!alphaCache||alphaCache.candidate!==candidate||alphaCache.threshold!==threshold||alphaCache.invert!==invert||alphaCache.smooth!==smooth)
+            alphaCache={candidate,threshold,invert,smooth,alpha:interpolatedAlpha(candidate.logits,segmentation.width,segmentation.height,width,height,threshold,invert,smooth)};
+        alpha=alphaCache.alpha.slice();
+    }else alpha=interpolatedAlpha(candidate.logits,segmentation.width,segmentation.height,width,height,threshold,invert,smooth);
+    const [l,t,r,b]=segmentation.region;
+    paintStrokes(alpha,width,height,r-l,b-t,brush.getStrokes());
+    if(includeCleanup&&areaCleanup)applyRegionRemoval(alpha,width,height,areaCleanup.removed,segmentation.width,segmentation.height);
+    return alpha;
+}
 function render(){
     if(!bitmap||!segmentation)return;
+    if(areaCleanup&&areaCleanup.key!==cleanupKey())resetCleanup('蒙版设置已更改，区域清理已撤销；确认新蒙版后可再次清理。');
     const index=Number($('candidate').value),threshold=Number($('threshold').value),candidate=segmentation.candidates[index];if(!candidate)return;
-    currentMask=binaryMask(candidate.logits,threshold,$('invert').checked);$('thresholdValue').textContent=threshold.toFixed(1);
+    currentMask=editedAlpha(segmentation.width,segmentation.height);$('thresholdValue').textContent=threshold.toFixed(1);
     const [l,t,r,b]=segmentation.region;resultCanvas.width=segmentation.width;resultCanvas.height=segmentation.height;resultCtx.clearRect(0,0,resultCanvas.width,resultCanvas.height);
     resultCtx.drawImage(bitmap,l,t,r-l,b-t,0,0,resultCanvas.width,resultCanvas.height);const pixels=resultCtx.getImageData(0,0,resultCanvas.width,resultCanvas.height);
-    if($('overlay').checked){for(let i=0;i<currentMask.length;i++)if(currentMask[i]){const p=i*4;pixels.data[p]*=.6;pixels.data[p+1]=pixels.data[p+1]*.6+100;pixels.data[p+2]*=.6;}}
-    else applyMaskRGBA(pixels.data,resultCanvas.width,resultCanvas.height,currentMask,segmentation.width,segmentation.height);
+    if($('overlay').checked){for(let i=0;i<currentMask.length;i++){const p=i*4,a=.4*currentMask[i];pixels.data[p]*=1-a;pixels.data[p+1]=pixels.data[p+1]*(1-a)+250*a;pixels.data[p+2]*=1-a;}}
+    else applyAlphaRGBA(pixels.data,currentMask);
     resultCtx.putImageData(pixels,0,0);resultCanvas.hidden=false;$('resultEmpty').hidden=true;
-    const bounds=maskBounds(currentMask,segmentation.width,segmentation.height),retained=(bounds?.count||0)/currentMask.length;
+    brush.drawOverlay();
+    const bounds=maskBounds(currentMask.map(a=>a>=1/255?1:0),segmentation.width,segmentation.height),retained=currentMask.reduce((sum,a)=>sum+a,0)/currentMask.length;
     $('maskInfo').textContent='裁剪图内保留 '+(retained*100).toFixed(1)+'%'+(retained>.98?' · 当前候选几乎保留整个裁剪图，若包含背景，请更换候选或补充提示点。':'');
-    if(lastDiagnostic){lastDiagnostic.selectedCandidate=index+1;lastDiagnostic.threshold=threshold;lastDiagnostic.inverted=$('invert').checked;lastDiagnostic.foregroundPixels=bounds?.count||0;lastDiagnostic.retainedFraction=retained;}
+    if(lastDiagnostic){lastDiagnostic.selectedCandidate=index+1;lastDiagnostic.threshold=threshold;lastDiagnostic.inverted=$('invert').checked;lastDiagnostic.foregroundPixels=bounds?.count||0;lastDiagnostic.retainedFraction=retained;lastDiagnostic.postprocess={continuousInterpolation:true,narrowAntialias:$('smooth').checked,brushStrokeCount:brush.getStrokes().length};}
     if(!bounds)tell('当前候选在此阈值下为空，可更换候选或降低阈值。');
+    if(lastDiagnostic)lastDiagnostic.regionCleanup=areaCleanup?{minPercent:areaCleanup.minPercent,connectivity:8,alphaCutoff:1/255,regions:areaCleanup.regions,removedRegions:areaCleanup.removedRegions,removedWorkingPixels:areaCleanup.removedPixels,workingSize:[segmentation.width,segmentation.height]}:null;
+}
+async function cleanAreas(){
+    if(blocked()||brush.isDrawing()||!segmentation)return;
+    const input=$('minArea').value.trim(),minPercent=Number(input);
+    if(!input||!Number.isFinite(minPercent)||minPercent<0||minPercent>100){tell('请输入 0～100 的区域面积百分比。');return;}
+    busy=true;refresh();tell('正在计算连通区域面积…');await new Promise(resolve=>setTimeout(resolve,0));
+    try{
+        const alpha=editedAlpha(segmentation.width,segmentation.height,false);
+        areaCleanup={...findSmallRegions(alpha,segmentation.width,segmentation.height,minPercent),key:cleanupKey()};
+        render();
+        const [l,t,r,b]=segmentation.region,sourceArea=(r-l)*(b-t),minimum=sourceArea*minPercent/100;
+        $('areaInfo').textContent='共 '+areaCleanup.regions+' 个连通区域，删除 '+areaCleanup.removedRegions+' 个；阈值 '+minPercent+'% ≈ '+Math.round(minimum)+' 原图像素²（工作图估算）。';
+        tell(areaCleanup.removedRegions?'小区域清理完成，预览与导出已同步；可撤销。':'没有面积小于阈值的区域，图片未改变。');
+    }catch(error){tell('区域清理失败：'+error.message);}finally{busy=false;refresh();}
 }
 function save(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 const toBlob=canvas=>new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('PNG 编码失败')),'image/png'));
 async function exportPNG(isMask=false){
-    if(blocked()||!currentMask||!bitmap)return;const bounds=maskBounds(currentMask,segmentation.width,segmentation.height);if(!bounds){tell('当前蒙版为空，未导出。');return;}
-    busy=true;refresh();const output=document.createElement('canvas');let full;
+    if(blocked()||brush.isDrawing()||!currentMask||!bitmap)return;
+    busy=true;refresh();tell('正在按导出尺寸处理蒙版与画笔修改…');await new Promise(resolve=>setTimeout(resolve,0));const output=document.createElement('canvas');let full;
     try{
-        if(isMask){output.width=segmentation.width;output.height=segmentation.height;const c=output.getContext('2d'),pixels=c.createImageData(output.width,output.height);
-            for(let i=0;i<currentMask.length;i++){pixels.data[i*4]=pixels.data[i*4+1]=pixels.data[i*4+2]=currentMask[i]?255:0;pixels.data[i*4+3]=255;}c.putImageData(pixels,0,0);
+        if(isMask){output.width=segmentation.width;output.height=segmentation.height;const alpha=editedAlpha(output.width,output.height),c=output.getContext('2d'),pixels=c.createImageData(output.width,output.height);
+            if(!alpha.some(a=>a>=1/255)){tell('当前蒙版为空，未导出。');return;}
+            for(let i=0;i<alpha.length;i++){pixels.data[i*4]=pixels.data[i*4+1]=pixels.data[i*4+2]=Math.round(alpha[i]*255);pixels.data[i*4+3]=255;}c.putImageData(pixels,0,0);
         }else{
             const [l,t,r,b]=segmentation.region;full=document.createElement('canvas');full.width=r-l;full.height=b-t;const c=full.getContext('2d',{willReadFrequently:true});c.drawImage(bitmap,l,t,r-l,b-t,0,0,full.width,full.height);
-            const pixels=c.getImageData(0,0,full.width,full.height);applyMaskRGBA(pixels.data,full.width,full.height,currentMask,segmentation.width,segmentation.height);c.putImageData(pixels,0,0);
-            const sx=full.width/segmentation.width,sy=full.height/segmentation.height;
-            const left=$('tight').checked?Math.floor(bounds.left*sx):0,top=$('tight').checked?Math.floor(bounds.top*sy):0;
-            const right=$('tight').checked?Math.min(full.width,Math.ceil(bounds.right*sx)):full.width,bottom=$('tight').checked?Math.min(full.height,Math.ceil(bounds.bottom*sy)):full.height;
+            const alpha=editedAlpha(full.width,full.height),pixels=c.getImageData(0,0,full.width,full.height);applyAlphaRGBA(pixels.data,alpha);c.putImageData(pixels,0,0);
+            // Use the actual exported alpha (including original transparency and brush edits) for tight cropping.
+            const visible=new Uint8Array(alpha.length);for(let i=0;i<visible.length;i++)visible[i]=pixels.data[i*4+3]>0?1:0;
+            const bounds=maskBounds(visible,full.width,full.height);if(!bounds){tell('当前蒙版为空，未导出。');return;}
+            const left=$('tight').checked?bounds.left:0,top=$('tight').checked?bounds.top:0;
+            const right=$('tight').checked?bounds.right:full.width,bottom=$('tight').checked?bounds.bottom:full.height;
             output.width=right-left;output.height=bottom-top;output.getContext('2d').drawImage(full,left,top,output.width,output.height,0,0,output.width,output.height);
         }
-        save(await toBlob(output),filename.replace(/\.[^.]+$/,'')+(isMask?'-mask':'-transparent')+'.png');tell(isMask?'已导出裁剪工作图尺寸黑白蒙版。':'已导出裁剪范围内原始分辨率透明 PNG。');
+        save(await toBlob(output),filename.replace(/\.[^.]+$/,'')+(isMask?'-mask':'-transparent')+'.png');tell(isMask?'已导出含画笔修改的灰度蒙版。':'已导出含画笔修改与边缘处理的原始分辨率透明 PNG。');
     }catch(error){tell('导出失败：'+error.message);}finally{output.width=output.height=1;if(full)full.width=full.height=1;busy=false;refresh();}
 }
 $('choose').onclick=()=>$('file').click();$('file').onchange=()=>{openFile($('file').files[0]);$('file').value='';};
@@ -176,6 +234,13 @@ $('undo').onclick=()=>{if(blocked()||!points.length)return;const removed=points.
 $('clearPrompt').onclick=()=>{if(blocked())return;promptBox=null;points=[];invalidate();draw();tell('手动蓝框和提示点已清除，恢复当前输入图完整范围的默认目标提示。白色裁剪范围不变。');};
 $('clear').onclick=()=>{if(blocked())return;crop=null;promptBox=null;points=[];discardEncoding();invalidate();draw();tell('两个框和提示点已清除，模型输入恢复整图。');};
 $('segment').onclick=run;$('candidate').onchange=$('threshold').oninput=$('overlay').onchange=render;
+$('smooth').onchange=render;
+$('cleanAreas').onclick=cleanAreas;
+$('undoAreas').onclick=()=>{if(blocked()||brush.isDrawing()||!areaCleanup)return;resetCleanup('已撤销区域清理，模型蒙版与画笔修改保留。');render();tell('已撤销区域清理。');};
+$('brushRadius').oninput=()=>{$('brushRadiusValue').textContent=$('brushRadius').value;};
+$('brushTool').onchange=()=>{brush.refreshTool();refresh();};
+$('curveUndo').onclick=()=>brush.removeLastShape();$('curveClear').onclick=()=>brush.clearShapes();
+$('brushUndo').onclick=()=>brush.undo();$('brushClear').onclick=()=>brush.clear();
 $('invert').onchange=()=>{render();tell($('invert').checked?'已反转裁剪图内的保留区域。':'已恢复模型原始保留区域。');};
 $('download').onclick=()=>exportPNG();$('maskDownload').onclick=()=>exportPNG(true);
 $('diagnostic').onclick=()=>{if(!blocked()&&lastDiagnostic)save(new Blob([JSON.stringify(lastDiagnostic,null,2)],{type:'application/json'}),'slimsam-diagnostics.json');};
