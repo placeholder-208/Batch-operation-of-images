@@ -1,4 +1,4 @@
-import { $, downloadBlob } from './ui.js';
+import { $, downloadBlob } from './ui.js?v=sam-1.8';
 import { canvasToBlob } from './image.js';
 import { detectObjects, semanticCSV } from './semantic-client.js';
 
@@ -15,6 +15,8 @@ export function createSemanticUI(actions) {
     <label for="semanticPrompt">要裁剪的对象</label><textarea id="semanticPrompt" rows="3" maxlength="500" placeholder="裁剪所有杯子，包含完整杯柄" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;resize:vertical"></textarea>
     <label for="semanticToken" class="small">测试访问口令（不是 Groq API Key）</label><input id="semanticToken" type="password" autocomplete="off" maxlength="256" style="width:100%;padding:8px;border:1px solid var(--line);border-radius:8px" placeholder="填写你设置的测试口令">
     <label class="notice" style="display:block"><input id="semanticConsent" type="checkbox"> 我同意将检测用的缩小图片和描述发送给 Groq；不上传敏感图片。</label>
+    <label class="notice" style="display:block"><input id="semanticSam" type="checkbox"> 完成后自动进入本地分割，生成透明蒙版</label>
+    <div class="notice">取本批首张有识别结果图片的第一个框（按接口返回顺序），裁图后送入 SlimSAM。不增加 API 调用，其余裁图与 CSV 保留在此页。分割结果仍需检查。</div>
     <button class="primary full" id="semanticStart" style="margin-top:16px" disabled>开始检测待处理图片</button><button class="secondary full" id="semanticStop" style="margin-top:8px" disabled>停止本批</button>
     <div class="module-state"><div class="status" role="status" aria-live="polite"><span class="dot"></span><span id="semanticStatus">等待图片与描述</span></div><dl class="module-rows"><div><dt>Groq 视觉接口</dt><dd id="semanticEngine">尚未调用</dd></div><div><dt>当前结果已知 tokens</dt><dd id="semanticUsage">0</dd></div></dl></div>
     <div class="notice">按张调用，不自动重试。请求之间至少间隔 22 秒；遇到权限、配置或额度错误停止本批。已发出的请求可能消耗额度。口令只留在本页内存中。</div>
@@ -37,7 +39,7 @@ export function createSemanticUI(actions) {
     }
     function refresh() {
         $('semanticCount').textContent=items.length+' 张图片';
-        for(const id of ['semanticAdd','semanticChoose','semanticReset','semanticPrompt','semanticToken','semanticConsent'])$(id).disabled=blocked();
+        for(const id of ['semanticAdd','semanticChoose','semanticReset','semanticPrompt','semanticToken','semanticConsent','semanticSam'])$(id).disabled=blocked();
         $('semanticStart').disabled=blocked()||!items.some(i=>!i.result)||!$('semanticPrompt').value.trim()||!$('semanticToken').value||!$('semanticConsent').checked;
         $('semanticStop').disabled=!busy||!controller;
         $('semanticRetry').disabled=blocked()||!items.some(i=>i.result||i.error);
@@ -91,7 +93,8 @@ export function createSemanticUI(actions) {
         if(blocked()||!$('semanticConsent').checked)return;
         const pending=items.filter(i=>!i.result),prompt=$('semanticPrompt').value.trim(),token=$('semanticToken').value;
         if(!pending.length||!prompt||!token)return;
-        busy=true;controller=new AbortController();const signal=controller.signal;actions.onBusy(true);refresh();let targets=0,failed=0;
+        const autoSam=$('semanticSam').checked;
+        busy=true;controller=new AbortController();const signal=controller.signal;actions.onBusy(true);refresh();let targets=0,failed=0,samTarget=null;
         try {
             for(let i=0;i<pending.length;i++) {
                 const item=pending[i];let bitmap;
@@ -117,6 +120,10 @@ export function createSemanticUI(actions) {
                         } catch(error){item.cropError=error.message;}finally{crop.width=crop.height=1;}
                     }
                     $('semanticEngine').textContent=result.model+' · '+result.elapsedMs+' ms';
+                    if(autoSam&&!samTarget&&result.objects.length){
+                        const first=result.objects[0],firstCrop=item.crops.find(c=>c.id===first.id);
+                        samTarget=firstCrop?{blob:firstCrop.blob,filename:item.file.name.replace(/\.[^.]+$/,'')+'-object-'+first.id+'.png'}:{error:'首个识别框的裁图未成功生成，未转入本地分割'};
+                    }
                 } catch(error) {
                     if(error.name==='AbortError'){item.error='用户停止；已发送请求可能消耗额度';throw error;}
                     failed++;item.error=error.message;$('semanticEngine').textContent='本图失败';
@@ -125,7 +132,17 @@ export function createSemanticUI(actions) {
             }
             tell('本次检测得到 '+targets+' 个目标'+(failed?'；'+failed+' 张失败':'')+'。请核对预览框。');
         } catch(error) {tell(error.name==='AbortError'?'已停止，完成的结果已保留。':'处理停止：'+error.message);}
-        finally {busy=false;controller=null;actions.onBusy(false);refresh();}
+        finally {
+            busy=false;controller=null;actions.onBusy(false);refresh();
+            if(autoSam&&!signal.aborted){
+                if(samTarget?.blob){
+                    tell('语义结果已保留，正在将首个目标转入本地分割…');
+                    try{await actions.openSam(samTarget.blob,samTarget.filename);tell('首个识别框已完成本地分割。语义裁图与 CSV 仍可导出。');}
+                    catch(error){tell('语义结果已保留；本地分割未完成：'+error.message);}
+                }else if(samTarget?.error)tell(samTarget.error+'；语义坐标结果已保留。');
+                else if(!targets)tell('本批没有识别到目标，未转入本地分割。');
+            }
+        }
     }
     async function exportZIP() {
         if(blocked())return;if(!window.JSZip){tell('ZIP 库未加载。');return;}

@@ -3,6 +3,12 @@ import { canvasToBlob } from "./image.js";
 import { parseWebURL, createLinkPreview, cancelLinkPreviews } from './link-preview.js';
 export const $ = id => document.getElementById(id);
 export function updateWorkspaceDescription(mode) {
+    if(mode === 'sam') {
+        $('introTitle').textContent='分割对象，导出透明背景图片。';
+        $('introDescription').textContent='在浏览器内使用 SlimSAM 生成对象蒙版，支持裁剪范围、目标位置提示及保留／排除点。可手动上传，也可从语义裁剪接收首个检测目标。';
+        $('introBadge').textContent='本地推理 · 图片不上传';
+        $('footerNote').textContent='SlimSAM 按需加载 · 请检查蒙版边缘后导出';document.title='心裁 · 本地分割';return;
+    }
     if(mode === 'semantic') {
         $('introTitle').textContent='描述一个对象，批量裁出对应区域。';
         $('introDescription').textContent='适合从一批照片中提取相同对象：输入名称、颜色或位置描述，通过 Groq 检测目标，再从原图生成矩形裁图。测试结果需要核对。';

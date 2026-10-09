@@ -2,19 +2,20 @@ import { processFile } from "./image.js";
 import { perspectiveCrop } from "./crop.js";
 import { createDecodeVariants } from "./preprocess.js";
 import { createImageZip, createAllZip } from "./zip.js";
-import { createUI, downloadBlob } from "./ui.js";
+import { createUI, downloadBlob } from "./ui.js?v=sam-1.8";
 import { report } from "./runtime-status.js";
 import { createMaskUI } from "./masking.js";
 import { createBarcodeUI } from "./barcode-ui.js";
-import { createSemanticUI } from "./semantic-ui.js";
-import { setupWorkspaceTabs } from "./workspace-tabs.js";
+import { createSemanticUI } from "./semantic-ui.js?v=sam-1.8";
+import { setupWorkspaceTabs } from "./workspace-tabs.js?v=sam-1.8";
+import { createSamWorkspace } from "./sam-workspace.js?v=sam-1.8";
 
 let running = false, exporting = false, decoderPromise = null;
-let barcodeUI = null, semanticUI = null;
+let barcodeUI = null, semanticUI = null, samUI = null;
 const tick = () => new Promise(resolve => setTimeout(resolve, 0));
 const ui = createUI({scan, export: exportResults, isExporting: () => exporting});
 const maskUI = createMaskUI({
-    isBlocked: () => running || exporting || Boolean(barcodeUI?.isBusy()) || Boolean(semanticUI?.isBusy()),
+    isBlocked: () => running || exporting || Boolean(barcodeUI?.isBusy()) || Boolean(semanticUI?.isBusy()) || Boolean(samUI?.isBusy()),
     onBusy: value => { ui.busy(value); barcodeUI?.refresh(); semanticUI?.refresh(); },
     async detect(file) {
         const source = await processFile(file), warnings = [];
@@ -32,14 +33,19 @@ const maskUI = createMaskUI({
     }
 });
 barcodeUI = createBarcodeUI({
-    isBlocked: () => running || exporting || maskUI.isBusy() || Boolean(semanticUI?.isBusy()),
+    isBlocked: () => running || exporting || maskUI.isBusy() || Boolean(semanticUI?.isBusy()) || Boolean(samUI?.isBusy()),
     prepare: loadDecoder,
     onBusy: value => { ui.busy(value); maskUI.refresh(); semanticUI?.refresh(); },
     refresh: () => { ui.refresh(); maskUI.refresh(); }
 });
 semanticUI = createSemanticUI({
-    isBlocked: () => running || exporting || maskUI.isBusy() || barcodeUI.isBusy(),
-    onBusy: value => { ui.busy(value); maskUI.refresh(); barcodeUI.refresh(); }
+    isBlocked: () => running || exporting || maskUI.isBusy() || barcodeUI.isBusy() || Boolean(samUI?.isBusy()),
+    onBusy: value => { ui.busy(value); maskUI.refresh(); barcodeUI.refresh(); },
+    openSam: (blob,filename) => samUI.openCrop(blob,filename)
+});
+samUI = createSamWorkspace({
+    isBlocked: () => running || exporting || maskUI.isBusy() || barcodeUI.isBusy() || semanticUI.isBusy(),
+    onBusy: value => { ui.busy(value); maskUI.refresh(); barcodeUI.refresh(); semanticUI.refresh(); }
 });
 setupWorkspaceTabs(() => { ui.refresh(); maskUI.refresh(); barcodeUI.refresh(); semanticUI.refresh(); });
 report("zxing", window.ZXingWASM ? "脚本已加载，等待首次解码" : "脚本加载失败", window.ZXingWASM ? "info" : "error");
@@ -55,7 +61,7 @@ async function loadDecoder() {
     return decoderPromise;
 }
 async function scan(items) {
-    if (running || exporting || maskUI.isBusy() || barcodeUI.isBusy() || semanticUI.isBusy() || !items.length) return;
+    if (running || exporting || maskUI.isBusy() || barcodeUI.isBusy() || semanticUI.isBusy() || samUI.isBusy() || !items.length) return;
     running = true; ui.busy(true); maskUI.refresh(); barcodeUI.refresh(); semanticUI.refresh(); ui.progress(0, items.length);
     const began = performance.now(); let succeeded = 0, failed = 0, totalCount = 0;
     try {
@@ -101,7 +107,7 @@ async function scan(items) {
     }
 }
 async function exportResults(results, single = false) {
-    if (running || exporting || maskUI.isBusy() || barcodeUI.isBusy() || semanticUI.isBusy() || !results.length) return;
+    if (running || exporting || maskUI.isBusy() || barcodeUI.isBusy() || semanticUI.isBusy() || samUI.isBusy() || !results.length) return;
     if (!window.JSZip) {ui.tell("ZIP 库加载失败，请检查 jszip.min.js。","qr");return;}
     exporting=true;ui.busy(false);maskUI.refresh();barcodeUI.refresh();semanticUI.refresh();ui.tell("正在生成 ZIP…","qr");await tick();
     try {

@@ -1,7 +1,7 @@
-import { $, updateWorkspaceDescription } from './ui.js';
+import { $, updateWorkspaceDescription } from './ui.js?v=sam-1.8';
 export function setupWorkspaceTabs(refresh) {
-    const modes=['qr','barcode','mask','semantic'];
-    const workspaces={qr:'normalWorkspace',barcode:'barcodeWorkspace',mask:'maskWorkspace',semantic:'semanticWorkspace'};
+    const modes=['qr','barcode','mask','semantic','sam'];
+    const workspaces={qr:'normalWorkspace',barcode:'barcodeWorkspace',mask:'maskWorkspace',semantic:'semanticWorkspace',sam:'samWorkspace'};
     for(const mode of modes) {
         const tab=$(mode+'Tab');tab.setAttribute('aria-controls',workspaces[mode]);
         $(workspaces[mode]).setAttribute('role','tabpanel');$(workspaces[mode]).setAttribute('aria-labelledby',mode+'Tab');
