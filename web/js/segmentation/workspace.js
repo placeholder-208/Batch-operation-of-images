@@ -3,6 +3,7 @@ import { workspaceTemplate } from './workspace-template.js';
 import { createMaskCache, csvCell } from './batch-cache.js';
 import { interpolatedAlpha, paintStrokes, applyAlphaRGBA } from './postprocess.js';
 import { createMaskBrush } from './mask-brush.js';
+import { createMagnifier } from './magnifier.js';
 import { findSmallRegions, applyRegionRemoval } from './region-cleanup.js';
 import { encodeImage, releaseEncoding, segmentBox } from './inference-client.js';
 import { normalizedBox, maskBounds, cropRelativePrompts, intersectBox } from './mask-utils.js';
@@ -23,13 +24,25 @@ const brush=createMaskBrush({canvas:resultCanvas,container:$('previewStage'),isB
     readRadius:()=>Number($('brushRadius').value),readMode:()=>$('brushMode').value,
     readTool:()=>$('brushTool').value,onStatus:tell,
     getAlpha:()=>({alpha:editedAlpha(segmentation.width,segmentation.height),width:segmentation.width,height:segmentation.height}),
-    onMode:mode=>{$('brushMode').value=mode;tell(mode==='add'?'画笔：增加保留区域。':'画笔：删除保留区域。');},
+    onMode:mode=>{$('brushMode').value=mode;brushLens.refresh();tell(mode==='add'?'画笔：增加保留区域。':'画笔：删除保留区域。');},
     onChange:render,onHistory:refresh});
+const pointLens=createMagnifier({canvas,isEnabled:()=>$('magnify').checked,
+    isAvailable:()=>!root.hidden&&!blocked()&&Boolean(bitmap)&&['positive','negative'].includes($('mode').value),
+    readZoom:()=>$('magnifyZoom').value,readMark:()=>({mode:$('mode').value==='negative'?'erase':'add'})});
+const brushLens=createMagnifier({canvas:resultCanvas,isEnabled:()=>$('magnify').checked,
+    isAvailable:()=>!root.hidden&&!blocked()&&Boolean(segmentation),readZoom:()=>$('magnifyZoom').value,
+    readMark:()=>({mode:$('brushMode').value,radius:$('brushTool').value==='circle'?Number($('brushRadius').value):0})});
+for(const suffix of ['', 'Preview']){
+    $('magnify'+suffix).onchange=()=>{const checked=$('magnify'+suffix).checked;$('magnify').checked=$('magnifyPreview').checked=checked;pointLens.refresh();brushLens.refresh();};
+    $('magnifyZoom'+suffix).onchange=()=>{const value=$('magnifyZoom'+suffix).value;$('magnifyZoom').value=$('magnifyZoomPreview').value=value;pointLens.refresh();brushLens.refresh();};
+}
+if(typeof MutationObserver!=='undefined')new MutationObserver(()=>{if(root.hidden){pointLens.hide();brushLens.hide();}}).observe(root,{attributes:true,attributeFilter:['hidden']});
 function cleanupKey(){return [$('candidate').value,$('threshold').value,$('invert').checked,$('smooth').checked].join('|');}
 function resetCleanup(message='尚未执行区域清理'){
     areaCleanup=null;$('areaInfo').textContent=message;refresh();
 }
 function refresh(){
+    if(blocked()){pointLens.hide();brushLens.hide();}
     for(const id of ['choose','file','mode','undo','clear','clearPrompt','overlay','tight'])$(id).disabled=blocked();
     $('segment').disabled=blocked()||brush.isDrawing()||!bitmap;
     for(const id of ['candidate','threshold','invert','smooth','download','maskDownload','diagnostic','brushTool','brushMode','brushRadius'])$(id).disabled=blocked()||brush.isDrawing()||!segmentation;
@@ -150,6 +163,7 @@ function draw(){
     drawFrame(drag?.kind==='prompt'?shown:promptBox,'#365ee8',$('mode').value==='prompt','目标提示');
     ctx.font='bold 14px system-ui';
     for(const p of points){const x=p.x*sx,y=p.y*sy;ctx.fillStyle=p.label===1?'#15a568':'#e05245';ctx.beginPath();ctx.arc(x,y,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='white';ctx.fillText(p.label===1?'+':'−',x-4,y+5);}
+    pointLens.refresh();
 }
 function pointer(event){const rect=canvas.getBoundingClientRect();return {x:Math.max(0,Math.min(bitmap.width,(event.clientX-rect.left)/rect.width*bitmap.width)),y:Math.max(0,Math.min(bitmap.height,(event.clientY-rect.top)/rect.height*bitmap.height))};}
 function actionAt(point){const rect=canvas.getBoundingClientRect();return hitBox(point,activeRect(),8*bitmap.width/rect.width,8*bitmap.height/rect.height);}
@@ -288,7 +302,7 @@ function render(){
         resultCtx.putImageData(pixels,0,0,x0,y0,x1-x0,y1-y0);
     }
     resultCanvas.hidden=false;$('resultEmpty').hidden=true;
-    brush.drawOverlay();
+    brush.drawOverlay();brushLens.refresh();
     if(brush.isDrawing())return;
     const bounds=maskBounds(currentMask.map(a=>a>=1/255?1:0),segmentation.width,segmentation.height),retained=currentMask.reduce((sum,a)=>sum+a,0)/currentMask.length;
     $('maskInfo').textContent='裁剪图内保留 '+(retained*100).toFixed(1)+'%'+(retained>.98?' · 当前候选几乎保留整个裁剪图，若包含背景，请更换候选或补充提示点。':'');
@@ -395,8 +409,9 @@ $('segment').onclick=run;$('candidate').onchange=$('threshold').oninput=$('overl
 $('smooth').onchange=render;
 $('cleanAreas').onclick=cleanAreas;
 $('undoAreas').onclick=()=>{if(blocked()||brush.isDrawing()||!areaCleanup)return;resetCleanup('已撤销区域清理，模型蒙版与画笔修改保留。');render();tell('已撤销区域清理。');};
-$('brushRadius').oninput=()=>{$('brushRadiusValue').textContent=$('brushRadius').value;};
-$('brushTool').onchange=()=>{brush.refreshTool();refresh();};
+$('brushRadius').oninput=()=>{$('brushRadiusValue').textContent=$('brushRadius').value;brushLens.refresh();};
+$('brushMode').onchange=()=>brushLens.refresh();
+$('brushTool').onchange=()=>{brush.refreshTool();brushLens.refresh();refresh();};
 $('curveUndo').onclick=()=>brush.removeLastShape();$('curveClear').onclick=()=>brush.clearShapes();
 $('brushUndo').onclick=()=>brush.undo();$('brushClear').onclick=()=>brush.clear();
 $('invert').onchange=()=>{render();tell($('invert').checked?'已反转裁剪图内的保留区域。':'已恢复模型原始保留区域。');};

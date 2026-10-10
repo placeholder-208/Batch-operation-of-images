@@ -36,6 +36,12 @@
 #samWorkspace .sam-settings>button{margin-top:16px;width:100%}
 #samWorkspace .sam-check{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.6;color:#566170}
 #samWorkspace .sam-check input{flex:none;margin:3px 0 0;accent-color:var(--blue)}
+#samWorkspace .sam-magnifier-controls{align-items:center;gap:12px 20px;margin-top:0}
+#samWorkspace .sam-magnifier-controls .sam-check{align-items:center;min-height:40px}
+#samWorkspace .sam-magnifier-controls .sam-check input{margin:0}
+#samWorkspace .sam-magnifier-zoom{display:inline-flex;align-items:center;gap:10px;flex:none;font-size:12px;color:#566170}
+#samWorkspace .sam-magnifier-zoom label{white-space:nowrap}
+#samWorkspace .sam-magnifier-zoom select{width:88px;min-height:40px;margin:0}
 #samWorkspace button,#samWorkspace select,#samWorkspace input{font:inherit}
 #samWorkspace button,#samWorkspace select{padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:white;color:var(--ink);font-size:12px}
 #samWorkspace button{cursor:pointer}

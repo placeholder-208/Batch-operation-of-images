@@ -5,6 +5,7 @@ export const workspaceTemplate=`
   <div class="sam-section sam-batch-list"><p class="sam-hint" id="sam-batchInfo" aria-live="polite">0 张图片</p><div class="sam-image-list" id="sam-imageList" aria-label="本批图片，点击切换当前图片"></div><div class="sam-actions"><button id="sam-removeImage" disabled>移除当前图片</button><button id="sam-clearBatch" disabled>清空本批图片</button></div><p class="sam-hint">单批最多 20 张，逐张设置范围与修整；切换图片保留各自结果。所有处理留在本浏览器会话内。</p></div>
   <div class="stage" id="sam-stage"><div class="sam-empty" id="sam-empty">选择 JPEG、PNG 或 WebP 图片<br><span>也可将图片拖入这里</span></div><canvas id="sam-source" hidden aria-label="原图：拖动编辑裁剪框、提示框，或添加提示点"></canvas></div>
   <div class="sam-filebar"><span id="sam-filename">未选择图片</span><span>白框裁剪 · 蓝框提示</span></div>
+  <div class="sam-section"><div class="sam-actions sam-magnifier-controls"><label class="sam-check"><input type="checkbox" id="sam-magnify" checked> 局部放大镜（提示点与画笔）</label><span class="sam-magnifier-zoom"><label for="sam-magnifyZoom">倍率</label><select id="sam-magnifyZoom"><option value="2">2×</option><option value="4" selected>4×</option><option value="6">6×</option><option value="8">8×</option></select></span></div><p class="sam-hint">鼠标移到图片上查看局部，十字对应实际落点；画笔圆圈同步放大。仍在原预览上操作，放大镜不改变画笔大小或导出结果。两工作区共用设置。</p></div>
   <div class="sam-section">
    <div class="sam-field"><label for="sam-mode">原图操作</label><select id="sam-mode"><option value="box">框选 / 编辑框（白色裁剪框）</option><option value="prompt">目标位置框选提示（蓝色提示框）</option><option value="positive">点击保留点 ＋</option><option value="negative">点击排除点 −</option></select></div>
    <div class="sam-actions"><button id="sam-undo" title="撤销最近添加的保留点或排除点" aria-describedby="sam-undoHelp">撤销点</button><button id="sam-clearPrompt">清除目标提示</button><button id="sam-clear">清除全部</button></div>
@@ -21,6 +22,7 @@ export const workspaceTemplate=`
  <section class="panel sam-card" aria-labelledby="sam-previewTitle">
   <div class="head"><div><span class="sam-step">02 · 蒙版修整</span><h2 id="sam-previewTitle">结果预览与画笔</h2></div><label class="sam-check"><input type="checkbox" id="sam-overlay"> 叠加蒙版</label></div>
   <div class="sam-brushbar">
+   <div class="sam-actions sam-magnifier-controls"><label class="sam-check"><input type="checkbox" id="sam-magnifyPreview" checked> 局部放大镜</label><span class="sam-magnifier-zoom"><label for="sam-magnifyZoomPreview">倍率</label><select id="sam-magnifyZoomPreview"><option value="2">2×</option><option value="4" selected>4×</option><option value="6">6×</option><option value="8">8×</option></select></span></div>
    <div class="sam-field"><label for="sam-brushTool">修整工具</label><select id="sam-brushTool"><option value="circle">圆形画笔</option><option value="curve">曲线闭合选区</option></select></div>
    <div class="sam-circle-tools" id="sam-circleTools">
    <div class="sam-field"><label for="sam-brushMode">画笔模式</label><select id="sam-brushMode"><option value="add">增加保留区域</option><option value="erase">删除保留区域</option></select></div>
