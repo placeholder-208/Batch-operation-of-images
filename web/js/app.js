@@ -1,3 +1,4 @@
+import { setupDesign } from './design.js';
 import {storeCrop,releaseCrops} from './crop-store.js';
 import { processFile } from "./image.js";
 import { perspectiveCrop } from "./crop.js";
@@ -52,6 +53,7 @@ setupWorkspaceTabs(() => { ui.refresh(); maskUI.refresh(); barcodeUI.refresh(); 
 report("zxing", window.ZXingWASM ? "脚本已加载，等待首次解码" : "脚本加载失败", window.ZXingWASM ? "info" : "error");
 report("wechat", globalThis.ort ? "运行库脚本已加载，模型按需加载" : "ONNX Runtime 脚本加载失败", globalThis.ort ? "info" : "error");
 report("curved", "等待任务");
+setupDesign();
 
 async function loadDecoder() {
     if (!decoderPromise) decoderPromise = import("./decoder.js").catch(error => {

@@ -1,0 +1,12 @@
+// Decorative icons and disclosure groups. All existing action nodes retain their handlers.
+export function setupDesign(){
+ const tabs=document.querySelector('.tabs'),layout=window.matchMedia('(max-width:760px)');
+ const orient=()=>tabs.setAttribute('aria-orientation',layout.matches?'horizontal':'vertical');orient();layout.addEventListener('change',orient);
+ const paths={qr:'M4 4h6v6H4z M14 4h6v6h-6z M4 14h6v6H4z M15 14v3h-2 M20 14v6h-5 M13 20h1',barcode:'M4 5v14 M7 5v14 M11 5v14 M13 5v14 M17 5v14 M20 5v14',mask:'M5 4h14v16H5z M8 8h8v8H8z M8 8l8 8 M16 8l-8 8',semantic:'M4 9V4h5 M15 4h5v5 M20 15v5h-5 M9 20H4v-5 M12 7v10 M7 12h10',sam:'M8 3c-3 2-4 5-3 8s-2 5 0 8 6 2 8 2 6-1 7-4-1-5-2-7 0-4-3-6-5-2-7-1z M10 9l2 2 4-4',upload:'M5 15v5h14v-5 M12 16V4 M7 9l5-5 5 5'};
+ function icon(name){const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('fill','none');svg.setAttribute('stroke','currentColor');svg.setAttribute('stroke-width','1.6');svg.setAttribute('stroke-linecap','round');svg.setAttribute('stroke-linejoin','round');svg.setAttribute('aria-hidden','true');svg.classList.add('ui-icon');const path=document.createElementNS(svg.namespaceURI,'path');path.setAttribute('d',paths[name]||paths.upload);svg.append(path);return svg;}
+ for(const name of ['qr','barcode','mask','semantic','sam']){const tab=document.getElementById(name+'Tab');if(!tab)continue;tab.prepend(icon(name));if(name==='semantic'){for(const node of tab.childNodes)if(node.nodeType===3)node.textContent='语义裁剪';const badge=document.createElement('span');badge.className='tab-tag';badge.textContent='测试';tab.append(badge);}}
+ document.querySelectorAll('.upload-icon').forEach(node=>node.replaceChildren(icon('upload')));
+ document.querySelectorAll('.module-state').forEach(node=>{const rows=node.querySelector('.module-rows');if(!rows)return;const details=document.createElement('details');details.className='runtime-details';const summary=document.createElement('summary');summary.textContent='引擎与运行详情';details.append(summary,rows);node.append(details);});
+ document.querySelector('#samWorkspace .sam-help[open]')?.removeAttribute('open');
+ const dialog=document.getElementById('guideDialog');document.getElementById('openGuide').onclick=()=>dialog.showModal();document.getElementById('closeGuide').onclick=()=>dialog.close();dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
+}

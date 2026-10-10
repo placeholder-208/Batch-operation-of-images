@@ -1,4 +1,5 @@
 export const workspaceTemplate=`
+<nav class="sam-flow-nav" aria-label="本地分割工作区导航"><a href="#sam-sourceTitle"><b>01</b> 范围与提示</a><span>→</span><a href="#sam-previewTitle"><b>02</b> 蒙版与修整</a><span>→</span><a href="#sam-download"><b>03</b> 导出图片</a></nav>
 <div class="sam-main">
  <section class="panel sam-card" aria-labelledby="sam-sourceTitle">
   <div class="head"><div><span class="sam-step">01 · 范围与提示</span><h2 id="sam-sourceTitle">原图工作区</h2></div><button id="sam-choose">添加图片（可多选）</button></div>

@@ -6,27 +6,27 @@ import { parseWebURL, createLinkPreview, cancelLinkPreviews } from './link-previ
 export const $ = id => document.getElementById(id);
 export function updateWorkspaceDescription(mode) {
     if(mode === 'sam') {
-        $('introTitle').textContent='分割对象，导出透明背景图片。';
-        $('introDescription').textContent='在浏览器内使用 SlimSAM 生成对象蒙版，支持裁剪范围、目标位置提示及保留／排除点。可手动上传，也可从语义裁剪接收首个检测目标。';
+        $('introTitle').textContent='留下主角，让背景透明。';
+        $('introDescription').textContent='框选范围、标记保留与排除位置，在本地生成蒙版。使用画笔精修边缘，批量导出透明背景图片。';
         $('introBadge').textContent='本地推理 · 图片不上传';
         $('footerNote').textContent='SlimSAM 按需加载 · 请检查蒙版边缘后导出';document.title='心裁 · 本地分割';return;
     }
     if(mode === 'semantic') {
-        $('introTitle').textContent='描述一个对象，批量裁出对应区域。';
+        $('introTitle').textContent='描述所需，批量裁出对象。';
         $('introDescription').textContent='适合从一批照片中提取相同对象：输入名称、颜色或位置描述，通过 Groq 检测目标，再从原图生成矩形裁图。测试结果需要核对。';
         $('introBadge').textContent='云端检测 · 裁图本地生成';
         $('footerNote').textContent='检测缩图与描述发送至 Groq · 非透明抠图';
         document.title='心裁 · 语义裁剪测试';return;
     }
     if(mode === 'barcode') {
-        $('introTitle').textContent='批量识别条形码，保留内容与裁图。';
+        $('introTitle').textContent='条形码，批量识别与整理。';
         $('introDescription').textContent='适合商品包装、标签和资料图片：识别常见条形码、查看码制与原文，批量导出裁图和 CSV，便于后续整理与格式化输入。';
         $('introBadge').textContent='条形码图片在本机处理';
         $('footerNote').textContent='图片本地识别 · CSV 保留原始解码内容';
         document.title='心裁 · 条形码识别';return;
     }
     const mask = mode === 'mask';
-    $('introTitle').textContent = mask ? '遮盖二维码，保留图片其余内容。' : '批量识别二维码，整理成单码图片。';
+    $('introTitle').textContent = mask ? '遮盖二维码，安心分享图片。' : '二维码，批量识别与整理。';
     $('introDescription').textContent = mask
         ? '适合分享截图、照片或公开展示资料前隐藏二维码：自动检测并实色遮盖，支持手动补框与整图批量导出。自动检测可能漏检，请检查后再分享。'
         : '适合活动二维码材料、多码截图和标签照片：定位二维码、查看内容，并将每个二维码分别裁出，支持单张下载与 ZIP 打包。';
