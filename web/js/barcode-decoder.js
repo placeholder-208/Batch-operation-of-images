@@ -1,3 +1,4 @@
+import {readBarcodes,getReaderBackend} from './reader-client.js';
 import { polygonArea, intersectionArea, refineStripeRegion, rotateVariant } from './barcode-geometry.js';
 // Explicit names avoid differences between ZXing versions' group aliases.
 export const BARCODE_FORMATS = ['EAN13', 'EAN8', 'UPCA', 'UPCE', 'Code128', 'Code39', 'ITF', 'Codabar'];
@@ -63,13 +64,13 @@ export async function decodeBarcodes(variants, onState=()=>{}, sourceCanvas=null
     const decoded=[]; let succeeded=0, lastError;
     const formats=readerFormats();
     const sourceImage=sourceCanvas?.getContext('2d',{willReadFrequently:true}).getImageData(0,0,sourceCanvas.width,sourceCanvas.height);
-    async function* passes(){yield* variants;if(sourceCanvas)for(const angle of [-45,-30,-15,15,30,45])yield rotateVariant(sourceCanvas,angle);}
+    async function* passes(){yield* variants;if(sourceCanvas)for(const angle of [-45,-30,-15,15,30,45])yield {...rotateVariant(sourceCanvas,angle),releaseAfterDecode:true};}
     let attempted=0;
     for await (const variant of passes()) {
         attempted++;
-        onState('正在解码：'+variant.name);
+        onState((getReaderBackend()==='worker'?'后台解码 · ':'兼容解码 · ')+(variant.preprocessBackend==='worker'?'后台预处理 · ':variant.preprocessBackend==='main'?'兼容预处理 · ':'')+'正在解码：'+variant.name);
         try {
-            const results=await window.ZXingWASM.readBarcodes(variant.imageData,{formats,tryHarder:true,tryRotate:true,minLineCount:2});
+            const results=await readBarcodes(variant.imageData,{formats,tryHarder:true,tryRotate:true,minLineCount:2});
             succeeded++;
             for(const result of results) {
                 if(result.isValid===false || !result.position || !BARCODE_FORMATS.includes(normalizeFormat(result.format)))continue;
@@ -86,7 +87,7 @@ export async function decodeBarcodes(variants, onState=()=>{}, sourceCanvas=null
                     decoded[index].sources=sources;
                 }
             }
-        } catch(error) {lastError=error; console.warn('条形码版本解码失败',variant.name,error);}
+        } catch(error) {lastError=error; console.warn('条形码版本解码失败',variant.name,error);}finally{if(variant.releaseAfterDecode)variant.imageData=null;}
         await new Promise(resolve=>setTimeout(resolve,0));
     }
     if(!succeeded)throw lastError||new Error('所有条形码解码版本均失败');

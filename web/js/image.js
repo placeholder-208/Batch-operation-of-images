@@ -11,7 +11,7 @@ export async function processFile(file) {
     try { context.drawImage(bitmap, 0, 0); } finally { bitmap.close(); }
 
     return {
-        image: canvas.toDataURL("image/png"),
+        image: null,
 width: canvas.width,
         height: canvas.height,
         canvas: canvas

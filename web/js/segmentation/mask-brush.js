@@ -2,7 +2,7 @@ import { closeCurve, polygonsOverlap, pointInPolygon, classifyPolygon } from './
 export function createMaskBrush({canvas,container,getSize,isBlocked,onChange,onMode,onHistory,readRadius,readMode,readTool=()=> 'circle',getAlpha,onStatus=()=>{}}){
  const cursor=document.createElement('span');cursor.className='mask-brush-cursor';cursor.hidden=true;container.append(cursor);
  const ns='http://www.w3.org/2000/svg',overlay=document.createElementNS(ns,'svg');overlay.classList.add('mask-curve-overlay');overlay.setAttribute('aria-hidden','true');container.append(overlay);
- let strokes=[],shapes=[],active=null,frame=null,changed=false,sequence=0;
+ let strokes=[],shapes=[],active=null,frame=null,changed=false,sequence=0,editSequence=0;
  const available=()=>Boolean(getSize())&&!isBlocked();
  function drawOverlay(){
   const size=getSize();overlay.style.display=!size||(!shapes.length&&!active?.curve)?'none':'';if(!size)return;
@@ -25,7 +25,7 @@ export function createMaskBrush({canvas,container,getSize,isBlocked,onChange,onM
   if(event.button!==0||!available()||active)return;event.preventDefault();
   const size=getSize(),rect=canvas.getBoundingClientRect();
   active=readTool()==='curve'?{curve:true,points:[point(event)],units:size.width/rect.width}:{mode:readMode(),radius:Number(readRadius())*size.width/rect.width,points:[point(event)]};
-  if(!active.curve)strokes.push(active);canvas.setPointerCapture(event.pointerId);show(event);notify(!active.curve);
+  if(!active.curve){active.editId=++editSequence;strokes.push(active);}canvas.setPointerCapture(event.pointerId);show(event);notify(!active.curve);
  };
  canvas.onpointermove=event=>{
   show(event);if(!active||!available())return;
@@ -61,13 +61,16 @@ export function createMaskBrush({canvas,container,getSize,isBlocked,onChange,onM
     if(!strokes.some(s=>s.shapeId===shape.id))shapes=shapes.filter(s=>s!==shape);
     onStatus('图形内少数状态占 '+(stats.minority*100).toFixed(2)+'%，超过 5%；未修改蒙版，请重新绘制图形（已处理的图形可先移除）。');notify(false);return;
    }
-   strokes.push({type:'polygon',shapeId:shape.id,points:shape.points,mode:stats.mode});
+   strokes.push({editId:++editSequence,type:'polygon',shapeId:shape.id,points:shape.points,mode:stats.mode});
    notify();onStatus('图形内 '+(stats.mode==='erase'?'全部删除':'全部保留')+'；少数状态占 '+(stats.minority*100).toFixed(2)+'%（不超过 5%）。');
   }catch(error){onStatus(error.message);}
  };
  if(typeof ResizeObserver!=='undefined')new ResizeObserver(drawOverlay).observe(canvas);
  return {
-  getStrokes:()=>strokes,getShapes:()=>shapes,isDrawing:()=>Boolean(active),drawOverlay,
+  flush(){if(frame!==null){cancelAnimationFrame(frame);frame=null;}if(changed){changed=false;onChange();}drawOverlay();onHistory(strokes.length);},
+  snapshot(){return structuredClone({strokes,shapes,sequence,editSequence});},
+  restore(state){this.reset();strokes=state?.strokes||[];shapes=state?.shapes||[];sequence=state?.sequence||0;editSequence=state?.editSequence||0;for(const stroke of strokes){if(!Number.isFinite(stroke.editId))stroke.editId=++editSequence;else editSequence=Math.max(editSequence,stroke.editId);}drawOverlay();onHistory(strokes.length);},
+  getLastEditId:()=>editSequence,getStrokes:()=>strokes,getShapes:()=>shapes,isDrawing:()=>Boolean(active),drawOverlay,
   refreshTool(){cursor.hidden=true;canvas.style.cursor=readTool()==='curve'?'crosshair':'none';drawOverlay();},
   reset(){strokes=[];shapes=[];active=null;changed=false;cursor.hidden=true;overlay.style.display='none';overlay.replaceChildren();if(frame!==null){cancelAnimationFrame(frame);frame=null;}onHistory(0);},
   undo(){if(isBlocked()||active||!strokes.length)return;strokes.pop();onChange();drawOverlay();onHistory(strokes.length);},

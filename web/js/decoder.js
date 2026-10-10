@@ -1,3 +1,4 @@
+import {readBarcodes,getReaderBackend} from './reader-client.js';
 import { report } from "./runtime-status.js";
 import {
     decodeWechatFallback
@@ -197,10 +198,10 @@ export async function decodeQRCode(
 
     let successfulVariants = 0;
     let failedVariants = 0;
-    for (const variant of variants) {
-        report("zxing", "正在解码：" + variant.name);
+    for await (const variant of variants) {
+        report("zxing", (getReaderBackend()==='worker'?'后台解码 · ':'兼容解码 · ')+(variant.preprocessBackend==='worker'?'后台预处理 · ':variant.preprocessBackend==='main'?'兼容预处理 · ':'')+"正在解码：" + variant.name);
         try {
-            const results = await window.ZXingWASM.readBarcodes(
+            const results = await readBarcodes(
                 variant.imageData,
                 {
                     formats: ["QRCode"],
@@ -223,7 +224,9 @@ export async function decodeQRCode(
                 `“${variant.name}”版本识别失败`,
                 error
             );
-        }
+        } finally {if(variant.releaseAfterDecode)variant.imageData=null;}
+        // Yield between passes; do not stop after finding one code in a multi-code image.
+        await new Promise(resolve=>setTimeout(resolve,0));
     }
 
     const uniqueDecoded = deduplicateResults(decoded);

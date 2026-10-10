@@ -1,3 +1,4 @@
+import {readBarcodes,getReaderBackend} from './reader-client.js';
 const LIMITS = {
     maxPixels: 360000,
     maxModels: 12,
@@ -583,7 +584,7 @@ export async function decodeCurvedRegion(canvas, options = {}) {
             samplingModel = { ...model, samples };
         }
         const rendered = renderCurvedModel(samplingModel);
-        const results = await window.ZXingWASM.readBarcodes(new ImageData(rendered.data, rendered.width, rendered.height), {
+        const results = await readBarcodes(new ImageData(rendered.data, rendered.width, rendered.height), {
             formats: ['QRCode'], tryHarder: true
         });
         attempted++;

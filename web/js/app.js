@@ -1,6 +1,7 @@
+import {storeCrop,releaseCrops} from './crop-store.js';
 import { processFile } from "./image.js";
 import { perspectiveCrop } from "./crop.js";
-import { createDecodeVariants } from "./preprocess.js";
+import { iterateBackgroundVariants as createDecodeVariants } from './preprocess-client.js';
 import { createImageZip, createAllZip } from "./zip.js";
 import { createUI, downloadBlob } from "./ui.js?v=sam-1.8";
 import { report } from "./runtime-status.js";
@@ -70,10 +71,10 @@ async function scan(items) {
             const item = items[index]; item.processing = true; item.error = null;
             ui.tell("正在识别第 " + (index+1) + " / " + items.length + " 张：" + item.file.name, "qr");
             ui.detail("正在读取图片…"); ui.refresh(); await tick();
-            const started = performance.now();
+            const started = performance.now();let source;
             try {
-                const source = await processFile(item.file);
-                ui.detail("正在生成图像预处理版本…"); await tick();
+                source = await processFile(item.file);
+                ui.detail("准备按顺序生成图像预处理版本…"); await tick();
                 const variants = createDecodeVariants(source.canvas);
                 ui.detail("正在执行 " + variants.length + " 个解码版本与检测兜底…"); await tick();
                 const detected = await decodeQRCode(variants, source.canvas);
@@ -83,9 +84,10 @@ async function scan(items) {
                 for (const qr of qrcodes) {
                     try {
                         const canvas = perspectiveCrop(source.canvas,qr.points,20);
-                        crops.push({id:qr.id,canvas,image:canvas.toDataURL("image/png")});
+                        crops.push(await storeCrop(canvas,qr.id));
                     } catch(error) {cropFailed++;console.warn("二维码 #"+qr.id+" 裁切失败",error);}
                 }
+                releaseCrops(item.result);
                 item.result = {filename:item.file.name,width:source.width,height:source.height,image:item.url,
                     count:qrcodes.length,qrcodes,crops};
                 item.elapsedMs = Math.round(performance.now()-started);
@@ -95,6 +97,7 @@ async function scan(items) {
             } catch(error) {
                 failed++;item.error=error.message||String(error);ui.detail("本图失败："+item.error);console.error(error);
             } finally {
+                if(source)source.canvas.width=source.canvas.height=1;
                 item.processing=false;ui.progress(index+1,items.length);ui.refresh();await tick();
             }
         }

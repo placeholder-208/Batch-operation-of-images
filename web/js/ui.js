@@ -1,3 +1,5 @@
+import {cropBlob,releaseCrops} from './crop-store.js';
+import { createTileList, prepareThumbnail, disposeThumbnail } from './thumbnail-list.js';
 import { subscribe } from "./runtime-status.js";
 import { canvasToBlob } from "./image.js";
 import { parseWebURL, createLinkPreview, cancelLinkPreviews } from './link-preview.js';
@@ -75,18 +77,15 @@ export function createUI(actions) {
             }
         }
     }
+    const updateTiles=createTileList($('tiles'),select,item=>item.error?'失败':item.result?item.result.count:item.processing?'识别中':'待识别');
     function tiles() {
-        const root = $("tiles"); root.replaceChildren(); root.hidden = queues.qr.length < 2;
-        queues.qr.forEach((item,index) => {
-            const button = document.createElement("button"); button.className = "tile" + (index===positions.qr?" active":"");
-            button.setAttribute("aria-label", item.file.name); button.setAttribute("aria-pressed", String(index===positions.qr));
-            const img = document.createElement("img"); img.src = item.url; img.alt = ""; button.append(img);
-            const label = document.createElement("span"); label.textContent = item.error ? "失败" : item.result ? item.result.count : item.processing ? "识别中" : "待识别"; button.append(label);
-            button.onclick = () => select(index); root.append(button);
-        });
+        updateTiles(queues.qr,positions.qr);
     }
+    let resultView=null;
     function showResults() {
-        const root = $("qrResults"), item = queues.qr[positions.qr]; root.replaceChildren();
+        const root = $("qrResults"), item = queues.qr[positions.qr];
+        const state=[item,item?.result,item?.error,item?.processing,selectedQR,linkEnabled.checked];
+        if(!resultView||state.some((v,i)=>v!==resultView[i])){resultView=state;root.replaceChildren();
         const results = item?.result?.qrcodes || [];
         if (!results.length) {
             const empty = document.createElement("div"); empty.className = "empty";
@@ -104,12 +103,13 @@ export function createUI(actions) {
             function button(label, handler) { const el = document.createElement("button"); el.className = "secondary"; el.textContent = label; el.onclick = handler; buttons.append(el); }
             button("定位",()=>{ selectedQR=qr.id; draw(); showResults(); });
             button("复制",async event=>{try{await navigator.clipboard.writeText(qr.text);event.target.textContent="已复制";}catch{tell("复制失败，请选中结果中的文字手动复制。","qr");}});
-            if (crop) button("下载 PNG",async()=>{try{downloadBlob(await canvasToBlob(crop.canvas),item.file.name.replace(/\.[^.]+$/,"")+"-qr-"+qr.id+".png");}catch(error){tell("下载失败："+error.message,"qr");}});
+            if (crop) button("下载 PNG",async()=>{try{downloadBlob(await cropBlob(crop),item.file.name.replace(/\.[^.]+$/,"")+"-qr-"+qr.id+".png");}catch(error){tell("下载失败："+error.message,"qr");}});
             const url=parseWebURL(qr.text);
             if(url){const a=document.createElement('a');a.href=url.href;a.target='_blank';a.rel='noopener noreferrer';a.textContent='打开链接';buttons.append(a);}
             card.append(title,meta);
             if(url)card.append(createLinkPreview(url,linkEnabled.checked));
             card.append(text,buttons); root.append(card);
+        }
         }
         const exportable = queues.qr.some(item=>item.result), checked = $("zipOutput").checked;
         $("downloadAllZip").disabled = busy || !checked || !exportable || actions.isExporting();
@@ -136,13 +136,14 @@ export function createUI(actions) {
         if(!accepted.length){notice("请选择浏览器可以读取的图片文件。");return;}
         const first=queues.qr.length;
         queues.qr.push(...accepted.map(file=>({file,url:URL.createObjectURL(file),result:null,error:null})));
+        for(const item of queues.qr.slice(first))prepareThumbnail(item,tiles);
         select(first);tell("已添加 "+queues.qr.length+" 张图片，请点击开始识别。");
     }
     $("choose").onclick=$("add").onclick=()=>$("file").click();
     $("file").onchange=event=>{add([...event.target.files]);event.target.value="";};
     $("resetImages").onclick=()=> {
         if(busy||actions.isExporting())return;
-        queues.qr.forEach(item=>URL.revokeObjectURL(item.url));
+        queues.qr.forEach(item=>{disposeThumbnail(item);releaseCrops(item.result);URL.revokeObjectURL(item.url);});
         queues.qr=[];positions.qr=-1;select(-1);
         tell("图片已清空，等待添加图片。");
         $("progressBar").style.width="0%";$("progressTrack").setAttribute("aria-valuenow","0");

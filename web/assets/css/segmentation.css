@@ -50,6 +50,10 @@
 #samWorkspace .sam-maskinfo{padding:10px 12px;background:#f6f8fc;border-radius:8px;font-size:12px;color:var(--muted);line-height:1.7;margin:16px 0 0}
 #samWorkspace .sam-export{display:grid;gap:8px;margin-top:16px}
 #samWorkspace .sam-help button{width:100%;margin-top:8px}
+#samWorkspace .sam-batch-list{border-bottom:1px solid var(--line);background:#fafbfc}
+#samWorkspace .sam-image-list{display:grid;gap:6px;max-height:210px;overflow:auto;margin-top:10px}
+#samWorkspace .sam-image-item{width:100%;text-align:left;overflow-wrap:anywhere;line-height:1.6}
+#samWorkspace .sam-image-item[aria-current="true"]{background:#edf1ff;border-color:#8298ec;color:#294bbf}
 #samWorkspace .mask-brush-cursor{position:absolute;pointer-events:none;border:2px solid #15a568;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 1px white,inset 0 0 0 1px white;z-index:2}
 #samWorkspace .mask-brush-cursor[data-mode="erase"]{border-color:#e05245}
 #samWorkspace .sam-circle-tools{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;grid-column:1/-1}
@@ -63,3 +67,12 @@
 #samWorkspace [hidden]{display:none!important}
 @media(max-width:900px){#samWorkspace{grid-template-columns:minmax(0,1fr) 280px;gap:16px}#samWorkspace .sam-settings{padding:16px}}
 @media(max-width:760px){#samWorkspace{display:flex;flex-direction:column}#samWorkspace .sam-main,#samWorkspace .sam-side{display:contents}#samWorkspace .sam-card{width:100%}#samWorkspace .sam-main>.sam-card:first-child{order:0}#samWorkspace .sam-side>.sam-card:nth-child(1){order:1}#samWorkspace .sam-side>.sam-card:nth-child(2){order:2}#samWorkspace .sam-main>.sam-card:nth-child(2){order:3}#samWorkspace .sam-side>.sam-card:nth-child(3){order:4}#samWorkspace .stage{padding:16px;min-height:200px}#samWorkspace .head,#samWorkspace .sam-section,#samWorkspace .sam-brushbar{padding:14px 16px}#samWorkspace .sam-brushbar{grid-template-columns:1fr}#samWorkspace .sam-filebar,#samWorkspace .sam-preview-legend{padding:10px 16px}}
+
+/* Keep batch navigation within reach while editing lower-page masks. */
+#samWorkspace{padding-bottom:104px}
+#samWorkspace .sam-quick-nav{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:12px;width:min(560px,calc(100vw - 32px));padding:10px 12px;background:var(--panel,#fff);border:1px solid var(--line,#dbe1ec);border-radius:14px;box-shadow:0 6px 28px #17254626;box-sizing:border-box}
+#samWorkspace .sam-quick-nav>button{flex:0 0 40px;height:42px;padding:0;font-size:20px}
+#samWorkspace .sam-quick-select{flex:1;min-width:0}
+#samWorkspace .sam-quick-select label{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-bottom:4px}
+#samWorkspace .sam-quick-select select{width:100%;min-width:0;text-overflow:ellipsis;height:34px;padding:4px 8px}
+@media(max-width:760px){#samWorkspace .sam-quick-nav{bottom:8px;gap:8px;width:calc(100vw - 16px)}}

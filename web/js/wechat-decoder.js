@@ -1,3 +1,4 @@
+import {readBarcodes,getReaderBackend} from './reader-client.js';
 import { report } from "./runtime-status.js";
 import { detectWechatRegions } from "./wechat-detector.js";
 import { decodeCurvedRegion, analyzeCurvedImage } from "./curved-region.js";
@@ -99,7 +100,7 @@ export async function decodeWechatFallback(sourceCanvas, existing = []) {
         attempted++;
         const imageData = canvas.getContext("2d", { willReadFrequently: true })
             .getImageData(0, 0, canvas.width, canvas.height);
-        const results = await window.ZXingWASM.readBarcodes(imageData, {
+        const results = await readBarcodes(imageData, {
             formats: ["QRCode"],
             tryHarder: true
         });

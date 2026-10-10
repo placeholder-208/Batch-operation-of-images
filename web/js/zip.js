@@ -1,3 +1,4 @@
+import {cropBlob} from './crop-store.js';
 import { canvasToBlob } from "./image.js";
 
 
@@ -44,7 +45,7 @@ export async function createImageZip(result) {
     const zip = new JSZip();
 
     for (const crop of result.crops) {
-        const blob = await canvasToBlob(crop.canvas);
+        const blob = await cropBlob(crop);
 
         const filename =
             String(crop.id).padStart(3, "0") + ".png";

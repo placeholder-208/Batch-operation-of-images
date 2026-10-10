@@ -1,6 +1,8 @@
+import {cropBlob,releaseCrops,storeCrop} from './crop-store.js';
+import { createTileList, prepareThumbnail, disposeThumbnail } from './thumbnail-list.js';
 import { $, downloadBlob } from './ui.js';
 import { processFile, canvasToBlob } from './image.js';
-import { createDecodeVariants } from './preprocess.js';
+import { iterateBackgroundVariants as createDecodeVariants } from './preprocess-client.js';
 import { decodeBarcodes, cropBarcode, bounds } from './barcode-decoder.js';
 import { barcodeCSV, barcodeZIP } from './barcode-export.js';
 import { containsPoint } from './barcode-geometry.js';
@@ -37,39 +39,40 @@ export function createBarcodeUI(actions) {
             ctx.fillStyle=ctx.strokeStyle;ctx.font='bold 16px system-ui';ctx.fillText('#'+code.id,b.left*sx,Math.max(18,b.top*sy-4));
         }
     }
+    const updateTiles=createTileList($('barcodeTiles'),select,item=>item.error?'失败':item.result?item.result.barcodes.length:item.processing?'识别中':'待识别');
+    let resultView=null;
     function refresh() {
         $('barcodeCount').textContent=items.length+' 张图片';
         for(const id of ['barcodeAdd','barcodeChoose','barcodeReset'])$(id).disabled=blocked();
         $('barcodeStart').disabled=blocked()||!items.some(v=>!v.result);
         for(const id of ['barcodeCSV','barcodeAllZip'])$(id).disabled=blocked()||!items.some(v=>v.result);
         $('barcodeImageZip').disabled=blocked()||!current()?.result;
-        const tiles=$('barcodeTiles');tiles.replaceChildren();tiles.hidden=items.length<2;
-        items.forEach((item,index)=>{const button=document.createElement('button');button.className='tile'+(index===position?' active':'');button.setAttribute('aria-label',item.file.name);button.setAttribute('aria-pressed',String(index===position));
-            const img=document.createElement('img');img.src=item.url;img.alt='';const label=document.createElement('span');label.textContent=item.error?'失败':item.result?item.result.barcodes.length:item.processing?'识别中':'待识别';button.append(img,label);button.onclick=()=>select(index);tiles.append(button);});
-        const list=$('barcodeResults');list.replaceChildren();
-        const item=current(),codes=item?.result?.barcodes||[];
+        updateTiles(items,position);
+        const list=$('barcodeResults'),item=current(),codes=item?.result?.barcodes||[];
+        const state=[item,item?.result,item?.error,item?.processing,active];
+        if(!resultView||state.some((v,i)=>v!==resultView[i])){resultView=state;list.replaceChildren();
         if(!codes.length){const empty=document.createElement('div');empty.className='empty';empty.textContent=item?.error?'处理失败：'+item.error:item?.result?'本图未识别到条形码。':item?.processing?'正在识别本图…':'添加图片后点击开始识别。';list.append(empty);}
         for(const code of codes){const card=document.createElement('article');card.className='qr-card'+(active===code.id?' active':'');card.id='barcode-card-'+code.id;
             const crop=item.result.crops.find(c=>c.id===code.id);if(crop){const img=document.createElement('img');img.src=crop.image;img.alt='条形码 #'+code.id;card.append(img);}
             const heading=document.createElement('h4');heading.textContent='条形码 #'+code.id+' · '+code.format;const text=document.createElement('pre');text.textContent=code.text||'（空内容）';const buttons=document.createElement('div');buttons.className='actions';
             const button=(label,handler)=>{const node=document.createElement('button');node.className='secondary';node.textContent=label;node.onclick=handler;buttons.append(node);};
             button('定位',()=>{active=code.id;draw();refresh();});button('复制',async()=>{try{await navigator.clipboard.writeText(code.text);tell('内容已复制。');}catch{tell('复制失败，请手动复制。');}});
-            if(crop)button('下载 PNG',async()=>{try{downloadBlob(await canvasToBlob(crop.canvas),item.file.name.replace(/\.[^.]+$/,'')+'-barcode-'+code.id+'.png');}catch(error){tell('下载失败：'+error.message);}});
+            if(crop)button('下载 PNG',async()=>{try{downloadBlob(await cropBlob(crop),item.file.name.replace(/\.[^.]+$/,'')+'-barcode-'+code.id+'.png');}catch(error){tell('下载失败：'+error.message);}});
             card.append(heading,text,buttons);
             if(code.contentConflict){const warning=document.createElement('div');warning.className='error-note small';warning.textContent='同一区域出现不同解码结果，已优先选择完整区域和多版本确认的内容，请核对条码下方数字。';card.append(warning);}
             if(code.geometry==='scan-strip'){const warning=document.createElement('div');warning.className='error-note small';warning.textContent='已解码，但尚未可靠定位完整条纹区域；当前框为扫描条带，请检查裁图。';card.append(warning);}
             list.append(card);
         }
-        draw();
+        draw();}
     }
     async function select(index){position=index;image=null;active=null;const stamp=++token,item=current();canvas.hidden=true;$('barcodeUpload').hidden=Boolean(item);$('barcodeFilename').textContent=item?.file.name||'尚未选择图片';$('barcodeDimensions').textContent='原图预览';refresh();if(!item)return;
         try{const img=new Image();img.src=item.url;await img.decode();if(stamp!==token)return;image=img;const scale=Math.min(1,1800/Math.max(img.naturalWidth,img.naturalHeight));canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));canvas.hidden=false;$('barcodeDimensions').textContent=img.naturalWidth+' × '+img.naturalHeight;draw();}catch(error){if(stamp===token)tell('预览失败：'+error.message);}}
-    function add(files){if(blocked())return;const accepted=files.filter(file=>file.type.startsWith('image/'));if(!accepted.length){tell('请选择图片文件。');return;}const index=items.length;items.push(...accepted.map(file=>({file,url:URL.createObjectURL(file),result:null})));select(index);tell('已添加 '+items.length+' 张图片，请点击开始识别。');}
+    function add(files){if(blocked())return;const accepted=files.filter(file=>file.type.startsWith('image/'));if(!accepted.length){tell('请选择图片文件。');return;}const index=items.length;items.push(...accepted.map(file=>({file,url:URL.createObjectURL(file),result:null})));for(const item of items.slice(index))prepareThumbnail(item,()=>updateTiles(items,position));select(index);tell('已添加 '+items.length+' 张图片，请点击开始识别。');}
     async function scan(){if(blocked())return;const pending=items.filter(v=>!v.result);if(!pending.length)return;busy=true;actions.onBusy(true);refresh();let count=0,failed=0;
         try{await actions.prepare();for(let i=0;i<pending.length;i++){const item=pending[i];item.processing=true;item.error=null;tell('正在识别 '+(i+1)+' / '+pending.length+'：'+item.file.name);refresh();let source;
             try{source=await processFile(item.file);const codes=await decodeBarcodes(createDecodeVariants(source.canvas,{curved:false}),text=>{$('barcodeEngine').textContent=text;},source.canvas);const crops=[];
-                for(const code of codes)try{const crop=cropBarcode(source.canvas,code);crops.push({id:code.id,canvas:crop,image:crop.toDataURL('image/png')});}catch(error){console.warn('条形码裁切失败',error);}
-                item.result={filename:item.file.name,barcodes:codes,crops};count+=codes.length;
+                for(const code of codes)try{const crop=cropBarcode(source.canvas,code);crops.push(await storeCrop(crop,code.id));}catch(error){console.warn('条形码裁切失败',error);}
+                releaseCrops(item.result);item.result={filename:item.file.name,barcodes:codes,crops};count+=codes.length;
             }catch(error){failed++;item.error=error.message;}finally{if(source)source.canvas.width=source.canvas.height=1;item.processing=false;const percent=Math.round((i+1)/pending.length*100);$('barcodeBar').style.width=percent+'%';$('barcodeProgress').setAttribute('aria-valuenow',String(percent));refresh();}}
             tell('本次识别 '+count+' 个条形码'+(failed?'；'+failed+' 张失败，可重试':'')+'。');
         }catch(error){tell('初始化失败：'+error.message);}finally{busy=false;actions.onBusy(false);refresh();}}
@@ -77,7 +80,7 @@ export function createBarcodeUI(actions) {
         try{downloadBlob(await barcodeZIP(results),single?current().file.name.replace(/\.[^.]+$/,'')+'-barcodes.zip':'barcode-results.zip');tell('ZIP 已生成，包含裁图与 CSV。');}catch(error){tell('导出失败：'+error.message);}finally{busy=false;actions.onBusy(false);refresh();}}
     $('barcodeAdd').onclick=$('barcodeChoose').onclick=()=>input.click();input.onchange=()=>{add([...input.files]);input.value='';};
     $('barcodeStage').ondragover=event=>event.preventDefault();$('barcodeStage').ondrop=event=>{event.preventDefault();add([...event.dataTransfer.files]);};
-    $('barcodeReset').onclick=()=>{if(blocked())return;items.forEach(item=>URL.revokeObjectURL(item.url));items=[];select(-1);$('barcodeBar').style.width='0%';$('barcodeProgress').setAttribute('aria-valuenow','0');tell('图片已清空。');};
+    $('barcodeReset').onclick=()=>{if(blocked())return;items.forEach(item=>{disposeThumbnail(item);releaseCrops(item.result);URL.revokeObjectURL(item.url);});items=[];select(-1);$('barcodeBar').style.width='0%';$('barcodeProgress').setAttribute('aria-valuenow','0');tell('图片已清空。');};
     $('barcodeStart').onclick=scan;$('barcodeImageZip').onclick=()=>exportZip(true);$('barcodeAllZip').onclick=()=>exportZip(false);
     $('barcodeCSV').onclick=()=>{if(blocked())return;downloadBlob(new Blob([barcodeCSV(items.filter(v=>v.result).map(v=>v.result))],{type:'text/csv;charset=utf-8'}),'barcode-results.csv');};
     canvas.onpointerdown=event=>{if(!image)return;const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width*image.naturalWidth,y=(event.clientY-r.top)/r.height*image.naturalHeight;const code=current()?.result?.barcodes.find(v=>containsPoint(v.points,{x,y}));if(code){active=code.id;refresh();$('barcode-card-'+code.id)?.scrollIntoView({block:'nearest'});}};

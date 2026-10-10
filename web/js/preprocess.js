@@ -1,3 +1,11 @@
+function preprocessingCanvas(){
+    return typeof document==='undefined' ? new OffscreenCanvas(1,1) : document.createElement('canvas');
+}
+
+export function clonePointMapper(width,height,direction,curvature=.55){
+    return createCylindricalMapper(width,height,direction,curvature);
+}
+
 function cloneImageData(imageData) {
     return new ImageData(
         new Uint8ClampedArray(imageData.data),
@@ -20,7 +28,7 @@ function getCanvasImageData(canvas) {
 
 
 function createCanvasFromImageData(imageData) {
-    const canvas = document.createElement("canvas");
+    const canvas = preprocessingCanvas();
 
     canvas.width = imageData.width;
     canvas.height = imageData.height;
@@ -128,7 +136,7 @@ function upscaleImageData(imageData, maxLongSide = 2400) {
 
     const sourceCanvas = createCanvasFromImageData(imageData);
 
-    const outputCanvas = document.createElement("canvas");
+    const outputCanvas = preprocessingCanvas();
 
     outputCanvas.width = Math.round(imageData.width * scale);
     outputCanvas.height = Math.round(imageData.height * scale);
@@ -146,7 +154,8 @@ function upscaleImageData(imageData, maxLongSide = 2400) {
         outputCanvas.height
     );
 
-    return getCanvasImageData(outputCanvas);
+    try { return getCanvasImageData(outputCanvas); }
+    finally { sourceCanvas.width=sourceCanvas.height=1;outputCanvas.width=outputCanvas.height=1; }
 }
 
 
@@ -398,4 +407,25 @@ export function createDecodeVariants(canvas, { curved = true } = {}) {
             mapPoint: curvedVertical.mapPoint
         }] : [])
     ];
+}
+
+// Same transforms and order as createDecodeVariants, with bounded live buffers.
+export function iterateDecodeVariants(canvas,{curved=true}={}){
+ function* generate(){
+  let original=getCanvasImageData(canvas);
+  yield {name:'original',imageData:original,scaleX:1,scaleY:1,releaseAfterDecode:true};
+  const contrast=toGrayscaleContrast(original);original=null;
+  yield {name:'contrast',imageData:contrast,scaleX:1,scaleY:1,releaseAfterDecode:true};
+  let sharpened=sharpen(contrast);
+  yield {name:'sharpen',imageData:sharpened,scaleX:1,scaleY:1,releaseAfterDecode:true};
+  let enlarged=upscaleImageData(sharpened);sharpened=null;
+  let enhanced=sharpen(enlarged,.45);enlarged=null;
+  yield {name:'upscale-sharpen',imageData:enhanced,scaleX:enhanced.width/canvas.width,scaleY:enhanced.height/canvas.height,releaseAfterDecode:true};enhanced=null;
+  yield {name:'adaptive-threshold',imageData:adaptiveThreshold(contrast),scaleX:1,scaleY:1,releaseAfterDecode:true};
+  if(curved)for(const axis of ['horizontal','vertical']){
+   const variant=createCylindricalVariant(contrast,axis);
+   yield {name:'cylindrical-'+axis,imageData:variant.imageData,mapPoint:variant.mapPoint,scaleX:1,scaleY:1,releaseAfterDecode:true};
+  }
+ }
+ const iterator=generate();iterator.length=curved?7:5;return iterator;
 }

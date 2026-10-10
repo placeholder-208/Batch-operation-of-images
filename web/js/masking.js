@@ -1,3 +1,4 @@
+import { createTileList, prepareThumbnail, disposeThumbnail } from './thumbnail-list.js';
 import { canvasToBlob } from './image.js';
 import { downloadBlob } from './ui.js';
 import { subscribe } from './runtime-status.js';
@@ -50,6 +51,7 @@ export function createMaskUI(actions) {
     const blocked = () => busy || actions.isBlocked();
     const margin = () => Number($('maskMargin').value) || 0;
     const masks = item => [...item.auto, ...item.manual];
+    const updateTiles=createTileList($('maskTiles'),select,item=>item.error?'待检查':masks(item).length?'已设遮盖':item.detected?'未检出':'待检测');
     function update() {
         const item = current(), lock = blocked();
         $('maskChoose').disabled = $('maskAdd').disabled = $('maskReset').disabled = lock;
@@ -61,15 +63,7 @@ export function createMaskUI(actions) {
         $('maskCount').textContent = items.length + ' 张图片';
         $('maskSummary').textContent = item ? '已解码 ' + item.decodedCount + ' 个 · 检测候选 ' + item.candidateCount + ' 个 · 手动框 ' + item.manual.length + ' 个（自动框可能重叠）' : '等待添加图片';
         $('maskReview').textContent = item?.error ? '本图需检查：' + item.error : item?.detected ? '请检查漏检和误盖；处理完成不代表已找到全部二维码。' : '可先自动检测，也可直接在图上拖动补框。';
-        const root = $('maskTiles'); root.replaceChildren();
-        items.forEach((entry, index) => {
-            const button = document.createElement('button'); button.className = 'tile' + (index===position?' active':'');
-            button.setAttribute('aria-label', entry.file.name); button.setAttribute('aria-pressed', String(index===position));
-            const thumb = document.createElement('img'); thumb.src=entry.url; thumb.alt='';
-            const label = document.createElement('span'); label.textContent=entry.error?'待检查':masks(entry).length?'已设遮盖':entry.detected?'未检出':'待检测';
-            button.append(thumb,label); button.onclick=()=>select(index); root.append(button);
-        });
-        root.hidden = items.length < 2;
+        updateTiles(items,position);
     }
     function draw() {
         ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -99,6 +93,7 @@ export function createMaskUI(actions) {
         const accepted=files.filter(file=>file.type.startsWith('image/'));if(!accepted.length){tell('请选择图片文件。');return;}
         const first=items.length;
         items.push(...accepted.map(file=>({file,url:URL.createObjectURL(file),auto:[],manual:[],decodedCount:0,candidateCount:0,detected:false,error:null})));
+        for(const item of items.slice(first))prepareThumbnail(item,()=>updateTiles(items,position));
         select(first);tell('图片已添加，请自动检测或拖动手动补框。');
     }
     async function detect() {
@@ -165,7 +160,7 @@ export function createMaskUI(actions) {
     $('maskFile').onchange=event=>{add([...event.target.files]);event.target.value='';};
     $('maskStage').ondragover=event=>event.preventDefault();
     $('maskStage').ondrop=event=>{event.preventDefault();add([...event.dataTransfer.files]);};
-    $('maskReset').onclick=()=>{if(blocked())return;items.forEach(item=>URL.revokeObjectURL(item.url));items=[];select(-1);$('maskProgress').textContent='';tell('图片已清空。');};
+    $('maskReset').onclick=()=>{if(blocked())return;items.forEach(item=>{disposeThumbnail(item);URL.revokeObjectURL(item.url);});items=[];select(-1);$('maskProgress').textContent='';tell('图片已清空。');};
     $('maskUndo').onclick=()=>{if(blocked()||!current())return;current().manual.pop();update();draw();};
     $('maskColor').onchange=$('maskMargin').oninput=$('maskOriginal').onchange=draw;
     $('maskStart').onclick=detect;$('maskDownload').onclick=()=>exportImages(false);$('maskZip').onclick=()=>exportImages(true);

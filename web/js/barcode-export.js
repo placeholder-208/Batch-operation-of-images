@@ -1,3 +1,4 @@
+import {cropBlob} from './crop-store.js';
 import { canvasToBlob } from './image.js';
 function cell(value) {
     // Exact contents, including leading zeroes. Import the text column as text.
@@ -17,7 +18,7 @@ export async function barcodeZIP(results) {
         const base=result.filename.replace(/\.[^/.]+$/,'').replace(/[\\/:*?"<>|]/g,'_')||'image';
         let name=base,index=2;while(used.has(name))name=base+'-'+index++;used.add(name);
         const folder=zip.folder(name);
-        for(const crop of result.crops)folder.file(String(crop.id).padStart(3,'0')+'.png',await canvasToBlob(crop.canvas));
+        for(const crop of result.crops)folder.file(String(crop.id).padStart(3,'0')+'.png',await cropBlob(crop));
         folder.file('result.csv',barcodeCSV([result]));
     }
     // Root CSV identifies the unique directory of each crop, even with duplicate filenames.
