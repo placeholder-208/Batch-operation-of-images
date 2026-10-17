@@ -1,10 +1,11 @@
 import { setupDesign } from './design.js';
+import { startWorkspaceSession } from './workspace-session.js';
 import {storeCrop,releaseCrops} from './crop-store.js';
 import { processFile } from "./image.js";
 import { perspectiveCrop } from "./crop.js";
 import { iterateBackgroundVariants as createDecodeVariants } from './preprocess-client.js';
 import { createImageZip, createAllZip } from "./zip.js";
-import { createUI, downloadBlob } from "./ui.js?v=sam-1.8";
+import { createUI, downloadBlob } from "./ui.js?v=links-3.5.1";
 import { report } from "./runtime-status.js";
 import { createMaskUI } from "./masking.js";
 import { createBarcodeUI } from "./barcode-ui.js";
@@ -14,9 +15,11 @@ import { createSamWorkspace } from "./segmentation/workspace.js";
 
 let running = false, exporting = false, decoderPromise = null;
 let barcodeUI = null, semanticUI = null, samUI = null;
+let persistence = null;
 const tick = () => new Promise(resolve => setTimeout(resolve, 0));
-const ui = createUI({scan, export: exportResults, isExporting: () => exporting});
+const ui = createUI({scan, export: exportResults, isExporting: () => exporting, onChange: () => persistence?.schedule('qr')});
 const maskUI = createMaskUI({
+    onChange: () => persistence?.schedule('mask'),
     isBlocked: () => running || exporting || Boolean(barcodeUI?.isBusy()) || Boolean(semanticUI?.isBusy()) || Boolean(samUI?.isBusy()),
     onBusy: value => { ui.busy(value); barcodeUI?.refresh(); semanticUI?.refresh(); samUI?.refresh(); },
     async detect(file) {
@@ -35,17 +38,20 @@ const maskUI = createMaskUI({
     }
 });
 barcodeUI = createBarcodeUI({
+    onChange: () => persistence?.schedule('barcode'),
     isBlocked: () => running || exporting || maskUI.isBusy() || Boolean(semanticUI?.isBusy()) || Boolean(samUI?.isBusy()),
     prepare: loadDecoder,
     onBusy: value => { ui.busy(value); maskUI.refresh(); semanticUI?.refresh(); samUI?.refresh(); },
     refresh: () => { ui.refresh(); maskUI.refresh(); }
 });
 semanticUI = createSemanticUI({
+    onChange: () => persistence?.schedule('semantic'),
     isBlocked: () => running || exporting || maskUI.isBusy() || barcodeUI.isBusy() || Boolean(samUI?.isBusy()),
     onBusy: value => { ui.busy(value); maskUI.refresh(); barcodeUI.refresh(); },
     openSam: (blob,filename) => samUI.openCrop(blob,filename)
 });
 samUI = createSamWorkspace({
+    onChange: () => persistence?.schedule('sam'),
     isBlocked: () => running || exporting || maskUI.isBusy() || barcodeUI.isBusy() || semanticUI.isBusy(),
     onBusy: value => { ui.busy(value); maskUI.refresh(); barcodeUI.refresh(); semanticUI.refresh(); samUI?.refresh(); }
 });
@@ -54,6 +60,7 @@ report("zxing", window.ZXingWASM ? "脚本已加载，等待首次解码" : "脚
 report("wechat", globalThis.ort ? "运行库脚本已加载，模型按需加载" : "ONNX Runtime 脚本加载失败", globalThis.ort ? "info" : "error");
 report("curved", "等待任务");
 setupDesign();
+persistence = startWorkspaceSession({ qr: ui, barcode: barcodeUI, mask: maskUI, semantic: semanticUI, sam: samUI });
 
 async function loadDecoder() {
     if (!decoderPromise) decoderPromise = import("./decoder.js").catch(error => {

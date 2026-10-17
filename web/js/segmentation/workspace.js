@@ -1,4 +1,5 @@
 import { createEditCache } from './edit-cache.js';
+import { createThumbnailItem, updateThumbnailItem, prepareThumbnail, disposeThumbnail } from '../thumbnail-list.js';
 import { workspaceTemplate } from './workspace-template.js';
 import { createMaskCache, csvCell } from './batch-cache.js';
 import { interpolatedAlpha, paintStrokes, applyAlphaRGBA } from './postprocess.js';
@@ -16,7 +17,9 @@ export function createSamWorkspace(actions) {
 const $=id=>root.querySelector('#sam-'+id),canvas=$('source'),ctx=canvas.getContext('2d'),resultCanvas=$('result'),resultCtx=resultCanvas.getContext('2d',{willReadFrequently:true});
 let bitmap=null,filename='',crop=null,promptBox=null,points=[],drag=null,busy=false,encoded=null,segmentation=null,currentMask=null,lastDiagnostic=null;
 let alphaCache=null,areaCleanup=null,previewPixels=null,previewDirty=null,previewOverlay=null;const editCache=createEditCache();
-let batchBusy=false,batchOperation='',cancelBatch=false,records=[],activeIndex=-1,sequence=0,cacheRevision=0,navigationKey='';
+let batchBusy=false,batchOperation='',cancelBatch=false,records=[],activeIndex=-1,sequence=0,cacheRevision=0;
+let restoringState=false,flushingState=false;
+const changed=()=>{if(!restoringState&&!flushingState)actions.onChange?.();};
 const cache=createMaskCache(),settingIds=['candidate','threshold','invert','smooth','tight','overlay','minArea','brushTool','brushMode','brushRadius','mode'];
 const tell=text=>{$('status').textContent=text;};
 const brush=createMaskBrush({canvas:resultCanvas,container:$('previewStage'),isBlocked:blocked,
@@ -33,8 +36,8 @@ const brushLens=createMagnifier({canvas:resultCanvas,isEnabled:()=>$('magnify').
     isAvailable:()=>!root.hidden&&!blocked()&&Boolean(segmentation),readZoom:()=>$('magnifyZoom').value,
     readMark:()=>({mode:$('brushMode').value,radius:$('brushTool').value==='circle'?Number($('brushRadius').value):0})});
 for(const suffix of ['', 'Preview']){
-    $('magnify'+suffix).onchange=()=>{const checked=$('magnify'+suffix).checked;$('magnify').checked=$('magnifyPreview').checked=checked;pointLens.refresh();brushLens.refresh();};
-    $('magnifyZoom'+suffix).onchange=()=>{const value=$('magnifyZoom'+suffix).value;$('magnifyZoom').value=$('magnifyZoomPreview').value=value;pointLens.refresh();brushLens.refresh();};
+    $('magnify'+suffix).onchange=()=>{const checked=$('magnify'+suffix).checked;$('magnify').checked=$('magnifyPreview').checked=checked;pointLens.refresh();brushLens.refresh();changed();};
+    $('magnifyZoom'+suffix).onchange=()=>{const value=$('magnifyZoom'+suffix).value;$('magnifyZoom').value=$('magnifyZoomPreview').value=value;pointLens.refresh();brushLens.refresh();changed();};
 }
 if(typeof MutationObserver!=='undefined')new MutationObserver(()=>{if(root.hidden){pointLens.hide();brushLens.hide();}}).observe(root,{attributes:true,attributeFilter:['hidden']});
 function cleanupKey(){return [$('candidate').value,$('threshold').value,$('invert').checked,$('smooth').checked].join('|');}
@@ -43,7 +46,7 @@ function resetCleanup(message='尚未执行区域清理'){
 }
 function refresh(){
     if(blocked()){pointLens.hide();brushLens.hide();}
-    for(const id of ['choose','file','mode','undo','clear','clearPrompt','overlay','tight'])$(id).disabled=blocked();
+    for(const id of ['choose','chooseEmpty','file','mode','undo','clear','clearPrompt','overlay','tight'])$(id).disabled=blocked();
     $('segment').disabled=blocked()||brush.isDrawing()||!bitmap;
     for(const id of ['candidate','threshold','invert','smooth','download','maskDownload','diagnostic','brushTool','brushMode','brushRadius'])$(id).disabled=blocked()||brush.isDrawing()||!segmentation;
     for(const id of ['curveUndo','curveClear'])$(id).disabled=blocked()||brush.isDrawing()||!brush.getShapes().length;
@@ -57,36 +60,41 @@ function refresh(){
     $('batchApply').disabled=blocked()||brush.isDrawing()||!segmentation;
     $('batchZip').disabled=blocked()||brush.isDrawing()||!records.some(record=>record.hasResult);
     $('batchStop').disabled=!batchBusy||!['generate','export'].includes(batchOperation)||cancelBatch;
+    for(const id of ['sourceView','maskView']){const view=root.querySelector('#sam-'+id);if(view)view.disabled=blocked()||brush.isDrawing();}
     const lock=busy||batchBusy;
     if(lock!==publishedBusy){publishedBusy=lock;actions.onBusy?.(lock);}
     refreshList();refreshNavigation();
+    changed();
 }
 function refreshList(){
-    $('batchInfo').textContent=records.length+' 张图片 · '+records.filter(r=>r.hasResult).length+' 张已生成 · 蒙版缓存 '+(cache.getBytes()/1024/1024).toFixed(1)+' MiB';
+    $('batchInfo').textContent=records.length+' 张图片';$('batchInfo').title=records.filter(r=>r.hasResult).length+' 张已生成 · 蒙版缓存 '+(cache.getBytes()/1024/1024).toFixed(1)+' MiB';
     for(const [index,record] of records.entries())if(record.button){
         record.button.disabled=blocked()||brush.isDrawing();record.button.setAttribute('aria-current',index===activeIndex?'true':'false');
-        record.button.textContent=(index+1)+'. '+record.file.name+' · '+(record.error?'失败':record.hasResult?'已生成':'待生成');record.button.title=record.error||record.file.name;
+        const processing=index===activeIndex&&(busy||(batchBusy&&batchOperation==='switch'));
+        updateThumbnailItem(record.thumbnail,record,index,index===activeIndex,{text:record.error?'失败':processing?'处理中':record.hasResult?'已生成':'待生成',state:record.error?'error':processing?'processing':record.hasResult?'complete':'pending'},'sam-image-item');
     }
 }
 function refreshNavigation(){
-    $('quickNav').hidden=records.length<2;
-    const labels=records.map((record,index)=>(index+1)+'. '+record.file.name+' · '+(record.error?'失败':record.hasResult?'已生成':'待生成'));
-    const key=JSON.stringify(records.map((record,index)=>[record.id,labels[index]]));
-    if(key!==navigationKey){navigationKey=key;$('imageSelect').replaceChildren();for(const [index,label] of labels.entries()){const option=document.createElement('option');option.value=String(index);option.textContent=label;$('imageSelect').append(option);}}
-    $('imageSelect').value=String(activeIndex);$('imageSelect').disabled=blocked()||brush.isDrawing();
-    $('imagePosition').textContent=(activeIndex+1)+' / '+records.length;
-    $('prevImage').disabled=blocked()||brush.isDrawing()||activeIndex<=0;
-    $('nextImage').disabled=blocked()||brush.isDrawing()||activeIndex>=records.length-1;
+    $('quickNav').hidden=false;
+    const total=records.length,hasCurrent=activeIndex>=0&&activeIndex<total,locked=blocked()||brush.isDrawing();
+    const position=(hasCurrent?activeIndex+1:0)+' / '+total;
+    if($('imagePosition').textContent!==position)$('imagePosition').textContent=position;
+    $('prevImage').disabled=locked||!hasCurrent||activeIndex<=0;
+    $('nextImage').disabled=locked||!hasCurrent||activeIndex>=total-1;
 }
 function readSettings(){return Object.fromEntries(settingIds.map(id=>[id,{value:$(id).value,checked:$(id).checked}]));}
 function writeSettings(settings){for(const id of settingIds)if(settings?.[id]){$(id).value=settings[id].value;$(id).checked=settings[id].checked;}$('brushRadiusValue').textContent=$('brushRadius').value;}
-async function saveActive(){
+function captureActive(){
     const record=records[activeIndex];if(!record)return;
     if(!bitmap){record.hasResult=false;return;}
-    brush.flush();
-    if(segmentation)await cache.put(record.id,segmentation);else cache.remove(record.id);
-    record.hasResult=Boolean(segmentation);record.state={crop:crop?[...crop]:null,promptBox:promptBox?[...promptBox]:null,points:structuredClone(points),brush:brush.snapshot(),settings:readSettings(),areaCleanup,lastDiagnostic,
+    flushingState=true;try{brush.flush();}finally{flushingState=false;}
+    record.hasResult=Boolean(segmentation);record.state={crop:crop?[...crop]:null,promptBox:promptBox?[...promptBox]:null,points:structuredClone(points),brush:brush.snapshot(),settings:readSettings(),areaCleanup:structuredClone(areaCleanup),lastDiagnostic:structuredClone(lastDiagnostic),
         areaText:$('areaInfo').textContent,encodeText:$('encodeState').textContent,decodeText:$('decodeState').textContent,status:$('status').textContent};
+    return {record,result:segmentation};
+}
+async function saveActive(){
+    const active=captureActive();if(!active)return;
+    if(active.result)await cache.put(active.record.id,active.result);else cache.remove(active.record.id);
 }
 async function selectRecord(index,internal=false){
     if(!internal&&(blocked()||brush.isDrawing()))return false;
@@ -103,7 +111,7 @@ async function selectRecord(index,internal=false){
             writeSettings(state.settings);brush.restore(state.brush);$('areaInfo').textContent=state.areaText;$('encodeState').textContent=state.lastDiagnostic?'上次 '+state.lastDiagnostic.encodeMs+' ms · 切图后待重新编码':'切图后待重新编码';$('decodeState').textContent=state.decodeText;draw();if(segmentation)render();tell(state.status);
         }
         record.error=null;return true;
-    }catch(error){tell('切换图片失败：'+error.message);return false;}finally{if(outer){batchBusy=false;batchOperation='';}refresh();}
+    }catch(error){tell('切换图片失败：'+error.message);return false;}finally{if(outer){batchBusy=false;batchOperation='';}refresh();if(outer&&!segmentation&&typeof CustomEvent!=='undefined')root.dispatchEvent(new CustomEvent('sam:source-ready'));}
 }
 async function addFiles(files){
     if(blocked()||brush.isDrawing())return;
@@ -111,7 +119,7 @@ async function addFiles(files){
     if(!accepted.length){tell('请选择不超过 20 MiB 的 JPEG、PNG 或 WebP 图片。');return;}
     if(records.length+accepted.length>20){tell('单批最多 20 张，请先导出并移除部分图片。');return;}
     const start=records.length;
-    for(const file of accepted){const record={id:++sequence,file,state:null,hasResult:false,error:null};const button=document.createElement('button');record.button=button;button.className='sam-image-item';button.onclick=()=>selectRecord(records.indexOf(record));records.push(record);$('imageList').append(button);}
+    for(const file of accepted){const record={id:++sequence,file,state:null,hasResult:false,error:null};record.thumbnail=createThumbnailItem(()=>selectRecord(records.indexOf(record)));record.button=record.thumbnail.button;records.push(record);$('imageList').append(record.button);prepareThumbnail(record,refreshList);}
     if(!await selectRecord(start))return;
     tell('已添加 '+accepted.length+' 张图片，可批量生成或逐张设置范围。'+(accepted.length!==Array.from(files).length?'部分不支持或超过大小限制的文件已跳过。':''));refresh();
     return true;
@@ -145,6 +153,7 @@ function activeCrop(){return crop||[0,0,bitmap.width,bitmap.height];}
 function insideCrop(p){const c=activeCrop();return p.x>=c[0]&&p.x<c[2]&&p.y>=c[1]&&p.y<c[3];}
 function drawFrame(b,color,active,label){
     if(!b)return;const sx=canvas.width/bitmap.width,sy=canvas.height/bitmap.height,rect=canvas.getBoundingClientRect();
+    if(!rect.width||!rect.height)return; // The source editor can be hidden while refining its mask.
     const hx=8*canvas.width/rect.width,hy=8*canvas.height/rect.height;
     // Dark under-stroke keeps the white crop line visible on a white photograph.
     ctx.strokeStyle='#202630';ctx.lineWidth=4;ctx.strokeRect(b[0]*sx,b[1]*sy,(b[2]-b[0])*sx,(b[3]-b[1])*sy);
@@ -220,7 +229,7 @@ canvas.oncontextmenu=event=>{
     }
     draw();refresh();updateCursor(event);
 };
-$('mode').onchange=()=>{drag=null;canvas.style.cursor='crosshair';draw();};
+$('mode').onchange=()=>{drag=null;canvas.style.cursor='crosshair';draw();changed();};
 async function openFile(file,internal=false){
     if(internal!==true&&blocked()||!file)return;if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>20*1024*1024){tell('请选择不超过 20 MiB 的 JPEG、PNG 或 WebP。');return;}
     busy=true;refresh();let next;
@@ -255,7 +264,7 @@ async function run(internal=false){
             promptMode:promptBox?'manual':'default',effectivePromptBox:[...effectivePrompt],localPrompts:prompts,points:points.map(p=>({...p})),encodeMs:encoded.elapsedMs,decodeMs:segmentation.elapsedMs,candidates:segmentation.order};
         render();tell(promptBox?'蒙版已生成，使用手动蓝框作为目标提示。':'蒙版已生成，使用当前输入图的完整范围作为默认目标提示（不显示蓝框）。');return true;
     }catch(error){segmentation=null;currentMask=null;resultCanvas.hidden=true;$('resultEmpty').hidden=false;$('resultEmpty').textContent='分割失败';$('modelState').textContent='任务失败';tell('分割失败：'+error.message);console.error('[SlimSAM 分割]',error);return false;}
-    finally{if(records[activeIndex]){records[activeIndex].hasResult=Boolean(segmentation);records[activeIndex].error=segmentation?null:$('status').textContent;}busy=false;refresh();}
+    finally{if(records[activeIndex]){records[activeIndex].hasResult=Boolean(segmentation);records[activeIndex].error=segmentation?null:$('status').textContent;}busy=false;refresh();if(segmentation&&internal!==true&&typeof CustomEvent!=='undefined')root.dispatchEvent(new CustomEvent('sam:generated'));}
 }
 function editedAlpha(width,height,includeCleanup=true){
     const candidate=segmentation.candidates[Number($('candidate').value)],threshold=Number($('threshold').value),invert=$('invert').checked,smooth=$('smooth').checked;
@@ -392,32 +401,36 @@ async function applyBatchSettings(){
 function emptyView(){discardEncoding();bitmap?.close();bitmap=null;crop=promptBox=null;points=[];drag=null;invalidate();canvas.hidden=true;$('empty').hidden=false;$('filename').textContent='未选择图片';}
 async function removeImage(){
     if(blocked()||brush.isDrawing()||activeIndex<0)return;batchBusy=true;batchOperation='remove';refresh();
-    try{const index=activeIndex,record=records[index];cache.remove(record.id);record.button.remove();records.splice(index,1);activeIndex=-1;emptyView();if(records.length)await selectRecord(Math.min(index,records.length-1),true);}
-    finally{batchBusy=false;batchOperation='';refresh();}
+    try{const index=activeIndex,record=records[index];disposeThumbnail(record);cache.remove(record.id);record.button.remove();records.splice(index,1);activeIndex=-1;emptyView();if(records.length)await selectRecord(Math.min(index,records.length-1),true);}
+    finally{batchBusy=false;batchOperation='';refresh();if(!records.length&&typeof CustomEvent!=='undefined')root.dispatchEvent(new CustomEvent('sam:source-ready'));}
 }
 $('prevImage').onclick=()=>selectRecord(activeIndex-1);$('nextImage').onclick=()=>selectRecord(activeIndex+1);
-$('imageSelect').onchange=()=>selectRecord(Number($('imageSelect').value));
-$('choose').onclick=()=>$('file').click();$('file').onchange=()=>{addFiles($('file').files);$('file').value='';};
-$('stage').ondragover=event=>event.preventDefault();$('stage').ondrop=event=>{event.preventDefault();addFiles(event.dataTransfer.files);};
+$('choose').onclick=$('chooseEmpty').onclick=()=>{if(!blocked())$('file').click();};$('file').onchange=()=>{addFiles($('file').files);$('file').value='';};
+$('stage').ondragover=event=>{event.preventDefault();if(!blocked())$('empty').classList.add('drag');};
+$('stage').ondragleave=()=>$('empty').classList.remove('drag');
+$('stage').ondrop=event=>{event.preventDefault();$('empty').classList.remove('drag');addFiles(event.dataTransfer.files);};
 $('batchGenerate').onclick=generateBatch;$('batchZip').onclick=exportBatch;$('batchApply').onclick=applyBatchSettings;
 $('batchStop').onclick=()=>{if(!batchBusy||!['generate','export'].includes(batchOperation))return;cancelBatch=true;$('batchProgress').textContent='将在当前图片处理结束后停止…';refresh();};
-$('removeImage').onclick=removeImage;$('clearBatch').onclick=()=>{if(blocked()||brush.isDrawing())return;records=[];activeIndex=-1;cache.clear();$('imageList').replaceChildren();emptyView();tell('本批图片与会话蒙版缓存已清空。');refresh();};
+$('removeImage').onclick=removeImage;$('clearBatch').onclick=()=>{if(blocked()||brush.isDrawing())return;records.forEach(disposeThumbnail);records=[];activeIndex=-1;cache.clear();$('imageList').replaceChildren();emptyView();tell('本批图片与蒙版已清空，正在同步本地保存。');refresh();if(typeof CustomEvent!=='undefined')root.dispatchEvent(new CustomEvent('sam:source-ready'));};
 $('undo').onclick=()=>{if(blocked()||!points.length)return;const removed=points.pop();invalidate();draw();tell('已撤销最近添加的'+(removed.label===1?'保留点':'排除点')+'，剩余 '+points.length+' 个提示点。请重新生成蒙版。');};
 $('clearPrompt').onclick=()=>{if(blocked())return;promptBox=null;points=[];invalidate();draw();tell('手动蓝框和提示点已清除，恢复当前输入图完整范围的默认目标提示。白色裁剪范围不变。');};
 $('clear').onclick=()=>{if(blocked())return;crop=null;promptBox=null;points=[];discardEncoding();invalidate();draw();tell('两个框和提示点已清除，模型输入恢复整图。');};
-$('segment').onclick=run;$('candidate').onchange=$('threshold').oninput=$('overlay').onchange=render;
-$('smooth').onchange=render;
+$('segment').onclick=run;$('candidate').onchange=$('threshold').oninput=$('overlay').onchange=()=>{render();changed();};
+$('smooth').onchange=()=>{render();changed();};
 $('cleanAreas').onclick=cleanAreas;
 $('undoAreas').onclick=()=>{if(blocked()||brush.isDrawing()||!areaCleanup)return;resetCleanup('已撤销区域清理，模型蒙版与画笔修改保留。');render();tell('已撤销区域清理。');};
-$('brushRadius').oninput=()=>{$('brushRadiusValue').textContent=$('brushRadius').value;brushLens.refresh();};
-$('brushMode').onchange=()=>brushLens.refresh();
+$('brushRadius').oninput=()=>{$('brushRadiusValue').textContent=$('brushRadius').value;brushLens.refresh();changed();};
+$('brushMode').onchange=()=>{brushLens.refresh();changed();};
+$('tight').onchange=$('minArea').oninput=$('batchFormat').onchange=changed;
 $('brushTool').onchange=()=>{brush.refreshTool();brushLens.refresh();refresh();};
 $('curveUndo').onclick=()=>brush.removeLastShape();$('curveClear').onclick=()=>brush.clearShapes();
 $('brushUndo').onclick=()=>brush.undo();$('brushClear').onclick=()=>brush.clear();
-$('invert').onchange=()=>{render();tell($('invert').checked?'已反转裁剪图内的保留区域。':'已恢复模型原始保留区域。');};
+$('invert').onchange=()=>{render();tell($('invert').checked?'已反转裁剪图内的保留区域。':'已恢复模型原始保留区域。');changed();};
 $('download').onclick=()=>exportPNG();$('maskDownload').onclick=()=>exportPNG(true);
 $('diagnostic').onclick=()=>{if(!blocked()&&lastDiagnostic)save(new Blob([JSON.stringify(lastDiagnostic,null,2)],{type:'application/json'}),'slimsam-diagnostics.json');};
 
+ root.addEventListener('sam:beforeviewchange',event=>{if(blocked()||brush.isDrawing())event.preventDefault();});
+ root.addEventListener('sam:viewchange',()=>{pointLens.hide();brushLens.hide();draw();brush.refreshTool();});
  refresh();
  async function openCrop(blob,name) {
   if(blocked())throw new Error('其他任务正在处理，请稍后转入本地分割');
@@ -426,5 +439,38 @@ $('diagnostic').onclick=()=>{if(!blocked()&&lastDiagnostic)save(new Blob([JSON.s
   if(!await addFiles([new File([blob],name||'semantic-first.png',{type:blob.type||'image/png'})]))throw new Error($('status').textContent);
   if(!await run())throw new Error($('status').textContent);
  }
- return {refresh,isBusy:()=>busy||batchBusy,openCrop};
+ function canSnapshot(){return !busy&&!batchBusy&&!drag&&!brush.isDrawing();}
+ async function snapshot(){
+  const active=captureActive();
+  const saved={version:1,records:records.map(record=>({id:record.id,file:record.file,state:structuredClone(record.state),hasResult:record.hasResult,error:record.error})),activeIndex,sequence,cacheRevision,
+   settings:readSettings(),magnify:$('magnify').checked,magnifyZoom:$('magnifyZoom').value,batchFormat:$('batchFormat').value};
+  // Capture the queue before compression yields. Later user edits get a separate save.
+  const entries=new Map(cache.exportEntries().map(entry=>[entry.id,entry]));
+  if(active){if(active.result)entries.set(active.record.id,{id:active.record.id,...await cache.put(active.record.id,active.result)});else{cache.remove(active.record.id);entries.delete(active.record.id);}}
+  saved.masks=saved.records.filter(record=>record.hasResult).map(record=>{const entry=entries.get(record.id);if(!entry)throw new Error('蒙版缓存尚未就绪');return entry;});
+  return saved;
+ }
+ async function restore(saved){
+  if(saved?.version!==1||!Array.isArray(saved.records)||saved.records.length>20||!Array.isArray(saved.masks))throw new Error('本地分割工作区数据格式无效');
+  const ids=new Set();
+  for(const record of saved.records){if(!(record.file instanceof Blob)||!Number.isSafeInteger(record.id)||record.id<1||ids.has(record.id))throw new Error('保存的分割图片无效');ids.add(record.id);}
+  restoringState=true;
+  try{
+   records.forEach(disposeThumbnail);records=[];activeIndex=-1;cache.clear();$('imageList').replaceChildren();emptyView();
+   cache.importEntries(saved.masks.filter(entry=>ids.has(entry.id)));
+   const entries=new Map(cache.exportEntries().map(entry=>[entry.id,entry]));
+   for(const record of saved.records){if(record.hasResult&&!entries.has(record.id))throw new Error('保存的蒙版缺失');}
+   sequence=Math.max(Number(saved.sequence)||0,...saved.records.map(record=>record.id),0);
+   cacheRevision=Math.max(Number(saved.cacheRevision)||0,...saved.masks.map(entry=>entry.revision),0);
+   records=saved.records.map(record=>({...record,state:structuredClone(record.state),hasResult:record.hasResult===true}));
+   for(const record of records){record.thumbnail=createThumbnailItem(()=>selectRecord(records.indexOf(record)));record.button=record.thumbnail.button;$('imageList').append(record.button);prepareThumbnail(record,refreshList);}
+   writeSettings(saved.settings);
+   $('magnify').checked=$('magnifyPreview').checked=saved.magnify!==false;
+   if(['2','4','6','8'].includes(saved.magnifyZoom))$('magnifyZoom').value=$('magnifyZoomPreview').value=saved.magnifyZoom;
+   if(['transparent','mask','both'].includes(saved.batchFormat))$('batchFormat').value=saved.batchFormat;
+   if(records.length){const index=Math.max(0,Math.min(records.length-1,Number.isInteger(saved.activeIndex)?saved.activeIndex:0));if(!await selectRecord(index,true))throw new Error($('status').textContent);}
+   tell(records.length?'已恢复 '+records.length+' 张图片及已保存的蒙版修改。':'等待添加图片');refresh();
+  }finally{restoringState=false;}
+ }
+ return {refresh,isBusy:()=>busy||batchBusy,openCrop,snapshot,restore,canSnapshot};
 }

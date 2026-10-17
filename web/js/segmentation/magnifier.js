@@ -2,9 +2,9 @@
 export function createMagnifier({canvas,isEnabled,isAvailable,readZoom,readMark}) {
  const lens=document.createElement('div'),view=document.createElement('canvas'),label=document.createElement('div');
  lens.hidden=true;lens.setAttribute('aria-hidden','true');
- lens.style.cssText='position:fixed;z-index:1000;pointer-events:none;width:180px;border:2px solid #365ee8;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 5px 22px #0004;';
+ lens.style.cssText='position:fixed;z-index:1000;pointer-events:none;width:180px;height:180px;border:2px solid #35d0a8;border-radius:50%;overflow:hidden;background:#fff;box-shadow:0 5px 22px #0006;';
  view.width=view.height=176;view.style.cssText='display:block;width:176px;height:176px;max-width:none;';
- label.style.cssText='font:12px system-ui;color:#24324b;padding:4px 8px;background:#fff;text-align:center;';
+ label.style.cssText='position:absolute;left:24px;right:24px;bottom:12px;font:11px system-ui;color:#fff;padding:4px 6px;border-radius:20px;background:#152d27e8;text-align:center;';
  lens.append(view,label);document.body.append(lens);
  const ctx=view.getContext('2d');let position=null,frame=null;
  function hide(){position=null;lens.hidden=true;if(frame!==null){cancelAnimationFrame(frame);frame=null;}}
@@ -29,8 +29,8 @@ export function createMagnifier({canvas,isEnabled,isAvailable,readZoom,readMark}
   function cross(){ctx.beginPath();ctx.moveTo(half-8,half);ctx.lineTo(half+8,half);ctx.moveTo(half,half-8);ctx.lineTo(half,half+8);ctx.stroke();}
   cross();ctx.strokeStyle=color;ctx.lineWidth=1;cross();
   if(mark.radius>0){ctx.beginPath();ctx.arc(half,half,mark.radius*zoom,0,Math.PI*2);ctx.stroke();}
-  label.textContent=zoom+'× · '+(mark.radius>0?'圆圈为实际画笔范围':'十字为实际落点');
-  const w=180,h=206,vw=window.innerWidth,vh=window.innerHeight;
+  label.textContent=zoom+'× · '+(mark.radius>0?'画笔范围':'实际落点');
+  const w=180,h=180,vw=window.innerWidth,vh=window.innerHeight;
   let lx=x+28,ly=y+28;if(lx+w>vw-8)lx=x-w-28;if(ly+h>vh-8)ly=y-h-28;
   lens.style.left=Math.max(8,Math.min(vw-w-8,lx))+'px';lens.style.top=Math.max(8,Math.min(vh-h-8,ly))+'px';lens.hidden=false;
  }

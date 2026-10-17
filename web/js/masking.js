@@ -1,7 +1,8 @@
-import { createTileList, prepareThumbnail, disposeThumbnail } from './thumbnail-list.js';
+import { createTileList, prepareThumbnail, disposeThumbnail, bindBatchNavigation } from './thumbnail-list.js';
 import { canvasToBlob } from './image.js';
 import { downloadBlob } from './ui.js';
 import { subscribe } from './runtime-status.js';
+import { packItem, unpackItem } from './workspace-state.js';
 
 // All masks use original-image coordinates. Solid rectangles also cover curved edges.
 export function normalizeRect(rect, width, height, padding = 0) {
@@ -45,13 +46,14 @@ export function paintMasks(context, rectangles, width, height, color, marginPerc
 export function createMaskUI(actions) {
     const $ = id => document.getElementById(id);
     const canvas = $('maskCanvas'), ctx = canvas.getContext('2d');
-    let items = [], position = -1, image = null, imageToken = 0, start = null, drag = null, busy = false;
+    let items = [], position = -1, image = null, imageToken = 0, start = null, drag = null, busy = false, restoring = false;
     const current = () => items[position];
     const tell = text => { $('maskStatus').textContent = text; };
     const blocked = () => busy || actions.isBlocked();
     const margin = () => Number($('maskMargin').value) || 0;
     const masks = item => [...item.auto, ...item.manual];
-    const updateTiles=createTileList($('maskTiles'),select,item=>item.error?'待检查':masks(item).length?'已设遮盖':item.detected?'未检出':'待检测');
+    const updateTiles=createTileList($('maskTiles'),select,item=>item.error?{text:'待检查',state:'error'}:item.processing?{text:'检测中',state:'processing'}:masks(item).length?{text:masks(item).length+' 个遮盖框',count:masks(item).length,state:'complete'}:item.detected?{text:0,state:'complete'}:{text:'待检测',state:'pending'});
+    const navigation=bindBatchNavigation($('maskWorkspace'),'mask',()=>({index:position,total:items.length}),select);
     function update() {
         const item = current(), lock = blocked();
         $('maskChoose').disabled = $('maskAdd').disabled = $('maskReset').disabled = lock;
@@ -64,6 +66,8 @@ export function createMaskUI(actions) {
         $('maskSummary').textContent = item ? '已解码 ' + item.decodedCount + ' 个 · 检测候选 ' + item.candidateCount + ' 个 · 手动框 ' + item.manual.length + ' 个（自动框可能重叠）' : '等待添加图片';
         $('maskReview').textContent = item?.error ? '本图需检查：' + item.error : item?.detected ? '请检查漏检和误盖；处理完成不代表已找到全部二维码。' : '可先自动检测，也可直接在图上拖动补框。';
         updateTiles(items,position);
+        navigation();
+        if(!restoring)actions.onChange?.();
     }
     function draw() {
         ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -102,7 +106,7 @@ export function createMaskUI(actions) {
         const pending=items.filter(item=>!item.detected);
         try {
             for(let index=0;index<pending.length;index++) {
-                const item=pending[index];tell('正在检测 '+(index+1)+' / '+pending.length+'：'+item.file.name);
+                const item=pending[index];item.processing=true;item.error=null;tell('正在检测 '+(index+1)+' / '+pending.length+'：'+item.file.name);update();
                 try {
                     const found=await actions.detect(item.file);
                     const rectangles=rectanglesForDetection(found.qrcodes,found.regions,found.width,found.height);
@@ -111,7 +115,7 @@ export function createMaskUI(actions) {
                     item.error=found.warnings.join('；') || null;
                     item.detected=!item.error;
                 } catch(error) {item.error=error.message||String(error);}
-                $('maskProgress').textContent=(index+1)+' / '+pending.length;update();draw();
+                item.processing=false;$('maskProgress').textContent=(index+1)+' / '+pending.length;update();draw();
                 await new Promise(resolve=>setTimeout(resolve,0));
             }
             tell('检测完成。请检查每张图的遮盖预览，未检出和异常图片需人工检查。');
@@ -162,9 +166,31 @@ export function createMaskUI(actions) {
     $('maskStage').ondrop=event=>{event.preventDefault();add([...event.dataTransfer.files]);};
     $('maskReset').onclick=()=>{if(blocked())return;items.forEach(item=>{disposeThumbnail(item);URL.revokeObjectURL(item.url);});items=[];select(-1);$('maskProgress').textContent='';tell('图片已清空。');};
     $('maskUndo').onclick=()=>{if(blocked()||!current())return;current().manual.pop();update();draw();};
-    $('maskColor').onchange=$('maskMargin').oninput=$('maskOriginal').onchange=draw;
+    $('maskColor').onchange=$('maskMargin').oninput=$('maskOriginal').onchange=()=>{draw();actions.onChange?.();};
     $('maskStart').onclick=detect;$('maskDownload').onclick=()=>exportImages(false);$('maskZip').onclick=()=>exportImages(true);
     for(const name of ['zxing','wechat','curved'])subscribe(state=>{if(state.module===name)$('mask-'+name+'State').textContent=state.text;});
-    // The shared three-tab navigation is installed by barcode-ui.js.
-    update();return {refresh:update,isBusy:()=>busy};
+    function snapshot(){return {version:1,items:items.map(packItem),position,options:{color:$('maskColor').value,margin:margin(),original:$('maskOriginal').checked}};}
+    async function restore(state){
+        if(state?.version!==1||!Array.isArray(state.items))throw new Error('遮盖工作区数据格式无效');
+        restoring=true;
+        try {
+            items.forEach(item=>{disposeThumbnail(item);URL.revokeObjectURL(item.url);});
+            items=state.items.map(unpackItem).filter(Boolean);
+            for(const item of items){
+                item.auto=Array.isArray(item.auto)?item.auto:[];item.manual=Array.isArray(item.manual)?item.manual:[];
+                item.decodedCount=Number(item.decodedCount)||0;item.candidateCount=Number(item.candidateCount)||0;
+                item.detected=item.detected===true;item.processing=false;
+                prepareThumbnail(item,()=>updateTiles(items,position));
+            }
+            $('maskColor').value=state.options?.color==='white'?'white':'black';
+            if(Number.isFinite(state.options?.margin))$('maskMargin').value=String(Math.min(30,Math.max(0,state.options.margin)));
+            $('maskOriginal').checked=state.options?.original===true;
+            const index=items.length?Math.min(items.length-1,Math.max(0,Number.isInteger(state.position)?state.position:0)):-1;
+            await select(index);
+            $('maskProgress').textContent=items.length?items.filter(item=>item.detected).length+' / '+items.length:'';
+            tell(items.length?'已恢复 '+items.length+' 张图片及自动、手动遮盖框。':'等待添加图片');
+            update();draw();
+        } finally {restoring=false;}
+    }
+    update();return {refresh:update,isBusy:()=>busy,snapshot,restore};
 }

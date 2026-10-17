@@ -6,7 +6,7 @@ export function setupWorkspaceTabs(refresh) {
         const tab=$(mode+'Tab');tab.setAttribute('aria-controls',workspaces[mode]);
         $(workspaces[mode]).setAttribute('role','tabpanel');$(workspaces[mode]).setAttribute('aria-labelledby',mode+'Tab');$(workspaces[mode]).setAttribute('tabindex','-1');
         tab.onclick=()=>{for(const name of modes){$(workspaces[name]).hidden=name!==mode;$(name+'Tab').setAttribute('aria-selected',String(name===mode));$(name+'Tab').tabIndex=name===mode?0:-1;}
-            document.querySelector('.skip-link')?.setAttribute('href','#'+workspaces[mode]);updateWorkspaceDescription(mode);refresh();};
+            document.querySelector('.skip-link')?.setAttribute('href','#'+workspaces[mode]);updateWorkspaceDescription(mode);refresh();document.dispatchEvent(new CustomEvent('workspace:change',{detail:{mode}}));};
         tab.addEventListener('keydown',event=>{
             if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(event.key))return;event.preventDefault();
             const index=modes.indexOf(mode),next=event.key==='Home'?0:event.key==='End'?modes.length-1:

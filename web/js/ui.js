@@ -1,38 +1,22 @@
 import {cropBlob,releaseCrops} from './crop-store.js';
-import { createTileList, prepareThumbnail, disposeThumbnail } from './thumbnail-list.js';
+import { packItem, unpackItem } from './workspace-state.js';
+import { createTileList, prepareThumbnail, disposeThumbnail, bindBatchNavigation } from './thumbnail-list.js';
 import { subscribe } from "./runtime-status.js";
 import { canvasToBlob } from "./image.js";
-import { parseWebURL, createLinkPreview, cancelLinkPreviews } from './link-preview.js';
+import { parseWebURL, createLinkPreview, cancelLinkPreviews } from './link-preview.js?v=3.5.1';
 export const $ = id => document.getElementById(id);
 export function updateWorkspaceDescription(mode) {
-    if(mode === 'sam') {
-        $('introTitle').textContent='留下主角，让背景透明。';
-        $('introDescription').textContent='框选范围、标记保留与排除位置，在本地生成蒙版。使用画笔精修边缘，批量导出透明背景图片。';
-        $('introBadge').textContent='本地推理 · 图片不上传';
-        $('footerNote').textContent='SlimSAM 按需加载 · 请检查蒙版边缘后导出';document.title='心裁 · 本地分割';return;
-    }
-    if(mode === 'semantic') {
-        $('introTitle').textContent='描述所需，批量裁出对象。';
-        $('introDescription').textContent='适合从一批照片中提取相同对象：输入名称、颜色或位置描述，通过 Groq 检测目标，再从原图生成矩形裁图。测试结果需要核对。';
-        $('introBadge').textContent='云端检测 · 裁图本地生成';
-        $('footerNote').textContent='检测缩图与描述发送至 Groq · 非透明抠图';
-        document.title='心裁 · 语义裁剪测试';return;
-    }
-    if(mode === 'barcode') {
-        $('introTitle').textContent='条形码，批量识别与整理。';
-        $('introDescription').textContent='适合商品包装、标签和资料图片：识别常见条形码、查看码制与原文，批量导出裁图和 CSV，便于后续整理与格式化输入。';
-        $('introBadge').textContent='条形码图片在本机处理';
-        $('footerNote').textContent='图片本地识别 · CSV 保留原始解码内容';
-        document.title='心裁 · 条形码识别';return;
-    }
-    const mask = mode === 'mask';
-    $('introTitle').textContent = mask ? '遮盖二维码，安心分享图片。' : '二维码，批量识别与整理。';
-    $('introDescription').textContent = mask
-        ? '适合分享截图、照片或公开展示资料前隐藏二维码：自动检测并实色遮盖，支持手动补框与整图批量导出。自动检测可能漏检，请检查后再分享。'
-        : '适合活动二维码材料、多码截图和标签照片：定位二维码、查看内容，并将每个二维码分别裁出，支持单张下载与 ZIP 打包。';
-    $('introBadge').textContent = mask ? '图片与遮盖在本机处理' : '图片本地处理 · 网页信息按需联网';
-    $('footerNote').textContent = mask ? '图片本地遮盖 · 导出保留原图尺寸' : '图片本地识别 · 单码裁图按原图像素输出';
-    document.title = mask ? '心裁 · 二维码遮盖' : '心裁 · 二维码识别';
+    const pages={
+        qr:['二维码识别','批量读取二维码内容，分别导出裁图与 CSV。'],
+        barcode:['条形码识别','批量读取条形码内容，导出裁图与 CSV。'],
+        mask:['二维码遮盖','自动检测或手动补框，批量导出遮盖后的整图。'],
+        semantic:['语义裁剪','按文字描述检测目标，批量导出矩形裁图。'],
+        sam:['本地分割','生成对象蒙版，修整边缘并导出透明 PNG。']
+    };
+    const [title,description]=pages[mode]||pages.qr;
+    $('introTitle').textContent=title;
+    $('introDescription').textContent=description;
+    document.title='心裁 · '+title;
 }
 export function downloadBlob(blob, filename) {
     const url = URL.createObjectURL(blob), link = document.createElement("a");
@@ -53,7 +37,7 @@ export function createUI(actions) {
     linkEnabled.type='checkbox';linkEnabled.checked=false;
     linkLabel.append(linkEnabled,document.createTextNode(' 联网获取网页标题和图标'));
     const linkNote=document.createElement('div');linkNote.className='small';
-    linkNote.textContent='开启后会将网址发送给本站服务并访问目标网页；核销、一次性或含凭证的链接请勿开启。图片不上传。';
+    linkNote.textContent='网址将经本站服务访问目标网页。勿用于核销、一次性或含凭证的链接。';
     linkControls.append(linkLabel,linkNote);$('qrDetail').after(linkControls);
     linkEnabled.onchange=()=>{if(!linkEnabled.checked)cancelLinkPreviews();showResults();};
     subscribe(({module, text, level}) => {
@@ -68,18 +52,20 @@ export function createUI(actions) {
             const item = current(), sx = canvas.width / image.naturalWidth, sy = canvas.height / image.naturalHeight;
             for (const qr of item?.result?.qrcodes || []) {
                 const active = qr.id === selectedQR;
-                context.strokeStyle = active ? "#ff9f45" : "#365ee8";
+                context.strokeStyle = active ? "#f4c26b" : "#35d0a8";
                 context.lineWidth = Math.max(2, canvas.width / 400);
                 context.beginPath(); qr.points.forEach((p, i) => i ? context.lineTo(p.x*sx,p.y*sy) : context.moveTo(p.x*sx,p.y*sy)); context.closePath(); context.stroke();
                 const x = qr.center.x*sx, y = qr.center.y*sy, radius = Math.max(12,canvas.width/55);
-                context.fillStyle = active ? "#d96a19" : "#365ee8"; context.beginPath(); context.arc(x,y,radius,0,Math.PI*2); context.fill();
-                context.fillStyle = "white"; context.font = "600 "+radius+"px system-ui"; context.textAlign = "center"; context.textBaseline = "middle"; context.fillText(qr.id,x,y);
+                context.fillStyle = active ? "#f4c26b" : "#35d0a8"; context.beginPath(); context.arc(x,y,radius,0,Math.PI*2); context.fill();
+                context.fillStyle = "#122b23"; context.font = "600 "+radius+"px system-ui"; context.textAlign = "center"; context.textBaseline = "middle"; context.fillText(qr.id,x,y);
             }
         }
     }
     const updateTiles=createTileList($('tiles'),select,item=>item.error?'失败':item.result?item.result.count:item.processing?'识别中':'待识别');
+    const navigation=bindBatchNavigation($('normalWorkspace'),'qr',()=>({index:positions.qr,total:queues.qr.length}),select);
     function tiles() {
         updateTiles(queues.qr,positions.qr);
+        navigation();
     }
     let resultView=null;
     function showResults() {
@@ -97,13 +83,13 @@ export function createUI(actions) {
             const card = document.createElement("article"); card.className = "qr-card" + (qr.id===selectedQR?" active":""); card.id = "qr-card-"+qr.id;
             if (crop) { const img = document.createElement("img"); img.src = crop.image; img.alt = "二维码 #"+qr.id; card.append(img); }
             const title = document.createElement("h4"); title.textContent = "二维码 #"+qr.id;
-            const meta = document.createElement("div"); meta.className = "meta"; meta.textContent = qr.source || qr.format;
+            const meta = document.createElement("div"); meta.className = "meta"; meta.textContent = '已解码 · '+(qr.format||'QRCode');meta.title=qr.source||'';
             const text = document.createElement("pre"); text.textContent = qr.text || "（空内容）";
             const buttons = document.createElement("div"); buttons.className = "actions";
             function button(label, handler) { const el = document.createElement("button"); el.className = "secondary"; el.textContent = label; el.onclick = handler; buttons.append(el); }
-            button("定位",()=>{ selectedQR=qr.id; draw(); showResults(); });
+            button("定位",()=>{ selectedQR=qr.id; draw(); showResults(); actions.onChange?.(); });
             button("复制",async event=>{try{await navigator.clipboard.writeText(qr.text);event.target.textContent="已复制";}catch{tell("复制失败，请选中结果中的文字手动复制。","qr");}});
-            if (crop) button("下载 PNG",async()=>{try{downloadBlob(await cropBlob(crop),item.file.name.replace(/\.[^.]+$/,"")+"-qr-"+qr.id+".png");}catch(error){tell("下载失败："+error.message,"qr");}});
+            if (crop) button("下载裁图",async()=>{try{downloadBlob(await cropBlob(crop),item.file.name.replace(/\.[^.]+$/,"")+"-qr-"+qr.id+".png");}catch(error){tell("下载失败："+error.message,"qr");}});
             const url=parseWebURL(qr.text);
             if(url){const a=document.createElement('a');a.href=url.href;a.target='_blank';a.rel='noopener noreferrer';a.textContent='打开链接';buttons.append(a);}
             card.append(title,meta);
@@ -118,6 +104,7 @@ export function createUI(actions) {
     }
     async function select(index) {
         positions.qr=index; const token=++imageToken; image=null; selectedQR=null; notice("");
+        actions.onChange?.();
         const item=current(); tiles(); showResults(); $("count").textContent=queues.qr.length+" 张图片";
         $("filename").textContent=item?.file.name || "尚未选择图片"; $("dimensions").textContent="原图预览";
         canvas.hidden=true; $("upload").hidden=Boolean(item);
@@ -148,7 +135,7 @@ export function createUI(actions) {
         tell("图片已清空，等待添加图片。");
         $("progressBar").style.width="0%";$("progressTrack").setAttribute("aria-valuenow","0");
     };
-    const stage=document.querySelector(".stage");
+    const stage=$('normalWorkspace').querySelector(".stage");
     stage.ondragover=event=>{event.preventDefault();$("upload").classList.add("drag");};
     stage.ondragleave=()=>$("upload").classList.remove("drag");
     stage.ondrop=event=>{event.preventDefault();$("upload").classList.remove("drag");add([...event.dataTransfer.files]);};
@@ -157,18 +144,33 @@ export function createUI(actions) {
         if(!image)return;
         {const p=point(event),sx=canvas.width/image.naturalWidth,sy=canvas.height/image.naturalHeight;
             const qr=current()?.result?.qrcodes.find(q=>{const xs=q.points.map(v=>v.x*sx),ys=q.points.map(v=>v.y*sy);return p.x>=Math.min(...xs)&&p.x<=Math.max(...xs)&&p.y>=Math.min(...ys)&&p.y<=Math.max(...ys);});
-            if(qr){selectedQR=qr.id;draw();showResults();$("qr-card-"+qr.id)?.scrollIntoView({block:"nearest",behavior:"smooth"});}return;}
+            if(qr){selectedQR=qr.id;draw();showResults();actions.onChange?.();$("qr-card-"+qr.id)?.scrollIntoView({block:"nearest",behavior:"smooth"});}return;}
     };
     $("qrStart").onclick=()=>actions.scan(queues.qr.filter(item=>!item.result));
-    $("zipOutput").onchange=showResults;
+    $("zipOutput").onchange=()=>{showResults();actions.onChange?.();};
     $("downloadAllZip").onclick=()=>actions.export(queues.qr.filter(item=>item.result).map(item=>item.result));
     $("downloadImageZip").onclick=()=>{const item=queues.qr[positions.qr];if(item?.result)actions.export([item.result],true);};
     return {
         tell,
+        snapshot(){return {version:1,items:queues.qr.map(packItem),position:positions.qr,selectedQR,zipOutput:$("zipOutput").checked};},
+        async restore(saved){
+            if(saved.version!==1||!Array.isArray(saved.items))throw new Error('二维码工作区数据版本无效');
+            queues.qr.forEach(item=>{disposeThumbnail(item);releaseCrops(item.result);URL.revokeObjectURL(item.url);});
+            queues.qr=saved.items.map(unpackItem);
+            for(const item of queues.qr)prepareThumbnail(item,tiles);
+            $("zipOutput").checked=saved.zipOutput!==false;
+            // A refreshed page never fetches decoded links automatically.
+            linkEnabled.checked=false;cancelLinkPreviews();
+            await select(queues.qr.length?Math.max(0,Math.min(queues.qr.length-1,saved.position||0)):-1);
+            selectedQR=saved.selectedQR??null;tiles();showResults();draw();
+            const done=queues.qr.filter(item=>item.result).length,percent=queues.qr.length?Math.round(done/queues.qr.length*100):0;
+            $("progressBar").style.width=percent+"%";$("progressTrack").setAttribute("aria-valuenow",String(percent));
+            tell(queues.qr.length?'已恢复 '+queues.qr.length+' 张图片及已完成的识别结果。':'等待添加图片');
+        },
         busy(value){busy=value;$("add").disabled=busy||actions.isExporting();$("choose").disabled=busy||actions.isExporting();$("resetImages").disabled=busy||actions.isExporting();showResults();},
-        refresh(){tiles();showResults();draw();},
+        refresh(){tiles();showResults();draw();actions.onChange?.();},
         progress(done,total){const percent=total?Math.round(done/total*100):0;$("progressBar").style.width=percent+"%";$("progressTrack").setAttribute("aria-valuenow",percent);},
-        detail(text){$("qrDetail").textContent=text;}
+        detail(text){$("qrDetail").textContent=text;$("qrDetail").hidden=!text;}
     };
 }
 
