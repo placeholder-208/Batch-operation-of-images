@@ -1,4 +1,5 @@
 import { createTileList, prepareThumbnail, disposeThumbnail, bindBatchNavigation } from './thumbnail-list.js';
+import { createFileImport } from './file-import.js';
 import { canvasToBlob } from './image.js';
 import { downloadBlob } from './ui.js';
 import { subscribe } from './runtime-status.js';
@@ -46,10 +47,10 @@ export function paintMasks(context, rectangles, width, height, color, marginPerc
 export function createMaskUI(actions) {
     const $ = id => document.getElementById(id);
     const canvas = $('maskCanvas'), ctx = canvas.getContext('2d');
-    let items = [], position = -1, image = null, imageToken = 0, start = null, drag = null, busy = false, restoring = false;
+    let items = [], position = -1, image = null, imageToken = 0, start = null, drag = null, busy = false, restoring = false, importBusy = false;
     const current = () => items[position];
     const tell = text => { $('maskStatus').textContent = text; };
-    const blocked = () => busy || actions.isBlocked();
+    const blocked = () => busy || importBusy || actions.isBlocked();
     const margin = () => Number($('maskMargin').value) || 0;
     const masks = item => [...item.auto, ...item.manual];
     const updateTiles=createTileList($('maskTiles'),select,item=>item.error?{text:'待检查',state:'error'}:item.processing?{text:'检测中',state:'processing'}:masks(item).length?{text:masks(item).length+' 个遮盖框',count:masks(item).length,state:'complete'}:item.detected?{text:0,state:'complete'}:{text:'待检测',state:'pending'});
@@ -92,14 +93,10 @@ export function createMaskUI(actions) {
             canvas.hidden=false;$('maskDimensions').textContent=img.naturalWidth+' × '+img.naturalHeight;draw();
         } catch(error) {if(token!==imageToken)return;current().error='图片读取失败：'+error.message;update();}
     }
-    function add(files) {
-        if(blocked())return;
-        const accepted=files.filter(file=>file.type.startsWith('image/'));if(!accepted.length){tell('请选择图片文件。');return;}
-        const first=items.length;
-        items.push(...accepted.map(file=>({file,url:URL.createObjectURL(file),auto:[],manual:[],decodedCount:0,candidateCount:0,detected:false,error:null})));
-        for(const item of items.slice(first))prepareThumbnail(item,()=>updateTiles(items,position));
-        select(first);tell('图片已添加，请自动检测或拖动手动补框。');
-    }
+    const importer=createFileImport({status:$('maskStatus'),canStart:()=>!blocked(),onLock(value){importBusy=value;actions.onBusy(value);update();},
+        async onItem(file,source){const index=items.length,item={file,source,url:URL.createObjectURL(file),auto:[],manual:[],decodedCount:0,candidateCount:0,detected:false,error:null};items.push(item);prepareThumbnail(item,()=>updateTiles(items,position));if(position<0)await select(index);update();},
+        onComplete({added,errors,cancelled}){tell((cancelled?'已停止导入，':'导入完成，')+'新增 '+added+' 张图片。'+(errors.length?' '+errors.join('；'):'请自动检测或拖动补框。'));}});
+    function add(files){return importer.add(files);}
     async function detect() {
         if(blocked())return;
         busy=true;actions.onBusy(true);update();
@@ -192,5 +189,5 @@ export function createMaskUI(actions) {
             update();draw();
         } finally {restoring=false;}
     }
-    update();return {refresh:update,isBusy:()=>busy,snapshot,restore};
+    update();return {refresh:update,isBusy:()=>busy||importBusy,snapshot,restore};
 }

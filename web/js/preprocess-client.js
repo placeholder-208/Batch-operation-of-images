@@ -20,10 +20,15 @@ function request(type,extra={},transfers=[]){
   }catch(error){const job=pending.get(id);if(job)clearTimeout(job.timer);pending.delete(id);reject(error);}
  });
 }
-export function iterateBackgroundVariants(canvas,{curved=true}={}){
+export function iterateBackgroundVariants(canvas,{curved=true,originalOnly=false}={}){
  const token={};
  function* compatibility(){for(const variant of iterateDecodeVariants(canvas,{curved})){variant.preprocessBackend='main';yield variant;}}
  async function* generate(){
+  if(originalOnly){
+   yield {name:'original',imageData:canvas.getContext('2d',{willReadFrequently:true}).getImageData(0,0,canvas.width,canvas.height),
+    scaleX:1,scaleY:1,releaseAfterDecode:true,preprocessBackend:'main'};
+   return;
+  }
   let acquired=false;
   // One pipeline at a time. UI normally serializes tasks; concurrent callers use the compatibility path.
   if(disabled||owner||typeof Worker==='undefined'||typeof OffscreenCanvas==='undefined'){
@@ -50,5 +55,5 @@ export function iterateBackgroundVariants(canvas,{curved=true}={}){
    if(owner===token)owner=null;
   }
  }
- const iterator=generate();iterator.length=curved?7:5;return iterator;
+ const iterator=generate();iterator.length=originalOnly?1:curved?7:5;return iterator;
 }

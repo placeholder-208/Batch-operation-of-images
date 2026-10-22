@@ -1,7 +1,7 @@
 // Explicit persistence boundary: keep user work, never DOM nodes, runtime URLs or credentials.
 const ITEM_FIELDS = ['file', 'result', 'crops', 'error', 'elapsedMs', 'auto', 'manual',
     'decodedCount', 'candidateCount', 'detected', 'errorStatus', 'errorDiagnostic',
-    'cropError', 'attemptPrompt'];
+    'cropError', 'attemptPrompt', 'prompt', 'source', 'qrStatistics','qrStatisticsHistory'];
 
 function packCrop(crop) {
     const { image, url, canvas, ...saved } = crop;
@@ -28,6 +28,10 @@ export function unpackItem(saved) {
     const item = packItem(saved);
     item.url = URL.createObjectURL(item.file);
     item.processing = false;
+    if(item.qrStatistics?.status==='处理中'){
+        item.qrStatistics={...item.qrStatistics,status:'上次处理已中断',
+            stages:item.qrStatistics.stages.map(stage=>stage.status?stage:{...stage,status:'interrupted'})};
+    }
     if (item.result) {
         item.result.image = item.url;
         if (item.result.crops) item.result.crops = item.result.crops.map(crop => ({

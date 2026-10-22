@@ -50,7 +50,7 @@ function prepareStandard(mode,rootId,listId,resultId){
   const maintenance=node('div','maintenance-actions');maintenance.append($('semanticRetry'),$('semanticDiagnostic'));output.append(disclosure('重新检测与诊断',maintenance));
  }
  const description=node('p','task-description',{
-  qr:'读取码内内容，分别导出裁图与 CSV。',barcode:'读取条形码内容，导出裁图与 CSV。',mask:'自动检测后逐张检查，可拖动补充遮盖框。',semantic:'用同一段描述，批量查找并裁出目标。'
+  qr:'导入图片或 PDF，读取码内内容并导出裁图与 CSV。',barcode:'导入图片或 PDF，读取条形码并导出裁图与 CSV。',mask:'导入图片或 PDF，自动检测后逐图检查并补充遮盖框。',semantic:'按图填写描述，或使用统一描述批量裁剪。'
  }[mode]);task.append(description,body);aside.classList.add('inspector');aside.append(task,results,output);
  root.dispatchEvent(new CustomEvent('studio:ready'));
 }

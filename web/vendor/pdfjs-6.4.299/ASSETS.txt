@@ -1,0 +1,5 @@
+PDF.js 6.4.299, Mozilla Foundation, Apache-2.0.
+Source: https://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-6.4.299.tgz
+Verified integrity: sha512-AVl138zALtfaAPvADulE0PZThbYzCBS79nL4pOSL/6Sm/4AH5A21BD9VHt97OlCuzJuCpmeZtAtkinisF4Vb1g==
+Includes matching legacy browser library/worker, CMaps, standard fonts, WASM support and licenses.
+Loaded only when importing a PDF. PDF data stays in the browser.

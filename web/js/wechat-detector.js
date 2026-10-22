@@ -1,4 +1,5 @@
 import { report } from "./runtime-status.js";
+import { measureQR, measureQRSync } from './qr-statistics.js';
 const MODEL_URL = new URL(
     "../models/detect-web.onnx",
     import.meta.url
@@ -339,7 +340,7 @@ function intersectionOverUnion(first, second) {
 }
 
 
-function decodeBoxes(config, outputs, anchors) {
+function decodeBoxes(config, outputs, anchors, diagnostics = null) {
     const location = outputs[config.locationOutput].data;
     const confidence = outputs[config.confidenceOutput].data;
     const attributes = config.detectionAttributes;
@@ -418,14 +419,17 @@ function decodeBoxes(config, outputs, anchors) {
     const selected = [];
     const nmsThreshold = attributes.nms_threshold ?? 0.45;
     const keepTopK = attributes.keep_top_k ?? 100;
+    let nmsSuppressed = 0, visited = 0;
 
     for (const candidate of sorted) {
+        visited++;
         if (selected.some(function (existing) {
             return intersectionOverUnion(
                 existing,
                 candidate
             ) > nmsThreshold;
         })) {
+            nmsSuppressed++;
             continue;
         }
 
@@ -435,30 +439,40 @@ function decodeBoxes(config, outputs, anchors) {
             break;
         }
     }
+    if(diagnostics)Object.assign(diagnostics,{postprocess:{
+        confidenceThreshold:threshold,nmsThreshold,topK,keepTopK,
+        aboveThresholdValidBoxes:candidates.length,afterTopK:sorted.length,
+        visited,nmsSuppressed,selected:selected.length}});
 
     return selected;
 }
 
 
-export async function detectWechatRegions(sourceCanvas) {
+export async function detectWechatRegions(sourceCanvas, trace = null) {
     const startedAt = performance.now();
-    const { config, session } = await getDetector();
+    if (trace) trace.record.detection = {status:'pending',sessionRequestedBefore:Boolean(detectorPromise)};
+    let detector;
+    try { detector = await measureQR(trace, 'wechat_init', {sessionRequestedBefore:Boolean(detectorPromise)}, getDetector); }
+    catch (error) { if(trace)Object.assign(trace.record.detection,{status:'error',error:error.message||String(error)});throw error; }
+    const { config, session } = detector;
 
     report("wechat", "正在检测候选区域…");
-    const input = prepareInput(
+    const input = measureQRSync(trace, 'wechat_prepare', {inputSize:config.inputSize}, () => prepareInput(
         sourceCanvas,
         config.inputSize
-    );
+    ));
 
     let outputs;
 
     try {
-        outputs = await session.run({
+        outputs = await measureQR(trace, 'wechat_inference', {}, () => session.run({
             [config.input]: input
-        });
+        }));
 
-        const anchors = createAnchors(config, outputs);
-        const boxes = decodeBoxes(config, outputs, anchors);
+        const {anchors,boxes} = measureQRSync(trace, 'wechat_postprocess', {}, () => {
+            const anchors = createAnchors(config, outputs);
+            return {anchors,boxes:decodeBoxes(config, outputs, anchors, trace?.record.detection)};
+        });
 
         const regions = boxes.map(function (box) {
             return {
@@ -472,6 +486,8 @@ export async function detectWechatRegions(sourceCanvas) {
             return region.right > region.x &&
                 region.bottom > region.y;
         });
+        if (trace) Object.assign(trace.record.detection,{status:'ok',inputSize:config.inputSize,
+            anchors:anchors.length,candidateCount:regions.length,reason:regions.length?null:'no-candidates'});
 
         console.log("[WeChat 检测]", {
             anchors: anchors.length,
@@ -482,6 +498,9 @@ export async function detectWechatRegions(sourceCanvas) {
 
         report("wechat", "候选 " + regions.length + " 个 · " + Math.round(performance.now() - startedAt) + " ms", "ready");
         return regions;
+    } catch (error) {
+        if(trace)Object.assign(trace.record.detection,{status:'error',error:error.message||String(error)});
+        throw error;
     } finally {
         input.dispose();
 

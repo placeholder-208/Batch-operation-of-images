@@ -14,7 +14,9 @@ export function createSemanticUI(actions) {
     <div class="stage" id="semanticStage"><div class="upload" id="semanticUpload"><div class="upload-icon" aria-hidden="true">⌗</div><strong>把图片拖到这里</strong><p>每批最多 10 张</p><button class="primary" id="semanticChoose">选择图片</button><span class="small">JPEG · PNG · WebP</span></div><canvas id="semanticCanvas" hidden aria-label="目标框预览，点击目标框定位结果"></canvas></div>
     <div class="image-footer"><span id="semanticFilename">尚未选择图片</span><span id="semanticDimensions">原图预览</span></div><div class="tiles" id="semanticTiles" hidden></div></section>
     <aside class="panel"><div class="panel-head"><h2>描述与裁剪</h2><span class="small" id="semanticCount">0 张图片</span></div><div class="side-body">
-    <label for="semanticPrompt">要裁剪的对象</label><textarea id="semanticPrompt" rows="3" maxlength="500" placeholder="裁剪所有杯子，包含完整杯柄" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;resize:vertical"></textarea>
+    <label class="notice" style="display:block"><input id="semanticSharedPrompt" type="checkbox"> 同一描述应用到全部图片</label>
+    <label id="semanticPromptLabel" for="semanticPrompt">当前图片的对象描述</label><textarea id="semanticPrompt" rows="3" maxlength="500" placeholder="裁剪所有杯子，包含完整杯柄" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;resize:vertical"></textarea>
+    <p class="field-hint" id="semanticPromptScope">每张图片独立填写描述，切换图片会保留。</p>
     <label for="semanticToken" class="small">测试访问口令（不是 Groq API Key）</label><input id="semanticToken" type="password" autocomplete="off" maxlength="256" style="width:100%;padding:8px;border:1px solid var(--line);border-radius:8px" placeholder="填写你设置的测试口令">
     <label class="notice" style="display:block"><input id="semanticConsent" type="checkbox"> 我同意将检测用的缩小图片和描述发送给 Groq；不上传敏感图片。</label>
     <label class="notice" style="display:block"><input id="semanticSam" type="checkbox"> 完成后自动进入本地分割，生成透明蒙版</label>
@@ -26,9 +28,12 @@ export function createSemanticUI(actions) {
     <details class="context-help"><summary>导出与诊断说明</summary><p>CSV 按文本导入，勿执行不可信公式。诊断包括文件名、描述、坐标、耗时及用量，不含图片和口令。</p></details><div class="divider"></div><h2>当前图片目标</h2><div id="semanticResults" style="max-height:520px;overflow:auto"></div></div></aside>`;
     $('maskWorkspace').after(root);
     const input=document.createElement('input');input.type='file';input.accept='image/jpeg,image/png,image/webp';input.multiple=true;input.hidden=true;root.append(input);
-    let items=[],position=-1,image=null,busy=false,controller=null,stamp=0,active=null,lastRequest=0,restoring=false;
+    let items=[],position=-1,image=null,busy=false,controller=null,stamp=0,active=null,lastRequest=0,restoring=false,useShared=false,sharedPrompt='';
     const canvas=$('semanticCanvas'),ctx=canvas.getContext('2d'),current=()=>items[position];
     const blocked=()=>busy||actions.isBlocked(),tell=text=>{$('semanticStatus').textContent=text;};
+    const effectivePrompt=item=>(useShared?sharedPrompt:item?.prompt||'').trim();
+    function loadPrompt(){$('semanticPrompt').value=useShared?sharedPrompt:current()?.prompt||'';}
+    function invalidateChangedResults(affected=items){for(const item of affected)if((item.result&&item.result.prompt!==effectivePrompt(item))||(!item.result&&item.attemptPrompt&&item.attemptPrompt!==effectivePrompt(item)))releaseResults(item);}
     function draw() {
         ctx.clearRect(0,0,canvas.width,canvas.height);if(!image)return;
         ctx.drawImage(image,0,0,canvas.width,canvas.height);
@@ -39,12 +44,16 @@ export function createSemanticUI(actions) {
             ctx.fillStyle=ctx.strokeStyle;ctx.font='bold 16px system-ui';ctx.fillText('#'+object.id,b[0]*sx,Math.max(18,b[1]*sy-5));
         }
     }
-    const updateTiles=createTileList($('semanticTiles'),select,item=>item.error?'失败':item.result?item.result.objects.length:item.processing?'检测中':'待检测');
+    const updateTiles=createTileList($('semanticTiles'),select,item=>item.error?'失败':item.result?item.result.objects.length:item.processing?'检测中':effectivePrompt(item)?'待检测':'待写描述');
     const navigation=bindBatchNavigation(root,'semantic',()=>({index:position,total:items.length}),select);
     function refresh() {
         $('semanticCount').textContent=items.length+' 张图片';
-        for(const id of ['semanticAdd','semanticChoose','semanticReset','semanticPrompt','semanticToken','semanticConsent','semanticSam'])$(id).disabled=blocked();
-        $('semanticStart').disabled=blocked()||!items.some(i=>!i.result)||!$('semanticPrompt').value.trim()||!$('semanticToken').value||!$('semanticConsent').checked;
+        for(const id of ['semanticAdd','semanticChoose','semanticReset','semanticPrompt','semanticToken','semanticConsent','semanticSam','semanticSharedPrompt'])$(id).disabled=blocked();
+        $('semanticPrompt').disabled=blocked()||(!useShared&&!current());
+        const pending=items.filter(item=>!item.result),missing=pending.filter(item=>!effectivePrompt(item)).length;
+        $('semanticStart').disabled=blocked()||!pending.length||missing>0||!$('semanticToken').value||!$('semanticConsent').checked;
+        $('semanticPromptLabel').textContent=useShared?'全部图片的对象描述':'当前图片的对象描述';
+        $('semanticPromptScope').textContent=(useShared?'统一描述用于全部图片；取消勾选后，每张图片保留该描述，可单独修改。':'每张图片独立填写描述，切换图片会保留。')+(missing?' 还有 '+missing+' 张待处理图片未填写描述。':'');
         $('semanticStop').disabled=!busy||!controller;
         $('semanticRetry').disabled=blocked()||!items.some(i=>i.result||i.error);
         $('semanticCSV').disabled=$('semanticZip').disabled=blocked()||!items.some(i=>i.result?.objects.length);
@@ -70,7 +79,7 @@ export function createSemanticUI(actions) {
         if(!restoring)actions.onChange?.();
     }
     async function select(index) {
-        position=index;image=null;active=null;const token=++stamp,item=current();canvas.hidden=true;$('semanticUpload').hidden=Boolean(item);
+        position=index;image=null;active=null;loadPrompt();const token=++stamp,item=current();canvas.hidden=true;$('semanticUpload').hidden=Boolean(item);
         $('semanticFilename').textContent=item?.file.name||'尚未选择图片';$('semanticDimensions').textContent='原图预览';refresh();if(!item)return;
         try {const img=new Image();img.src=item.url;await img.decode();if(token!==stamp)return;image=img;
             const scale=Math.min(1,1800/Math.max(img.naturalWidth,img.naturalHeight));canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));canvas.hidden=false;
@@ -83,7 +92,7 @@ export function createSemanticUI(actions) {
         const accepted=files.filter(file=>['image/jpeg','image/png','image/webp'].includes(file.type)&&file.size<=20*1024*1024);
         if(!accepted.length){tell('请选择不超过 20 MiB 的 JPEG、PNG 或 WebP。');return;}
         if(items.length+accepted.length>10){tell('测试阶段每批最多 10 张，请减少图片数量。');return;}
-        const index=items.length;items.push(...accepted.map(file=>({file,url:URL.createObjectURL(file)})));for(const item of items.slice(index))prepareThumbnail(item,()=>updateTiles(items,position));select(index);
+        const index=items.length;items.push(...accepted.map(file=>({file,prompt:'',url:URL.createObjectURL(file)})));for(const item of items.slice(index))prepareThumbnail(item,()=>updateTiles(items,position));select(index);
         tell('已添加 '+accepted.length+' 张图片'+(accepted.length<files.length?'，部分不支持或过大的文件已跳过':'')+'。');
     }
     async function waitForSlot(signal) {
@@ -95,13 +104,16 @@ export function createSemanticUI(actions) {
     }
     async function scan() {
         if(blocked()||!$('semanticConsent').checked)return;
-        const pending=items.filter(i=>!i.result),prompt=$('semanticPrompt').value.trim(),token=$('semanticToken').value;
-        if(!pending.length||!prompt||!token)return;
+        const pending=items.filter(i=>!i.result),token=$('semanticToken').value;
+        if(!pending.length||!token)return;
+        const missing=pending.find(item=>!effectivePrompt(item));
+        if(missing){await select(items.indexOf(missing));tell('请先填写这张图片的描述，或启用统一描述。');return;}
+        const prompts=new Map(pending.map(item=>[item,effectivePrompt(item)]));
         const autoSam=$('semanticSam').checked;
         busy=true;controller=new AbortController();const signal=controller.signal;actions.onBusy(true);refresh();let targets=0,failed=0,samTarget=null;
         try {
             for(let i=0;i<pending.length;i++) {
-                const item=pending[i];let bitmap;
+                const item=pending[i],prompt=prompts.get(item);let bitmap;
                 await waitForSlot(signal);if(signal.aborted)break;
                 item.processing=true;item.error=null;item.errorStatus=null;item.errorDiagnostic=null;item.attemptPrompt=prompt;tell('正在检测 '+(i+1)+' / '+pending.length+'：'+item.file.name);refresh();
                 const started=performance.now();
@@ -158,11 +170,24 @@ export function createSemanticUI(actions) {
             downloadBlob(await zip.generateAsync({type:'blob'}),'semantic-crops.zip');tell('已导出 '+count+' 张裁图，文件夹编号对应原始上传顺序。');
         } catch(error){tell('导出失败：'+error.message);}finally{busy=false;actions.onBusy(false);refresh();}
     }
-    function diagnostics(){return {revision:'groq-semantic-sam-v1.8.2',createdAt:new Date().toISOString(),items:items.map((item,index)=>({index:index+1,filename:item.file.name,prompt:item.result?.prompt||item.attemptPrompt||null,result:item.result||null,error:item.error||null,httpStatus:item.errorStatus??null,errorDiagnostic:item.errorDiagnostic??null,cropError:item.cropError||null,elapsedMs:item.elapsedMs||null}))};}
+    function diagnostics(){return {revision:'semantic-prompts-v3.6',createdAt:new Date().toISOString(),promptMode:useShared?'shared':'individual',items:items.map((item,index)=>({index:index+1,filename:item.file.name,configuredPrompt:effectivePrompt(item),prompt:item.result?.prompt||item.attemptPrompt||null,result:item.result||null,error:item.error||null,httpStatus:item.errorStatus??null,errorDiagnostic:item.errorDiagnostic??null,cropError:item.cropError||null,elapsedMs:item.elapsedMs||null}))};}
     $('semanticAdd').onclick=$('semanticChoose').onclick=()=>input.click();input.onchange=()=>{add([...input.files]);input.value='';};
     $('semanticStage').ondragover=event=>event.preventDefault();$('semanticStage').ondrop=event=>{event.preventDefault();add([...event.dataTransfer.files]);};
     $('semanticReset').onclick=()=>{if(blocked())return;for(const item of items){disposeThumbnail(item);releaseResults(item);URL.revokeObjectURL(item.url);}items=[];select(-1);tell('已清空图片和结果。');};
-    $('semanticPrompt').oninput=()=>{if(blocked())return;for(const item of items)releaseResults(item);tell('描述已修改，先前结果已清除。');refresh();};
+    $('semanticPrompt').oninput=()=>{
+        if(blocked())return;
+        if(useShared)sharedPrompt=$('semanticPrompt').value;else if(current())current().prompt=$('semanticPrompt').value;
+        invalidateChangedResults(useShared?items:[current()].filter(Boolean));tell(useShared?'统一描述已更新，不匹配的旧结果已清除。':'当前图片的描述已更新，其他图片的描述与结果保留。');refresh();
+    };
+    $('semanticSharedPrompt').onchange=()=>{
+        if(blocked())return;
+        const nextShared=$('semanticSharedPrompt').checked;
+        // Materialize the shared description before returning to per-image editing.
+        if(useShared&&!nextShared)for(const item of items)item.prompt=sharedPrompt;
+        useShared=nextShared;
+        if(useShared&&!sharedPrompt)sharedPrompt=current()?.prompt||'';
+        invalidateChangedResults();loadPrompt();refresh();tell(useShared?'已启用统一描述，适用于全部图片。':'统一描述已保留到每张图片，现在可单独修改。');
+    };
     $('semanticToken').oninput=$('semanticConsent').onchange=refresh;
     $('semanticSam').onchange=()=>actions.onChange?.();
     $('semanticRetry').onclick=()=>{if(blocked()||!confirm('清除检测结果？再次检测会重新调用 API、消耗额度。'))return;items.forEach(releaseResults);refresh();tell('结果已清除，点击开始检测重试。');};
@@ -171,15 +196,17 @@ export function createSemanticUI(actions) {
     $('semanticDiagnostic').onclick=()=>{if(!blocked())downloadBlob(new Blob([JSON.stringify(diagnostics(),null,2)],{type:'application/json'}),'semantic-diagnostics.json');};
     canvas.onpointerdown=event=>{if(!image)return;const rect=canvas.getBoundingClientRect(),x=(event.clientX-rect.left)/rect.width*1000,y=(event.clientY-rect.top)/rect.height*1000;
         const found=current()?.result?.objects.find(o=>x>=o.bbox[0]&&x<=o.bbox[2]&&y>=o.bbox[1]&&y<=o.bbox[3]);if(found){active=found.id;refresh();}};
-    function snapshot(){return {version:1,items:items.map(item=>{const saved=packItem(item);if(item.processing&&item.result)saved.cropError='上次裁图未全部完成，已保留检测坐标及已生成的裁图。';return saved;}),position,active,options:{prompt:$('semanticPrompt').value,autoSam:$('semanticSam').checked}};}
+    function snapshot(){return {version:1,items:items.map(item=>{const saved=packItem(item);if(item.processing&&item.result)saved.cropError='上次裁图未全部完成，已保留检测坐标及已生成的裁图。';return saved;}),position,active,options:{promptMode:useShared?'shared':'individual',sharedPrompt,autoSam:$('semanticSam').checked}};}
     async function restore(state){
         if(state?.version!==1||!Array.isArray(state.items))throw new Error('语义裁剪工作区数据格式无效');
         restoring=true;
         try {
             for(const item of items){disposeThumbnail(item);releaseResults(item);URL.revokeObjectURL(item.url);}
             items=state.items.map(unpackItem).filter(Boolean);
+            const legacy=state.options?.promptMode===undefined,legacyPrompt=legacy&&typeof state.options?.prompt==='string'?state.options.prompt:'';
+            for(const item of items)item.prompt=typeof item.prompt==='string'?item.prompt.slice(0,500):String(legacy?legacyPrompt:item.result?.prompt||item.attemptPrompt||'').slice(0,500);
             for(const item of items){item.processing=false;prepareThumbnail(item,()=>updateTiles(items,position));}
-            $('semanticPrompt').value=typeof state.options?.prompt==='string'?state.options.prompt.slice(0,500):'';
+            useShared=state.options?.promptMode==='shared';sharedPrompt=String(state.options?.sharedPrompt||legacyPrompt).slice(0,500);$('semanticSharedPrompt').checked=useShared;
             $('semanticSam').checked=state.options?.autoSam===true;
             // Permission and credentials stay session-only; restoring never issues a request.
             $('semanticToken').value='';$('semanticConsent').checked=false;

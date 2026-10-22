@@ -1,4 +1,6 @@
 import {readBarcodes,getReaderBackend} from './reader-client.js';
+import { measureQR } from './qr-statistics.js';
+import { fitTPS, validateTPS } from './tps.js';
 const LIMITS = {
     maxPixels: 360000,
     maxModels: 12,
@@ -441,6 +443,29 @@ export async function analyzeCurvedImage(imageData, options = {}) {
             if (n !== 21 && !alignment) continue;
             const controls = n === 21 ? ideal : ideal.concat([point(n - 6.5, n - 6.5)]);
             const actual = n === 21 ? observed : observed.concat([alignment]);
+            if(limits.tpsOnly){
+                const map=fitTPS(controls,actual,n,width);
+                if(!map||!validateTPS(map,n,width,height)){
+                    diagnostics.tpsRejected=(diagnostics.tpsRejected||0)+1;continue;
+                }
+                const samples=sampleGrid(map,normalized,width,height,n);
+                if(!samples)continue;
+                for(const cutoff of [0.5,0.65,0.75]){
+                    const info=formatInformation(samples,n,cutoff);
+                    if(!info)continue;
+                    let correct=0,total=0;
+                    for(let i=8;i<n-8;i++){
+                        correct+=Number((samples[6*n+i]<cutoff)===(i%2===0));
+                        correct+=Number((samples[i*n+6]<cutoff)===(i%2===0));total+=2;
+                    }
+                    const timing=correct/total;
+                    if(timing<.8)continue;
+                    models.push({dimension:n,curvature:null,axis:null,cutoff,timing,rms:0,
+                        score:timing-.02*(info[0].errors+info[1].errors),
+                        samples,map,groupIndex,moduleSize,finders,family:'tps',controlPoints:controls.length});
+                }
+                await sleepTick();continue;
+            }
             const axes = [0, 1, 2, 3];
             for (const axis of axes) for (const curvature of [0.4, 0.8, 1.2, 1.6, 2]) {
                 if (performance.now() > groupDeadline) { diagnostics.groupBudgetLimited = (diagnostics.groupBudgetLimited || 0) + 1; break sizeLoop; }
@@ -501,10 +526,36 @@ export function renderCurvedModel(model) {
 }
 
 export async function decodeCurvedRegion(canvas, options = {}) {
+    if(options.useTPS){
+        const tps={};
+        if(options.statistics)options.statistics.tps=tps;
+        const tpsEnd=options.trace?.start('tps_total',{regionId:options.regionId,parent:true});
+        try{
+            const decoded=await decodeCurvedRegion(canvas,{...options,useTPS:false,tpsOnly:true,statistics:tps});
+            tpsEnd?.();
+            if(decoded.length){
+                if(options.statistics)Object.assign(options.statistics,{reason:null,selectedFamily:'tps',
+                    models:tps.models,attempted:tps.attempted,decoded:decoded.length});
+                return decoded;
+            }
+        }catch(error){
+            tps.error=error.message||String(error);tps.reason='runtime-error';
+            tpsEnd?.('error',{error:tps.error});
+        }
+        if(options.statistics)options.statistics.selectedFamily='original-fallback';
+        // Failure leaves the original cylindrical path and its full budget available.
+        return decodeCurvedRegion(canvas,{...options,useTPS:false,tpsOnly:false});
+    }
     const started = performance.now();
+    const trace=options.trace, statistics=options.statistics;
+    const family=options.tpsOnly?'tps':'cylindrical';
+    let geometryEnd=trace?.start('curved_geometry',{regionId:options.regionId,family});
+    try {
     const limits = { ...LIMITS, ...options };
     // 原图采样需要读取像素，单独保留内存保护；普通大图不再被 36 万像素限制跳过。
     if (canvas.width * canvas.height > 6000000) {
+        geometryEnd?.('skipped',{reason:'source-memory-limit'});geometryEnd=null;
+        if(statistics)Object.assign(statistics,{reason:'source-memory-limit',attempted:0,decoded:0});
         console.log('[局部曲面解码]', {
             width: canvas.width, height: canvas.height,
             reason: 'source-memory-limit', attempted: 0, decoded: 0
@@ -551,13 +602,18 @@ export async function decodeCurvedRegion(canvas, options = {}) {
         ...limits, maxPixels: targetPixels,
         geometryMs: Math.max(100, limits.geometryMs - (performance.now() - started))
     });
+    geometryEnd?.();geometryEnd=null;
     const scaleX = canvas.width / analysisCanvas.width;
     const scaleY = canvas.height / analysisCanvas.height;
     let sourceData = null;
     const normalizedCache = new Map();
     if (analysisCanvas !== canvas && models.length) {
+        const end=trace?.start('curved_resample',{regionId:options.regionId,step:'source-read',family});
+        try {
         sourceData = canvas.getContext('2d', { willReadFrequently: true })
             .getImageData(0, 0, canvas.width, canvas.height);
+        end?.();
+        } catch(error){end?.('error',{error:error.message||String(error)});throw error;}
     }
     const logInfo = {
         ...diagnostics,
@@ -569,6 +625,9 @@ export async function decodeCurvedRegion(canvas, options = {}) {
     };
     let attempted = 0;
     for (const model of models) {
+        const resampleEnd=trace?.start('curved_resample',{regionId:options.regionId,model:attempted+1,family});
+        let resampleDone=false;
+        try {
         const originalMap = (x, y) => {
             const p = model.map(x, y);
             return point((p.x + 0.5) * scaleX - 0.5, (p.y + 0.5) * scaleY - 0.5);
@@ -580,13 +639,14 @@ export async function decodeCurvedRegion(canvas, options = {}) {
             if (!normalizedCache.has(key)) normalizedCache.set(key, normalizeImage(sourceData, sourceModule));
             const sourceNormalized = normalizedCache.get(key);
             const samples = sampleGrid(originalMap, sourceNormalized, canvas.width, canvas.height, model.dimension);
-            if (!samples) continue;
+            if (!samples) {resampleEnd?.('skipped',{reason:'invalid-samples'});resampleDone=true;continue;}
             samplingModel = { ...model, samples };
         }
         const rendered = renderCurvedModel(samplingModel);
-        const results = await readBarcodes(new ImageData(rendered.data, rendered.width, rendered.height), {
+        resampleEnd?.();resampleDone=true;
+        const results = await measureQR(trace,'curved_decode',{regionId:options.regionId,model:attempted+1,family},()=>readBarcodes(new ImageData(rendered.data, rendered.width, rendered.height), {
             formats: ['QRCode'], tryHarder: true
-        });
+        }));
         attempted++;
         const decoded = results.filter(r => r.isValid !== false && r.text && r.position).map(r => {
             const points = [r.position.topLeft, r.position.topRight, r.position.bottomRight, r.position.bottomLeft]
@@ -594,15 +654,22 @@ export async function decodeCurvedRegion(canvas, options = {}) {
             return {
                 text: r.text, format: r.format || 'QRCode', points,
                 center: point(points.reduce((sum, p) => sum + p.x, 0) / 4, points.reduce((sum, p) => sum + p.y, 0) / 4),
-                source: 'wechat-local-curved'
+                source: options.tpsOnly?'wechat-local-tps':'wechat-local-curved'
             };
         }).filter(r => r.points.every(p => Number.isFinite(p.x + p.y)));
         if (decoded.length) {
+            if(statistics)Object.assign(statistics,logInfo,{reason:null,geometryReason:diagnostics.reason||null,
+                attempted,decoded:decoded.length,dimension:model.dimension,axis:model.axis,curvature:model.curvature,
+                family,controlPoints:model.controlPoints});
             console.log('[局部曲面解码]', { ...logInfo, finders: model.finders.map(p => point((p.x + 0.5) * scaleX - 0.5, (p.y + 0.5) * scaleY - 0.5)), groupIndex: model.groupIndex, attempted, decoded: decoded.length, dimension: model.dimension, version: (model.dimension - 17) / 4, axis: model.axis, curvature: model.curvature, totalMs: Math.round(performance.now() - started) });
             return decoded;
         }
         await sleepTick();
+        } catch(error){if(!resampleDone)resampleEnd?.('error',{error:error.message||String(error)});throw error;}
     }
+    if(statistics)Object.assign(statistics,logInfo,{attempted,decoded:0,geometryReason:diagnostics.reason||null,
+        reason:!models.length?(diagnostics.reason||'no-accepted-model'):attempted?'models-undecodable':'resampling-failed'});
     console.log('[局部曲面解码]', { ...logInfo, attempted, decoded: 0, totalMs: Math.round(performance.now() - started) });
     return [];
+    } catch(error){geometryEnd?.('error',{error:error.message||String(error)});throw error;}
 }

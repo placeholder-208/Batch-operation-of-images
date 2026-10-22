@@ -1,4 +1,5 @@
 import {cropBlob,releaseCrops,storeCrop} from './crop-store.js';
+import { createFileImport } from './file-import.js';
 import { createTileList, prepareThumbnail, disposeThumbnail, bindBatchNavigation } from './thumbnail-list.js';
 import { $, downloadBlob } from './ui.js';
 import { processFile, canvasToBlob } from './image.js';
@@ -16,7 +17,7 @@ export function createBarcodeUI(actions) {
     root.setAttribute('role','tabpanel');root.setAttribute('aria-labelledby','barcodeTab');
     // Fixed interface markup only; filenames and decoded content always use textContent.
     root.innerHTML=`<section class="panel" aria-label="条形码图片工作区"><div class="panel-head"><h2>条形码预览</h2><div class="tools" style="margin:0"><button class="secondary" id="barcodeReset">清空</button><button class="secondary" id="barcodeAdd">添加图片</button></div></div>
-    <div class="stage" id="barcodeStage"><div class="upload" id="barcodeUpload"><div class="upload-icon" aria-hidden="true">▥</div><strong>把图片拖到这里</strong><p>可一次选择多张图片</p><button class="primary" id="barcodeChoose">选择图片</button><span class="small">JPEG · PNG · WebP</span></div><canvas id="barcodeCanvas" hidden aria-label="原图预览，可点击定位条形码"></canvas></div>
+    <div class="stage" id="barcodeStage"><div class="upload" id="barcodeUpload"><div class="upload-icon" aria-hidden="true">▥</div><strong>把图片拖到这里</strong><p>图片可多选，PDF 按页导入</p><button class="primary" id="barcodeChoose">选择图片或 PDF</button><span class="small">JPEG · PNG · WebP · PDF</span></div><canvas id="barcodeCanvas" hidden aria-label="原图预览，可点击定位条形码"></canvas></div>
     <div class="image-footer"><span id="barcodeFilename">尚未选择图片</span><span id="barcodeDimensions">原图预览</span></div><div class="tiles" id="barcodeTiles" hidden></div></section>
     <aside class="panel"><div class="panel-head"><h2>识别与导出</h2><span class="small" id="barcodeCount">0 张图片</span></div><div class="side-body"><button class="primary full" id="barcodeStart" disabled>开始识别</button><p class="processing-note">图片在本机处理；首次使用需加载解码引擎。</p>
     <div class="module-state"><div class="status" role="status" aria-live="polite"><span class="dot"></span><span id="barcodeStatus">等待添加图片</span></div><dl class="module-rows"><div><dt>ZXing 解码引擎</dt><dd id="barcodeEngine">等待任务</dd></div></dl></div>
@@ -25,10 +26,10 @@ export function createBarcodeUI(actions) {
     <div class="export-actions"><button class="secondary full" id="barcodeCSV" disabled>下载全部结果 CSV</button><button class="secondary full" id="barcodeImageZip" disabled>下载当前图片 ZIP（含 CSV）</button><button class="secondary full" id="barcodeAllZip" disabled>下载全部结果 ZIP（含 CSV）</button></div>
     <details class="context-help"><summary>CSV 导入说明</summary><p>将 text 列按文本导入，避免前导零丢失；不可信内容请勿作为公式执行。</p></details><div class="divider"></div><h2>识别结果</h2><div id="barcodeResults" style="max-height:520px;overflow:auto"></div></div></aside>`;
     $('maskWorkspace').before(root);
-    const input=document.createElement('input');input.type='file';input.accept='image/jpeg,image/png,image/webp';input.multiple=true;input.hidden=true;root.append(input);
-    let items=[],position=-1,busy=false,image=null,token=0,active=null,restoring=false;
+    const input=document.createElement('input');input.type='file';input.accept='image/jpeg,image/png,image/webp,application/pdf,.pdf';input.multiple=true;input.hidden=true;root.append(input);
+    let items=[],position=-1,busy=false,image=null,token=0,active=null,restoring=false,importBusy=false;
     const canvas=$('barcodeCanvas'),ctx=canvas.getContext('2d'),current=()=>items[position];
-    const blocked=()=>busy||actions.isBlocked();
+    const blocked=()=>busy||importBusy||actions.isBlocked();
     const tell=text=>{$('barcodeStatus').textContent=text;};
     function draw() {
         ctx.clearRect(0,0,canvas.width,canvas.height);if(!image)return;
@@ -71,7 +72,10 @@ export function createBarcodeUI(actions) {
     }
     async function select(index){position=index;image=null;active=null;const stamp=++token,item=current();canvas.hidden=true;$('barcodeUpload').hidden=Boolean(item);$('barcodeFilename').textContent=item?.file.name||'尚未选择图片';$('barcodeDimensions').textContent='原图预览';refresh();if(!item)return;
         try{const img=new Image();img.src=item.url;await img.decode();if(stamp!==token)return;image=img;const scale=Math.min(1,1800/Math.max(img.naturalWidth,img.naturalHeight));canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));canvas.hidden=false;$('barcodeDimensions').textContent=img.naturalWidth+' × '+img.naturalHeight;draw();}catch(error){if(stamp===token)tell('预览失败：'+error.message);}}
-    function add(files){if(blocked())return;const accepted=files.filter(file=>file.type.startsWith('image/'));if(!accepted.length){tell('请选择图片文件。');return;}const index=items.length;items.push(...accepted.map(file=>({file,url:URL.createObjectURL(file),result:null})));for(const item of items.slice(index))prepareThumbnail(item,()=>updateTiles(items,position));select(index);tell('已添加 '+items.length+' 张图片，请点击开始识别。');}
+    const importer=createFileImport({status:$('barcodeStatus'),canStart:()=>!blocked(),onLock(value){importBusy=value;actions.onBusy(value);refresh();},
+        async onItem(file,source){const index=items.length,item={file,source,url:URL.createObjectURL(file),result:null};items.push(item);prepareThumbnail(item,()=>updateTiles(items,position));if(position<0)await select(index);refresh();},
+        onComplete({added,errors,cancelled}){tell((cancelled?'已停止导入，':'导入完成，')+'新增 '+added+' 张图片。'+(errors.length?' '+errors.join('；'):'请点击开始识别。'));}});
+    function add(files){return importer.add(files);}
     async function scan(){if(blocked())return;const pending=items.filter(v=>!v.result);if(!pending.length)return;busy=true;actions.onBusy(true);refresh();let count=0,failed=0;
         try{await actions.prepare();for(let i=0;i<pending.length;i++){const item=pending[i];item.processing=true;item.error=null;tell('正在识别 '+(i+1)+' / '+pending.length+'：'+item.file.name);refresh();let source;
             try{source=await processFile(item.file);const codes=await decodeBarcodes(createDecodeVariants(source.canvas,{curved:false}),text=>{$('barcodeEngine').textContent=text;},source.canvas);const crops=[];
@@ -105,5 +109,5 @@ export function createBarcodeUI(actions) {
             refresh();
         } finally {restoring=false;}
     }
-    refresh();return {refresh,isBusy:()=>busy,snapshot,restore};
+    refresh();return {refresh,isBusy:()=>busy||importBusy,snapshot,restore};
 }
