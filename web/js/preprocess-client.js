@@ -1,4 +1,4 @@
-import {iterateDecodeVariants,clonePointMapper} from './preprocess.js';
+import {iterateDecodeVariants} from './preprocess.js';
 import {report} from './runtime-status.js';
 let worker=null,disabled=false,sequence=0,owner=null;
 const pending=new Map();
@@ -20,9 +20,9 @@ function request(type,extra={},transfers=[]){
   }catch(error){const job=pending.get(id);if(job)clearTimeout(job.timer);pending.delete(id);reject(error);}
  });
 }
-export function iterateBackgroundVariants(canvas,{curved=true,originalOnly=false}={}){
+export function iterateBackgroundVariants(canvas,{originalOnly=false}={}){
  const token={};
- function* compatibility(){for(const variant of iterateDecodeVariants(canvas,{curved})){variant.preprocessBackend='main';yield variant;}}
+ function* compatibility(){for(const variant of iterateDecodeVariants(canvas)){variant.preprocessBackend='main';yield variant;}}
  async function* generate(){
   if(originalOnly){
    yield {name:'original',imageData:canvas.getContext('2d',{willReadFrequently:true}).getImageData(0,0,canvas.width,canvas.height),
@@ -37,11 +37,10 @@ export function iterateBackgroundVariants(canvas,{curved=true,originalOnly=false
   owner=token;
   try{
    const image=canvas.getContext('2d',{willReadFrequently:true}).getImageData(0,0,canvas.width,canvas.height);
-   await request('init',{width:canvas.width,height:canvas.height,curved,pixels:image.data.buffer},[image.data.buffer]);acquired=true;
+   await request('init',{width:canvas.width,height:canvas.height,pixels:image.data.buffer},[image.data.buffer]);acquired=true;
    while(true){
     const result=await request('next',{sourceWidth:canvas.width,sourceHeight:canvas.height});if(result.done)break;
     const variant={name:result.name,imageData:new ImageData(new Uint8ClampedArray(result.pixels),result.width,result.height),scaleX:result.scaleX,scaleY:result.scaleY,releaseAfterDecode:true,preprocessBackend:'worker'};
-    if(result.mapping){const m=result.mapping;variant.mapPoint=clonePointMapper(m.width,m.height,m.direction,m.curvature);}
     yield variant;
    }
   }catch(error){
@@ -55,5 +54,5 @@ export function iterateBackgroundVariants(canvas,{curved=true,originalOnly=false
    if(owner===token)owner=null;
   }
  }
- const iterator=generate();iterator.length=originalOnly?1:curved?7:5;return iterator;
+ const iterator=generate();iterator.length=originalOnly?1:5;return iterator;
 }

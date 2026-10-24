@@ -1,12 +1,11 @@
 import { setupDesign } from './design.js';
-import { createQRStatistics, measureQR, normalizeQRExperiments } from './qr-statistics.js';
+import { createQRStatistics, measureQR, normalizeQROptions } from './qr-statistics.js';
 import { startWorkspaceSession } from './workspace-session.js';
 import {storeCrop,releaseCrops} from './crop-store.js';
 import { processFile } from "./image.js";
 import { perspectiveCrop } from "./crop.js";
-import { iterateBackgroundVariants as createDecodeVariants } from './preprocess-client.js';
 import { createImageZip, createAllZip } from "./zip.js";
-import { createUI, downloadBlob } from "./ui.js?v=qr-experiments-3.8";
+import { createUI, downloadBlob } from "./ui.js?v=qr-3.12";
 import { report } from "./runtime-status.js";
 import { createMaskUI } from "./masking.js";
 import { createBarcodeUI } from "./barcode-ui.js";
@@ -28,7 +27,7 @@ const maskUI = createMaskUI({
         let qrcodes = [], regions = [];
         try {
             const { decodeQRCode } = await loadDecoder();
-            qrcodes = await decodeQRCode(createDecodeVariants(source.canvas), source.canvas);
+            qrcodes = await decodeQRCode(source.canvas);
         } catch (error) { warnings.push('解码未完成：' + error.message); }
         try {
             const { detectWechatRegions } = await import('./wechat-detector.js');
@@ -74,7 +73,7 @@ async function loadDecoder() {
 async function scan(items, requestedOptions = {}) {
     if (running || exporting || ui.isImporting() || maskUI.isBusy() || barcodeUI.isBusy() || semanticUI.isBusy() || samUI.isBusy() || !items.length) return;
     running = true; ui.busy(true); maskUI.refresh(); barcodeUI.refresh(); semanticUI.refresh(); samUI?.refresh(); ui.progress(0, items.length);
-    const options=normalizeQRExperiments(requestedOptions);
+    const options=normalizeQROptions(requestedOptions);
     const began = performance.now(); let succeeded = 0, failed = 0, totalCount = 0;
     const run={id:globalThis.crypto?.randomUUID?.()||String(Date.now()),
         startedAt:new Date().toISOString(),imageCount:items.length,
@@ -98,10 +97,8 @@ async function scan(items, requestedOptions = {}) {
             try {
                 source = await measureQR(trace,'image_read',{},()=>processFile(item.file));
                 Object.assign(trace.record,{width:source.width,height:source.height});
-                ui.detail("准备按顺序生成图像预处理版本…"); await tick();
-                const variants = createDecodeVariants(source.canvas,{originalOnly:options.reordered});
-                ui.detail("正在执行 " + variants.length + " 个解码版本与检测兜底…"); await tick();
-                const detected = await decodeQRCode(variants, source.canvas, trace,options);
+                ui.detail("整图基础解码后，检测候选并处理未解码区域…"); await tick();
+                const detected = await decodeQRCode(source.canvas, trace,options);
                 const qrcodes = detected.map((qr,index)=>({...qr,id:index+1}));
                 detectedCodes=qrcodes;
                 const crops = []; let cropFailed = 0;

@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>本地分割模型评估</title>
+<style>body{font:16px/1.7 system-ui;max-width:1080px;margin:32px auto;padding:0 20px;color:#20352d}button,input{font:inherit;margin:8px}table{border-collapse:collapse;width:100%;font-size:14px}td,th{padding:8px;text-align:left;border-bottom:1px solid #ccc}canvas{max-width:180px;border:1px solid #ccc}figure{display:inline-block;margin:12px}pre{white-space:pre-wrap}</style>
+<h1>本地分割模型评估</h1>
+<p>同一 SlimSAM-77-uniform、同一图片与真实蒙版框提示，比较 q8 与 FP32。浏览器单线程 WASM，顺序运行，每种精度预热两次。</p>
+<p>默认几何图仅用于验证流程。真实样本请成对选择，例如 <code>cup.png</code> 和 <code>cup_alpha.png</code>，尺寸相同；蒙版须为不透明灰度 PNG，白色保留、黑色删除。图片仅在本机处理。</p>
+<label>成对样本 <input id="files" type="file" accept="image/*" multiple></label>
+<label>测量次数 <input id="repeats" type="number" min="1" max="5" value="2"></label>
+<button id="run">运行 q8 / FP32 对照</button><button id="download" disabled>下载 JSON</button>
+<p id="status" role="status">先运行 prepare.py 准备模型，并用 serve.py 启动服务。</p><div id="samples"></div>
+<table><thead><tr><th>精度</th><th>样本</th><th>IoU</th><th>边界 F1</th><th>alpha MAE</th><th>编码/ms</th><th>解码/ms</th></tr></thead><tbody id="rows"></tbody></table>
+<p>边界 F1 按原图 2 px 欧氏距离匹配。alpha 指标评价应用抗锯齿输出，不表示专用 matting。未测量峰值内存；加载时间包括初始化，不等于纯下载时间。报告保留失败项和校验值。</p>
+<pre id="summary"></pre><script type="module" src="./benchmark.mjs"></script></html>

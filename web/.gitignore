@@ -1,0 +1,12 @@
+# Local evaluation output and recovered editor work.
+benchmarks/archive/
+benchmarks/**/__pycache__/
+benchmarks/qr/results/local-*
+*.swp
+*.swo
+
+# Local build/runtime files.
+node_modules/
+.wrangler/
+.dev.vars*
+*.log

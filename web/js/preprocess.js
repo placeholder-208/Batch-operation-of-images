@@ -2,10 +2,6 @@ function preprocessingCanvas(){
     return typeof document==='undefined' ? new OffscreenCanvas(1,1) : document.createElement('canvas');
 }
 
-export function clonePointMapper(width,height,direction,curvature=.55){
-    return createCylindricalMapper(width,height,direction,curvature);
-}
-
 function cloneImageData(imageData) {
     return new ImageData(
         new Uint8ClampedArray(imageData.data),
@@ -241,176 +237,8 @@ function adaptiveThreshold(imageData, radius = 15, bias = 8) {
     return result;
 }
 
-function createCylindricalMapper(
-    width,
-    height,
-    direction,
-    curvature = 0.55
-) {
-    const dimension =
-        direction === "horizontal"
-            ? width
-            : height;
-
-    const half = dimension / 2;
-    const radius = half / curvature;
-    const maxAngle = Math.asin(curvature);
-
-    return function (point) {
-        const axis =
-            direction === "horizontal"
-                ? point.x
-                : point.y;
-
-        const normalized = (axis - half) / half;
-
-        const mappedAxis =
-            half +
-            radius *
-                Math.sin(normalized * maxAngle);
-
-        if (direction === "horizontal") {
-            return {
-                x: mappedAxis,
-                y: point.y
-            };
-        }
-
-        return {
-            x: point.x,
-            y: mappedAxis
-        };
-    };
-}
-
-
-function createCylindricalVariant(
-    imageData,
-    direction,
-    curvature = 0.55
-) {
-    const width = imageData.width;
-    const height = imageData.height;
-
-    const source = imageData.data;
-    const result = new ImageData(width, height);
-    const output = result.data;
-
-    const mapPoint = createCylindricalMapper(
-        width,
-        height,
-        direction,
-        curvature
-    );
-
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-            const sourcePoint = mapPoint({ x, y });
-
-            const sourceX = Math.round(sourcePoint.x);
-            const sourceY = Math.round(sourcePoint.y);
-
-            const outputIndex = (y * width + x) * 4;
-
-            if (
-                sourceX < 0 ||
-                sourceX >= width ||
-                sourceY < 0 ||
-                sourceY >= height
-            ) {
-                output[outputIndex + 3] = 0;
-                continue;
-            }
-
-            const sourceIndex =
-                (sourceY * width + sourceX) * 4;
-
-            output[outputIndex] = source[sourceIndex];
-            output[outputIndex + 1] = source[sourceIndex + 1];
-            output[outputIndex + 2] = source[sourceIndex + 2];
-            output[outputIndex + 3] = source[sourceIndex + 3];
-        }
-    }
-
-    return {
-        imageData: result,
-        mapPoint: mapPoint
-    };
-}
-
-export function createDecodeVariants(canvas, { curved = true } = {}) {
-    const original = getCanvasImageData(canvas);
-
-    const contrast = toGrayscaleContrast(original);
-
-    const sharpened = sharpen(contrast);
-
-    const enlarged = upscaleImageData(sharpened);
-
-    const enlargedSharpened = sharpen(enlarged, 0.45);
-
-    const adaptive = adaptiveThreshold(contrast);
-
-    const curvedHorizontal = curved && createCylindricalVariant(
-        contrast,
-        "horizontal"
-    );
-
-    const curvedVertical = curved && createCylindricalVariant(
-        contrast,
-        "vertical"
-    );
-
-    return [
-        {
-            name: "original",
-            imageData: original,
-            scaleX: 1,
-            scaleY: 1
-        },
-        {
-            name: "contrast",
-            imageData: contrast,
-            scaleX: 1,
-            scaleY: 1
-        },
-        {
-            name: "sharpen",
-            imageData: sharpened,
-            scaleX: 1,
-            scaleY: 1
-        },
-        {
-            name: "upscale-sharpen",
-            imageData: enlargedSharpened,
-            scaleX: enlargedSharpened.width / original.width,
-            scaleY: enlargedSharpened.height / original.height
-        },
-        {
-            name: "adaptive-threshold",
-            imageData: adaptive,
-            scaleX: 1,
-            scaleY: 1
-        },
-        ...(curved ? [{
-            name: "cylindrical-horizontal",
-            imageData: curvedHorizontal.imageData,
-            scaleX: 1,
-            scaleY: 1,
-            mapPoint: curvedHorizontal.mapPoint
-        },
-        {
-            name: "cylindrical-vertical",
-            imageData: curvedVertical.imageData,
-            scaleX: 1,
-            scaleY: 1,
-            mapPoint: curvedVertical.mapPoint
-        }] : [])
-    ];
-}
-
-// Same transforms and order as createDecodeVariants, with bounded live buffers.
-export function iterateDecodeVariants(canvas,{curved=true}={}){
+// Local enhancements, generated lazily with bounded live buffers.
+export function iterateDecodeVariants(canvas){
  function* generate(){
   let original=getCanvasImageData(canvas);
   yield {name:'original',imageData:original,scaleX:1,scaleY:1,releaseAfterDecode:true};
@@ -422,10 +250,6 @@ export function iterateDecodeVariants(canvas,{curved=true}={}){
   let enhanced=sharpen(enlarged,.45);enlarged=null;
   yield {name:'upscale-sharpen',imageData:enhanced,scaleX:enhanced.width/canvas.width,scaleY:enhanced.height/canvas.height,releaseAfterDecode:true};enhanced=null;
   yield {name:'adaptive-threshold',imageData:adaptiveThreshold(contrast),scaleX:1,scaleY:1,releaseAfterDecode:true};
-  if(curved)for(const axis of ['horizontal','vertical']){
-   const variant=createCylindricalVariant(contrast,axis);
-   yield {name:'cylindrical-'+axis,imageData:variant.imageData,mapPoint:variant.mapPoint,scaleX:1,scaleY:1,releaseAfterDecode:true};
-  }
  }
- const iterator=generate();iterator.length=curved?7:5;return iterator;
+ const iterator=generate();iterator.length=5;return iterator;
 }

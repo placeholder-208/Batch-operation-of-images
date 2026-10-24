@@ -1,4 +1,4 @@
-import {readBarcodes,getReaderBackend} from './reader-client.js';
+import {readBarcodes} from './reader-client.js';
 import { measureQR } from './qr-statistics.js';
 import { fitTPS, validateTPS } from './tps.js';
 const LIMITS = {
@@ -525,6 +525,25 @@ export function renderCurvedModel(model) {
     return { data, width, height: width };
 }
 
+// Preserve sub-module gradients until ZXing performs its own binarization.
+// Coordinates use the same eight pixels/module and four-module quiet zone
+// as renderCurvedModel, so decoding positions share the existing inverse map.
+export function renderContinuousModel(model, map, gray, sourceWidth, sourceHeight) {
+    const pixels = 8, margin = 4, n = model.dimension;
+    const width = (n + 2 * margin) * pixels;
+    const data = new Uint8ClampedArray(width * width * 4).fill(255);
+    for (let y = margin * pixels; y < (n + margin) * pixels; y++) {
+        for (let x = margin * pixels; x < (n + margin) * pixels; x++) {
+            const p = map((x + 0.5) / pixels - margin, (y + 0.5) / pixels - margin);
+            if (!Number.isFinite(p.x + p.y) || p.x < 0 || p.y < 0 ||
+                p.x > sourceWidth - 1 || p.y > sourceHeight - 1) return null;
+            const value = sample(gray, sourceWidth, sourceHeight, p), pos = (y * width + x) * 4;
+            data[pos] = data[pos + 1] = data[pos + 2] = value;
+        }
+    }
+    return {data, width, height: width};
+}
+
 export async function decodeCurvedRegion(canvas, options = {}) {
     if(options.useTPS){
         const tps={};
@@ -623,9 +642,13 @@ export async function decodeCurvedRegion(canvas, options = {}) {
         resolutionMode, moduleSizeHint,
         finders: diagnostics.finders.map(p => point((p.x + 0.5) * scaleX - 0.5, (p.y + 0.5) * scaleY - 0.5))
     };
-    let attempted = 0;
-    for (const model of models) {
-        const resampleEnd=trace?.start('curved_resample',{regionId:options.regionId,model:attempted+1,family});
+    let attempted = 0, continuousAttempted = 0, sourceGray = null;
+    // Keep the original decoding order, then retry at most three fitted models.
+    const queue = models.map(model => ({model, samplingMode:'module-binary'}));
+    if (options.continuousResample) queue.push(...models.slice(0, 3)
+        .map(model => ({model, samplingMode:'continuous-gray'})));
+    for (const {model, samplingMode} of queue) {
+        const resampleEnd=trace?.start('curved_resample',{regionId:options.regionId,model:attempted+1,family,samplingMode});
         let resampleDone=false;
         try {
         const originalMap = (x, y) => {
@@ -633,7 +656,7 @@ export async function decodeCurvedRegion(canvas, options = {}) {
             return point((p.x + 0.5) * scaleX - 0.5, (p.y + 0.5) * scaleY - 0.5);
         };
         let samplingModel = model;
-        if (sourceData) {
+        if (sourceData && samplingMode === 'module-binary') {
             const sourceModule = model.moduleSize * Math.sqrt(scaleX * scaleY);
             const key = Math.max(5, Math.min(63, Math.round(sourceModule * 2.4) | 1));
             if (!normalizedCache.has(key)) normalizedCache.set(key, normalizeImage(sourceData, sourceModule));
@@ -642,24 +665,40 @@ export async function decodeCurvedRegion(canvas, options = {}) {
             if (!samples) {resampleEnd?.('skipped',{reason:'invalid-samples'});resampleDone=true;continue;}
             samplingModel = { ...model, samples };
         }
-        const rendered = renderCurvedModel(samplingModel);
+        let rendered;
+        if (samplingMode === 'continuous-gray') {
+            if (!sourceGray) {
+                sourceData ||= canvas.getContext('2d',{willReadFrequently:true})
+                    .getImageData(0,0,canvas.width,canvas.height);
+                sourceGray = new Float32Array(canvas.width * canvas.height);
+                for (let i=0;i<sourceGray.length;i++) {
+                    const alpha=sourceData.data[i*4+3]/255;
+                    sourceGray[i]=alpha*(.299*sourceData.data[i*4]+.587*sourceData.data[i*4+1]+
+                        .114*sourceData.data[i*4+2])+255*(1-alpha);
+                }
+            }
+            rendered=renderContinuousModel(model,originalMap,sourceGray,canvas.width,canvas.height);
+            if (!rendered) {resampleEnd?.('skipped',{reason:'invalid-samples'});resampleDone=true;continue;}
+        } else rendered = renderCurvedModel(samplingModel);
         resampleEnd?.();resampleDone=true;
-        const results = await measureQR(trace,'curved_decode',{regionId:options.regionId,model:attempted+1,family},()=>readBarcodes(new ImageData(rendered.data, rendered.width, rendered.height), {
+        const results = await measureQR(trace,'curved_decode',{regionId:options.regionId,model:attempted+1,family,samplingMode},()=>readBarcodes(new ImageData(rendered.data, rendered.width, rendered.height), {
             formats: ['QRCode'], tryHarder: true
         }));
         attempted++;
+        if(samplingMode==='continuous-gray')continuousAttempted++;
         const decoded = results.filter(r => r.isValid !== false && r.text && r.position).map(r => {
             const points = [r.position.topLeft, r.position.topRight, r.position.bottomRight, r.position.bottomLeft]
                 .map(p => originalMap(p.x / 8 - 4, p.y / 8 - 4));
             return {
                 text: r.text, format: r.format || 'QRCode', points,
                 center: point(points.reduce((sum, p) => sum + p.x, 0) / 4, points.reduce((sum, p) => sum + p.y, 0) / 4),
-                source: options.tpsOnly?'wechat-local-tps':'wechat-local-curved'
+                source: samplingMode==='continuous-gray'?(options.tpsOnly?'wechat-local-tps-gray':'wechat-local-curved-gray'):
+                    options.tpsOnly?'wechat-local-tps':'wechat-local-curved'
             };
         }).filter(r => r.points.every(p => Number.isFinite(p.x + p.y)));
         if (decoded.length) {
             if(statistics)Object.assign(statistics,logInfo,{reason:null,geometryReason:diagnostics.reason||null,
-                attempted,decoded:decoded.length,dimension:model.dimension,axis:model.axis,curvature:model.curvature,
+                attempted,continuousAttempted,samplingMode,decoded:decoded.length,dimension:model.dimension,axis:model.axis,curvature:model.curvature,
                 family,controlPoints:model.controlPoints});
             console.log('[局部曲面解码]', { ...logInfo, finders: model.finders.map(p => point((p.x + 0.5) * scaleX - 0.5, (p.y + 0.5) * scaleY - 0.5)), groupIndex: model.groupIndex, attempted, decoded: decoded.length, dimension: model.dimension, version: (model.dimension - 17) / 4, axis: model.axis, curvature: model.curvature, totalMs: Math.round(performance.now() - started) });
             return decoded;
@@ -667,7 +706,7 @@ export async function decodeCurvedRegion(canvas, options = {}) {
         await sleepTick();
         } catch(error){if(!resampleDone)resampleEnd?.('error',{error:error.message||String(error)});throw error;}
     }
-    if(statistics)Object.assign(statistics,logInfo,{attempted,decoded:0,geometryReason:diagnostics.reason||null,
+    if(statistics)Object.assign(statistics,logInfo,{attempted,continuousAttempted,decoded:0,geometryReason:diagnostics.reason||null,
         reason:!models.length?(diagnostics.reason||'no-accepted-model'):attempted?'models-undecodable':'resampling-failed'});
     console.log('[局部曲面解码]', { ...logInfo, attempted, decoded: 0, totalMs: Math.round(performance.now() - started) });
     return [];

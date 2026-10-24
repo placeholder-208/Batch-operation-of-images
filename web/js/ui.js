@@ -1,5 +1,5 @@
 import {cropBlob,releaseCrops} from './crop-store.js';
-import { qrStatisticsCSV, qrStatisticsJSON, normalizeQRExperiments } from './qr-statistics.js';
+import { qrStatisticsCSV, qrStatisticsJSON, normalizeQROptions } from './qr-statistics.js';
 import { createFileImport } from './file-import.js';
 import { packItem, unpackItem } from './workspace-state.js';
 import { createTileList, prepareThumbnail, disposeThumbnail, bindBatchNavigation } from './thumbnail-list.js';
@@ -34,20 +34,20 @@ export function createUI(actions) {
     const locked=()=>busy||importBusy;
     const current = () => queues.qr[positions.qr];
     const experiments=document.createElement('details');experiments.className='context-help';
-    const experimentTitle=document.createElement('summary');experimentTitle.textContent='识别对照实验';
+    const experimentTitle=document.createElement('summary');experimentTitle.textContent='识别选项';
     experiments.append(experimentTitle);
     const experimentControls={};
-    for(const [key,label,id]of [['reordered','调整检测顺序','qrReordered'],['useTPS','使用 TPS','qrUseTPS']]){
+    for(const [key,label,id]of [['useTPS','启用 TPS 校正（实验）','qrUseTPS'],['detailedRecovery','精细模糊恢复（较慢）','qrDetailedRecovery']]){
         const wrapper=document.createElement('label');wrapper.style.display='block';
         const input=document.createElement('input');input.type='checkbox';input.checked=false;input.id=id;
         input.onchange=()=>actions.onChange?.();experimentControls[key]=input;
         wrapper.append(input,document.createTextNode(' '+label));experiments.append(wrapper);
     }
     const experimentNote=document.createElement('p');experimentNote.className='small';
-    experimentNote.textContent='默认均关闭。TPS失败后回退原校正，可能增加耗时。选项只影响下次识别；重新识别保留此前统计，当前图像结果会替换。';
+    experimentNote.textContent='两项默认关闭。TPS失败后继续柱面校正；精细恢复使用更高分辨率，增加耗时与内存。选项只影响下次识别，重新识别会保留此前统计并替换结果。';
     const rerun=document.createElement('button');rerun.type='button';rerun.className='secondary full';
-    rerun.id='qrRerun';rerun.textContent='按当前选项重新识别本批';
-    const getOptions=()=>normalizeQRExperiments(Object.fromEntries(Object.entries(experimentControls).map(([key,input])=>[key,input.checked])));
+    rerun.id='qrRerun';rerun.textContent='重新识别本批';
+    const getOptions=()=>normalizeQROptions(Object.fromEntries(Object.entries(experimentControls).map(([key,input])=>[key,input.checked])));
     rerun.onclick=()=>{if(!locked()&&!actions.isExporting()&&queues.qr.length)actions.scan([...queues.qr],getOptions());};
     experiments.append(experimentNote,rerun);$('qrStart').after(experiments);
     const statisticsButtons=[];
@@ -189,12 +189,12 @@ export function createUI(actions) {
     return {
         tell,
         isImporting:()=>importBusy,
-        snapshot(){return {version:1,items:queues.qr.map(packItem),position:positions.qr,selectedQR,zipOutput:$("zipOutput").checked,experiments:getOptions()};},
+        snapshot(){return {version:1,items:queues.qr.map(packItem),position:positions.qr,selectedQR,zipOutput:$("zipOutput").checked,options:getOptions()};},
         async restore(saved){
             if(saved.version!==1||!Array.isArray(saved.items))throw new Error('二维码工作区数据版本无效');
             queues.qr.forEach(item=>{disposeThumbnail(item);releaseCrops(item.result);URL.revokeObjectURL(item.url);});
             queues.qr=saved.items.map(unpackItem);
-            const options=normalizeQRExperiments(saved.experiments);
+            const options=normalizeQROptions(saved.options??saved.experiments);
             for(const [key,input]of Object.entries(experimentControls))input.checked=options[key];
             for(const item of queues.qr)prepareThumbnail(item,tiles);
             $("zipOutput").checked=saved.zipOutput!==false;

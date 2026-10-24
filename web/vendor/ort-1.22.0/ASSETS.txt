@@ -1,0 +1,9 @@
+ONNX Runtime Web 1.22.0 — QR detector, WASM execution provider.
+
+The production page loads ort.wasm.js. Its matching runtime consists of
+ort-wasm-simd-threaded.mjs and ort-wasm-simd-threaded.wasm. Alternative
+WebGPU/WebGL/Node/JSEP builds and source-map files are not needed here.
+
+Project: https://github.com/microsoft/onnxruntime
+Distribution: https://www.npmjs.com/package/onnxruntime-web/v/1.22.0
+License: MIT, see LICENSE.txt.

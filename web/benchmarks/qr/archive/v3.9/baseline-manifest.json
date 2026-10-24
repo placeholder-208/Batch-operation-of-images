@@ -1,0 +1,21 @@
+{
+  "base": "v3.8 restored 2026-10-22",
+  "version": "3.9-gray-retry",
+  "files": [
+    {
+      "path": "web/js/curved-region.js",
+      "baseSHA256": "3655a583ed3ed7e2c05ada5a493a9b53bb2e90391ebfc6b179cdcbb2e7f4554e",
+      "updatedSHA256": "c7d1ed738e5c5cb1273a987897ad3f5c7dfa0416e652d59369a49f4eb0ef3644"
+    },
+    {
+      "path": "web/js/qr-statistics.js",
+      "baseSHA256": "45bd907d15ed3b67eb1956598be205d4dc58e3397ad4f541dca281f11ae1e469",
+      "updatedSHA256": "22dc24341adf0c86308b24be60a4dd8d505aaf42c2f604ce1dad7a1ee3100af7"
+    },
+    {
+      "path": "web/js/wechat-decoder.js",
+      "baseSHA256": "456b77f63b4931ce9a86a1247f960b1d056b33112fb325c6b9d41ad33ac5f76f",
+      "updatedSHA256": "3f21f44f8660dc4d22bc8c26aa27bb07255d63bbae76beecc0b58b87b6c940ae"
+    }
+  ]
+}

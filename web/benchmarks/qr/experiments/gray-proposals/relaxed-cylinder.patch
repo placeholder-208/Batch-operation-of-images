@@ -1,0 +1,79 @@
+--- js/curved-region.js
++++ js/curved-region.js
+@@ -428,6 +428,7 @@
+         const dimensions = Array.from({ length: 40 }, (_, i) => 21 + i * 4)
+             .sort((a, b) => Math.abs(a - estimatedDimension) - Math.abs(b - estimatedDimension));
+         sizeLoop: for (const n of dimensions) {
++            if(limits.relaxedStructure&&!dimensions.slice(0,10).includes(n))continue;
+             if (performance.now() > groupDeadline) { diagnostics.groupBudgetLimited = (diagnostics.groupBudgetLimited || 0) + 1; break; }
+             const ideal = idealPoints(n), flat = flatMap(ideal, observed, n, width);
+             if (!flat) continue;
+@@ -440,9 +441,9 @@
+                 if (score < best) { best = score; alignment = a; }
+             }
+             // 版本 1 是 21×21，无校正方块，仅使用三个定位方块的角点与中心拟合。
+-            if (n !== 21 && !alignment) continue;
+-            const controls = n === 21 ? ideal : ideal.concat([point(n - 6.5, n - 6.5)]);
+-            const actual = n === 21 ? observed : observed.concat([alignment]);
++            if (n !== 21 && !alignment && !limits.relaxedStructure) continue;
++            const controls = n === 21 || !alignment ? ideal : ideal.concat([point(n - 6.5, n - 6.5)]);
++            const actual = n === 21 || !alignment ? observed : observed.concat([alignment]);
+             if(limits.tpsOnly){
+                 const map=fitTPS(controls,actual,n,width);
+                 if(!map||!validateTPS(map,n,width,height)){
+@@ -476,6 +477,22 @@
+                 let sum = 0;
+                 controls.forEach((p, i) => { sum += distance(map(p.x, p.y), actual[i]) ** 2; });
+                 const rms = Math.sqrt(sum / controls.length);
++                if(limits.relaxedStructure){
++                    if(rms>moduleSize*.8||!validateTPS(map,n,width,height))continue;
++                    let timing=0;
++                    for(const cutoff of [.4,.5,.6,.7]){
++                        let correct=0,total=0;
++                        for(let i=8;i<n-8;i++){
++                            correct+=Number((samples[6*n+i]<cutoff)===(i%2===0));
++                            correct+=Number((samples[i*n+6]<cutoff)===(i%2===0));total+=2;
++                        }
++                        timing=Math.max(timing,correct/total);
++                    }
++                    if(timing<.6)continue;
++                    models.push({dimension:n,curvature,axis,cutoff:.5,timing,rms,
++                        score:timing-.1*rms/moduleSize,samples,map,groupIndex,moduleSize,finders});
++                    continue;
++                }
+                 for (const cutoff of [0.5, 0.65, 0.75]) {
+                     const info = formatInformation(samples, n, cutoff);
+                     if (!info) continue;
+@@ -644,8 +661,8 @@
+     };
+     let attempted = 0, continuousAttempted = 0, sourceGray = null;
+     // Keep the original decoding order, then retry at most three fitted models.
+-    const queue = models.map(model => ({model, samplingMode:'module-binary'}));
+-    if (options.continuousResample) queue.push(...models.slice(0, 3)
++    const queue = options.relaxedStructure?[]:models.map(model => ({model, samplingMode:'module-binary'}));
++    if (options.continuousResample) queue.push(...models.slice(0, options.relaxedStructure?6:3)
+         .map(model => ({model, samplingMode:'continuous-gray'})));
+     for (const {model, samplingMode} of queue) {
+         const resampleEnd=trace?.start('curved_resample',{regionId:options.regionId,model:attempted+1,family,samplingMode});
+--- js/wechat-decoder.js
++++ js/wechat-decoder.js
+@@ -160,11 +160,18 @@
+                 return result;
+             });
+             report('curved','正在校正第 '+curvedAttempted+' 个区域…');
+-            const corrected=await measureQR(trace,'curved_total',{regionId:id,parent:true},()=>
++            let corrected=await measureQR(trace,'curved_total',{regionId:id,parent:true},()=>
+                 decodeCurvedRegion(canvas,{maxPixels:360000,maxModels:12,geometryMs:2000,
+                     continuousResample:true,
+                     moduleSizeHint:crop.moduleSizeHint,trace,regionId:id,statistics:record.curved,
+                     useTPS:options.useTPS===true}));
++            if(!corrected.length){
++                record.relaxed={};
++                corrected=await measureQR(trace,'relaxed_total',{regionId:id,parent:true},()=>
++                    decodeCurvedRegion(canvas,{maxPixels:360000,maxModels:6,geometryMs:1500,
++                        continuousResample:true,relaxedStructure:true,
++                        moduleSizeHint:crop.moduleSizeHint,trace,regionId:id,statistics:record.relaxed}));
++            }
+             decoded.push(...corrected.map(qr=>translateResult(qr,crop.left,crop.top)));
+             Object.assign(record,{outcome:covered(box)?'curved-decoded':'undecoded',
+                 curvedDecoded:corrected.length,reason:covered(box)?null:record.curved.reason||'not-covered'});

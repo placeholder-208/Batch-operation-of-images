@@ -1,18 +1,20 @@
 worker.js
 wrangler.jsonc
 .assetsignore
+.gitignore
+README.md
+docs/
+.git/
+.codex/
+.agents/
+.aws/
 node_modules/
 .wrangler/
 package.json
 package-lock.json
 *.log
-# Retired assets: exclude from deployment even before repository cleanup.
-opencv/
-js/curved-decoder.js
 server/
 .dev.vars*
-
-sam-test/
-js/sam-workspace.js
-
+*.swp
 test/
+benchmarks/

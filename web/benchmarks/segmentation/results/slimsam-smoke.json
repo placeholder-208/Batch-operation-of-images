@@ -1,0 +1,400 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-22T17:03:18.580Z",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+  "hardwareConcurrency": 16,
+  "backend": "wasm",
+  "threads": 1,
+  "model": "slimsam-77-uniform",
+  "protocol": {
+    "prompt": "ground-truth-tight-box",
+    "candidate": "highest-predicted-IoU",
+    "threshold": 0,
+    "warmupsPerVariant": 2,
+    "repeats": 2,
+    "maxWorkingEdge": 1024,
+    "antialias": "production-interpolatedAlpha",
+    "boundaryTolerancePixels": 2,
+    "memory": "not-measured",
+    "loading": "includes-initialization; not-network-only"
+  },
+  "samples": [
+    {
+      "name": "solid",
+      "kind": "synthetic-smoke",
+      "width": 256,
+      "height": 256,
+      "box": [
+        48,
+        48,
+        208,
+        208
+      ]
+    },
+    {
+      "name": "hole",
+      "kind": "synthetic-smoke",
+      "width": 256,
+      "height": 256,
+      "box": [
+        48,
+        48,
+        208,
+        208
+      ]
+    },
+    {
+      "name": "thin-parts",
+      "kind": "synthetic-smoke",
+      "width": 256,
+      "height": 256,
+      "box": [
+        48,
+        64,
+        208,
+        192
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "dtype": "q8",
+      "sample": "solid",
+      "repeat": 0,
+      "status": "ok",
+      "iou": 0.41785243631874824,
+      "boundaryPrecision": 0.10237442922374429,
+      "boundaryRecall": 0.9948979591836735,
+      "boundaryF1": 0.1856459923412907,
+      "alphaMAE": 0.5306362203957516,
+      "alphaMSE": 0.515801418791975,
+      "tolerancePixels": 2,
+      "selectedCandidate": 0,
+      "scores": [
+        1.0152263641357422,
+        0.9810635447502136,
+        0.7621244192123413
+      ],
+      "preprocessMs": 106.5,
+      "encodeMs": 6771.100000023842,
+      "decodeMs": 179.2999999821186,
+      "postprocessMs": 8.300000011920929,
+      "inferencePipelineMs": 7065.200000017881
+    },
+    {
+      "dtype": "q8",
+      "sample": "solid",
+      "repeat": 1,
+      "status": "ok",
+      "iou": 0.41785243631874824,
+      "boundaryPrecision": 0.10237442922374429,
+      "boundaryRecall": 0.9948979591836735,
+      "boundaryF1": 0.1856459923412907,
+      "alphaMAE": 0.5306362203957516,
+      "alphaMSE": 0.515801418791975,
+      "tolerancePixels": 2,
+      "selectedCandidate": 0,
+      "scores": [
+        1.0152263641357422,
+        0.9810635447502136,
+        0.7621244192123413
+      ],
+      "preprocessMs": 90.7000000178814,
+      "encodeMs": 6772.199999988079,
+      "decodeMs": 531.4000000059605,
+      "postprocessMs": 14.900000005960464,
+      "inferencePipelineMs": 7409.300000011921
+    },
+    {
+      "dtype": "q8",
+      "sample": "hole",
+      "repeat": 0,
+      "status": "ok",
+      "iou": 0.2922255722372631,
+      "boundaryPrecision": 0.45524412296564193,
+      "boundaryRecall": 0.6673640167364017,
+      "boundaryF1": 0.5412637513542841,
+      "alphaMAE": 0.7023413498150914,
+      "alphaMSE": 0.6980883580608975,
+      "tolerancePixels": 2,
+      "selectedCandidate": 0,
+      "scores": [
+        1.0092525482177734,
+        0.9806936979293823,
+        0.7408493757247925
+      ],
+      "preprocessMs": 106.30000001192093,
+      "encodeMs": 6768.4000000059605,
+      "decodeMs": 180.89999997615814,
+      "postprocessMs": 7.700000017881393,
+      "inferencePipelineMs": 7063.300000011921
+    },
+    {
+      "dtype": "q8",
+      "sample": "hole",
+      "repeat": 1,
+      "status": "ok",
+      "iou": 0.2922255722372631,
+      "boundaryPrecision": 0.45524412296564193,
+      "boundaryRecall": 0.6673640167364017,
+      "boundaryF1": 0.5412637513542841,
+      "alphaMAE": 0.7023413498150914,
+      "alphaMSE": 0.6980883580608975,
+      "tolerancePixels": 2,
+      "selectedCandidate": 0,
+      "scores": [
+        1.0092525482177734,
+        0.9806936979293823,
+        0.7408493757247925
+      ],
+      "preprocessMs": 89.90000000596046,
+      "encodeMs": 6581,
+      "decodeMs": 173.90000000596046,
+      "postprocessMs": 7.5999999940395355,
+      "inferencePipelineMs": 6852.5
+    },
+    {
+      "dtype": "q8",
+      "sample": "thin-parts",
+      "repeat": 0,
+      "status": "ok",
+      "iou": 0.20140851596163648,
+      "boundaryPrecision": 0.30083811204234673,
+      "boundaryRecall": 0.3579387186629526,
+      "boundaryF1": 0.32691376906541575,
+      "alphaMAE": 0.788425153076572,
+      "alphaMSE": 0.7852292217616145,
+      "tolerancePixels": 2,
+      "selectedCandidate": 0,
+      "scores": [
+        1.0194581747055054,
+        0.9922729730606079,
+        0.6669256687164307
+      ],
+      "preprocessMs": 108.5,
+      "encodeMs": 6618.300000011921,
+      "decodeMs": 169.40000000596046,
+      "postprocessMs": 8.700000017881393,
+      "inferencePipelineMs": 6905.100000023842
+    },
+    {
+      "dtype": "q8",
+      "sample": "thin-parts",
+      "repeat": 1,
+      "status": "ok",
+      "iou": 0.20140851596163648,
+      "boundaryPrecision": 0.30083811204234673,
+      "boundaryRecall": 0.3579387186629526,
+      "boundaryF1": 0.32691376906541575,
+      "alphaMAE": 0.788425153076572,
+      "alphaMSE": 0.7852292217616145,
+      "tolerancePixels": 2,
+      "selectedCandidate": 0,
+      "scores": [
+        1.0194581747055054,
+        0.9922729730606079,
+        0.6669256687164307
+      ],
+      "preprocessMs": 91.90000000596046,
+      "encodeMs": 6525.0999999940395,
+      "decodeMs": 185,
+      "postprocessMs": 16.700000017881393,
+      "inferencePipelineMs": 6818.700000017881
+    },
+    {
+      "dtype": "fp32",
+      "sample": "solid",
+      "repeat": 0,
+      "status": "ok",
+      "iou": 0.38447447817252633,
+      "boundaryPrecision": 0.47723785166240407,
+      "boundaryRecall": 0.8792517006802721,
+      "boundaryF1": 0.6186736816048338,
+      "alphaMAE": 0.6103618975234132,
+      "alphaMSE": 0.6067072681259926,
+      "tolerancePixels": 2,
+      "selectedCandidate": 0,
+      "scores": [
+        1.0303750038146973,
+        1.0089448690414429,
+        0.9146983623504639
+      ],
+      "preprocessMs": 92,
+      "encodeMs": 7227.700000017881,
+      "decodeMs": 231.7999999821186,
+      "postprocessMs": 8.700000017881393,
+      "inferencePipelineMs": 7560.300000011921
+    },
+    {
+      "dtype": "fp32",
+      "sample": "solid",
+      "repeat": 1,
+      "status": "ok",
+      "iou": 0.38447447817252633,
+      "boundaryPrecision": 0.47723785166240407,
+      "boundaryRecall": 0.8792517006802721,
+      "boundaryF1": 0.6186736816048338,
+      "alphaMAE": 0.6103618975234132,
+      "alphaMSE": 0.6067072681259926,
+      "tolerancePixels": 2,
+      "selectedCandidate": 0,
+      "scores": [
+        1.0303750038146973,
+        1.0089448690414429,
+        0.9146983623504639
+      ],
+      "preprocessMs": 99.09999999403954,
+      "encodeMs": 7264.5999999940395,
+      "decodeMs": 208.40000000596046,
+      "postprocessMs": 7.5,
+      "inferencePipelineMs": 7579.699999988079
+    },
+    {
+      "dtype": "fp32",
+      "sample": "hole",
+      "repeat": 0,
+      "status": "ok",
+      "iou": 0.2769926948678744,
+      "boundaryPrecision": 0.45798931520155417,
+      "boundaryRecall": 1,
+      "boundaryF1": 0.6282478347768155,
+      "alphaMAE": 0.7155958202789325,
+      "alphaMSE": 0.7088007676745982,
+      "tolerancePixels": 2,
+      "selectedCandidate": 0,
+      "scores": [
+        0.9944935441017151,
+        0.9583269953727722,
+        0.6917210221290588
+      ],
+      "preprocessMs": 87.2000000178814,
+      "encodeMs": 7150.199999988079,
+      "decodeMs": 206.90000000596046,
+      "postprocessMs": 9.799999982118607,
+      "inferencePipelineMs": 7454.0999999940395
+    },
+    {
+      "dtype": "fp32",
+      "sample": "hole",
+      "repeat": 1,
+      "status": "ok",
+      "iou": 0.2769926948678744,
+      "boundaryPrecision": 0.45798931520155417,
+      "boundaryRecall": 1,
+      "boundaryF1": 0.6282478347768155,
+      "alphaMAE": 0.7155958202789325,
+      "alphaMSE": 0.7088007676745982,
+      "tolerancePixels": 2,
+      "selectedCandidate": 0,
+      "scores": [
+        0.9944935441017151,
+        0.9583269953727722,
+        0.6917210221290588
+      ],
+      "preprocessMs": 117.39999997615814,
+      "encodeMs": 7213.800000011921,
+      "decodeMs": 240.10000002384186,
+      "postprocessMs": 22.399999976158142,
+      "inferencePipelineMs": 7593.899999976158
+    },
+    {
+      "dtype": "fp32",
+      "sample": "thin-parts",
+      "repeat": 0,
+      "status": "ok",
+      "iou": 0.002490813204385061,
+      "boundaryPrecision": 0.5517625231910946,
+      "boundaryRecall": 0.9986072423398329,
+      "boundaryF1": 0.7107905016731774,
+      "alphaMAE": 0.9869907075876886,
+      "alphaMSE": 0.982225644295488,
+      "tolerancePixels": 2,
+      "selectedCandidate": 0,
+      "scores": [
+        1.00746750831604,
+        0.9820087552070618,
+        0.651547908782959
+      ],
+      "preprocessMs": 102.19999998807907,
+      "encodeMs": 7248.699999988079,
+      "decodeMs": 220.09999999403954,
+      "postprocessMs": 8.5,
+      "inferencePipelineMs": 7579.5999999940395
+    },
+    {
+      "dtype": "fp32",
+      "sample": "thin-parts",
+      "repeat": 1,
+      "status": "ok",
+      "iou": 0.002490813204385061,
+      "boundaryPrecision": 0.5517625231910946,
+      "boundaryRecall": 0.9986072423398329,
+      "boundaryF1": 0.7107905016731774,
+      "alphaMAE": 0.9869907075876886,
+      "alphaMSE": 0.982225644295488,
+      "tolerancePixels": 2,
+      "selectedCandidate": 0,
+      "scores": [
+        1.00746750831604,
+        0.9820087552070618,
+        0.651547908782959
+      ],
+      "preprocessMs": 97.5,
+      "encodeMs": 7118.700000017881,
+      "decodeMs": 212.09999999403954,
+      "postprocessMs": 7.4000000059604645,
+      "inferencePipelineMs": 7435.700000017881
+    }
+  ],
+  "variants": [
+    {
+      "dtype": "q8",
+      "loadMs": 978,
+      "status": "loaded"
+    },
+    {
+      "dtype": "fp32",
+      "loadMs": 484.19999998807907,
+      "status": "loaded"
+    }
+  ],
+  "assets": {
+    "repository": "Xenova/slimsam-77-uniform",
+    "revision": "5850ab45f587c112167512ffef949107115e26a0",
+    "files": {
+      "onnx/vision_encoder.onnx": {
+        "bytes": 23276014,
+        "sha256": "9f8433273a6750b587779baa0cf5508111001bf7e7acfcf585d370139fd366d0",
+        "fits25MiB": true
+      },
+      "onnx/prompt_encoder_mask_decoder.onnx": {
+        "bytes": 16557892,
+        "sha256": "f4514391764fbd56e08e119060d874ecd7d52994bfb1968af159e12d4943b5bb",
+        "fits25MiB": true
+      },
+      "onnx/vision_encoder_quantized.onnx": {
+        "bytes": 8882165,
+        "sha256": "cce23c7b2e5d4f330932738fb67ba518e04b0d99ccdd1cccd22a7da4e01f2971",
+        "fits25MiB": true
+      },
+      "onnx/prompt_encoder_mask_decoder_quantized.onnx": {
+        "bytes": 4903810,
+        "sha256": "cb90b279f549d2cab7fd6e20c38522438c65d84bdcca3d2a764cff7d857fdce2",
+        "fits25MiB": true
+      },
+      "config.json": {
+        "bytes": 379,
+        "sha256": "6339884f168658d3ca6473b486973913fb33e84e625e06ae2dd7b4a808187419"
+      },
+      "preprocessor_config.json": {
+        "bytes": 466,
+        "sha256": "225545a743c654e3c495ec6f545a0eaba57c8ba3fbbd8483b3cb1c0fc58db517"
+      },
+      "LICENSE.txt": {
+        "bytes": 11357,
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      }
+    }
+  },
+  "status": "complete"
+}

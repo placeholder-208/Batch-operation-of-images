@@ -1,0 +1,3023 @@
+[
+  {
+    "kind": "baseline",
+    "file": "curved/image017.jpg",
+    "count": 1,
+    "record": {
+      "schemaVersion": 2,
+      "startedAt": "2026-10-23T08:39:39.259Z",
+      "filename": "curved/image017.jpg",
+      "fileBytes": 0,
+      "source": null,
+      "run": {},
+      "settings": {
+        "reordered": false,
+        "useTPS": true,
+        "fullVariants": 7,
+        "tryHarder": true,
+        "returnErrors": false,
+        "regionLimit": 8,
+        "curvedRegionLimit": 2,
+        "curvedModelLimit": 12,
+        "geometryBudgetMs": 2000,
+        "tpsExtraGeometryBudgetMs": 2000,
+        "tpsExtraModelLimit": 12
+      },
+      "manualReview": {
+        "missedQRCodeCount": null,
+        "falseCandidateCount": null,
+        "notes": ""
+      },
+      "status": "候选未全部识别",
+      "stages": [
+        {
+          "name": "preprocess_next",
+          "offsetMs": 0.7,
+          "elapsedMs": 37,
+          "status": "ok",
+          "variant": "original",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 37.8,
+          "variant": "original",
+          "elapsedMs": 87.6,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 125.6,
+          "elapsedMs": 13.5,
+          "status": "ok",
+          "variant": "contrast",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 139.1,
+          "variant": "contrast",
+          "elapsedMs": 16,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 155.3,
+          "elapsedMs": 135,
+          "status": "ok",
+          "variant": "sharpen",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 290.4,
+          "variant": "sharpen",
+          "elapsedMs": 12.6,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 303.1,
+          "elapsedMs": 436.7,
+          "status": "ok",
+          "variant": "upscale-sharpen",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 739.8,
+          "variant": "upscale-sharpen",
+          "elapsedMs": 45.2,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 785.2,
+          "elapsedMs": 31.4,
+          "status": "ok",
+          "variant": "adaptive-threshold",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 816.6,
+          "variant": "adaptive-threshold",
+          "elapsedMs": 12.9,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 829.6,
+          "elapsedMs": 36.5,
+          "status": "ok",
+          "variant": "cylindrical-horizontal",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 866.1,
+          "variant": "cylindrical-horizontal",
+          "elapsedMs": 11.5,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 877.7,
+          "elapsedMs": 43.5,
+          "status": "ok",
+          "variant": "cylindrical-vertical",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 921.2,
+          "variant": "cylindrical-vertical",
+          "elapsedMs": 12.2,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 933.5,
+          "elapsedMs": 0.5,
+          "status": "ok",
+          "variant": null,
+          "done": true
+        },
+        {
+          "name": "wechat_init",
+          "offsetMs": 934.5,
+          "sessionRequestedBefore": false,
+          "elapsedMs": 378.5,
+          "status": "ok"
+        },
+        {
+          "name": "wechat_prepare",
+          "offsetMs": 1313.1,
+          "inputSize": 400,
+          "elapsedMs": 10.9,
+          "status": "ok"
+        },
+        {
+          "name": "wechat_inference",
+          "offsetMs": 1324,
+          "elapsedMs": 48.6,
+          "status": "ok"
+        },
+        {
+          "name": "wechat_postprocess",
+          "offsetMs": 1372.6,
+          "elapsedMs": 5.2,
+          "status": "ok"
+        },
+        {
+          "name": "region_crop",
+          "offsetMs": 1378.2,
+          "regionId": 1,
+          "elapsedMs": 151.7,
+          "status": "ok"
+        },
+        {
+          "name": "region_read",
+          "offsetMs": 1530.1,
+          "regionId": 1,
+          "elapsedMs": 1.1,
+          "status": "ok"
+        },
+        {
+          "name": "region_decode",
+          "offsetMs": 1531.2,
+          "regionId": 1,
+          "elapsedMs": 3,
+          "status": "ok"
+        },
+        {
+          "name": "curved_total",
+          "offsetMs": 1534.2,
+          "regionId": 1,
+          "parent": true,
+          "elapsedMs": 223.3,
+          "status": "ok"
+        },
+        {
+          "name": "tps_total",
+          "offsetMs": 1534.8,
+          "regionId": 1,
+          "parent": true,
+          "elapsedMs": 99.8,
+          "status": "ok"
+        },
+        {
+          "name": "curved_geometry",
+          "offsetMs": 1534.8,
+          "regionId": 1,
+          "family": "tps",
+          "elapsedMs": 91.3,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1626.2,
+          "regionId": 1,
+          "model": 1,
+          "family": "tps",
+          "elapsedMs": 1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1627.2,
+          "regionId": 1,
+          "model": 1,
+          "family": "tps",
+          "elapsedMs": 1.9,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1629.1,
+          "regionId": 1,
+          "model": 2,
+          "family": "tps",
+          "elapsedMs": 0.6,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1629.7,
+          "regionId": 1,
+          "model": 2,
+          "family": "tps",
+          "elapsedMs": 1.8,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1631.5,
+          "regionId": 1,
+          "model": 3,
+          "family": "tps",
+          "elapsedMs": 0.4,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1631.9,
+          "regionId": 1,
+          "model": 3,
+          "family": "tps",
+          "elapsedMs": 1.7,
+          "status": "ok"
+        },
+        {
+          "name": "curved_geometry",
+          "offsetMs": 1634.6,
+          "regionId": 1,
+          "family": "cylindrical",
+          "elapsedMs": 93.1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1727.7,
+          "regionId": 1,
+          "model": 1,
+          "family": "cylindrical",
+          "elapsedMs": 0.7,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1728.4,
+          "regionId": 1,
+          "model": 1,
+          "family": "cylindrical",
+          "elapsedMs": 2.2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1730.7,
+          "regionId": 1,
+          "model": 2,
+          "family": "cylindrical",
+          "elapsedMs": 0.1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1730.9,
+          "regionId": 1,
+          "model": 2,
+          "family": "cylindrical",
+          "elapsedMs": 1.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1732.4,
+          "regionId": 1,
+          "model": 3,
+          "family": "cylindrical",
+          "elapsedMs": 0.3,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1732.7,
+          "regionId": 1,
+          "model": 3,
+          "family": "cylindrical",
+          "elapsedMs": 1.8,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1734.5,
+          "regionId": 1,
+          "model": 4,
+          "family": "cylindrical",
+          "elapsedMs": 0.3,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1734.8,
+          "regionId": 1,
+          "model": 4,
+          "family": "cylindrical",
+          "elapsedMs": 2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1736.8,
+          "regionId": 1,
+          "model": 5,
+          "family": "cylindrical",
+          "elapsedMs": 0.4,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1737.2,
+          "regionId": 1,
+          "model": 5,
+          "family": "cylindrical",
+          "elapsedMs": 1.6,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1738.8,
+          "regionId": 1,
+          "model": 6,
+          "family": "cylindrical",
+          "elapsedMs": 0.4,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1739.2,
+          "regionId": 1,
+          "model": 6,
+          "family": "cylindrical",
+          "elapsedMs": 1.9,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1741.1,
+          "regionId": 1,
+          "model": 7,
+          "family": "cylindrical",
+          "elapsedMs": 0.3,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1741.4,
+          "regionId": 1,
+          "model": 7,
+          "family": "cylindrical",
+          "elapsedMs": 1.6,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1743,
+          "regionId": 1,
+          "model": 8,
+          "family": "cylindrical",
+          "elapsedMs": 0.4,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1743.4,
+          "regionId": 1,
+          "model": 8,
+          "family": "cylindrical",
+          "elapsedMs": 8.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1752,
+          "regionId": 1,
+          "model": 9,
+          "family": "cylindrical",
+          "elapsedMs": 0,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1752,
+          "regionId": 1,
+          "model": 9,
+          "family": "cylindrical",
+          "elapsedMs": 1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1753,
+          "regionId": 1,
+          "model": 10,
+          "family": "cylindrical",
+          "elapsedMs": 0.1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1753.1,
+          "regionId": 1,
+          "model": 10,
+          "family": "cylindrical",
+          "elapsedMs": 1.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1754.6,
+          "regionId": 1,
+          "model": 11,
+          "family": "cylindrical",
+          "elapsedMs": 0.2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1754.8,
+          "regionId": 1,
+          "model": 11,
+          "family": "cylindrical",
+          "elapsedMs": 1.2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1756,
+          "regionId": 1,
+          "model": 12,
+          "family": "cylindrical",
+          "elapsedMs": 0.1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1756.1,
+          "regionId": 1,
+          "model": 12,
+          "family": "cylindrical",
+          "elapsedMs": 1.1,
+          "status": "ok"
+        },
+        {
+          "name": "region_crop",
+          "offsetMs": 1757.6,
+          "regionId": 2,
+          "elapsedMs": 18.2,
+          "status": "ok"
+        },
+        {
+          "name": "region_read",
+          "offsetMs": 1776,
+          "regionId": 2,
+          "elapsedMs": 0.5,
+          "status": "ok"
+        },
+        {
+          "name": "region_decode",
+          "offsetMs": 1776.5,
+          "regionId": 2,
+          "elapsedMs": 1.6,
+          "status": "ok"
+        },
+        {
+          "name": "curved_total",
+          "offsetMs": 1778.1,
+          "regionId": 2,
+          "parent": true,
+          "elapsedMs": 92.9,
+          "status": "ok"
+        },
+        {
+          "name": "tps_total",
+          "offsetMs": 1778.1,
+          "regionId": 2,
+          "parent": true,
+          "elapsedMs": 37.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_geometry",
+          "offsetMs": 1778.1,
+          "regionId": 2,
+          "family": "tps",
+          "elapsedMs": 32.2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1810.3,
+          "regionId": 2,
+          "model": 1,
+          "family": "tps",
+          "elapsedMs": 0.2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1810.5,
+          "regionId": 2,
+          "model": 1,
+          "family": "tps",
+          "elapsedMs": 1.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1812.1,
+          "regionId": 2,
+          "model": 2,
+          "family": "tps",
+          "elapsedMs": 0.2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1812.3,
+          "regionId": 2,
+          "model": 2,
+          "family": "tps",
+          "elapsedMs": 1.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1813.9,
+          "regionId": 2,
+          "model": 3,
+          "family": "tps",
+          "elapsedMs": 0.2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1814.1,
+          "regionId": 2,
+          "model": 3,
+          "family": "tps",
+          "elapsedMs": 1.2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_geometry",
+          "offsetMs": 1815.6,
+          "regionId": 2,
+          "family": "cylindrical",
+          "elapsedMs": 51.3,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1866.9,
+          "regionId": 2,
+          "model": 1,
+          "family": "cylindrical",
+          "elapsedMs": 0.1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1867,
+          "regionId": 2,
+          "model": 1,
+          "family": "cylindrical",
+          "elapsedMs": 3.6,
+          "status": "ok"
+        }
+      ],
+      "variants": [
+        {
+          "name": "original",
+          "width": 756,
+          "height": 1008,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "contrast",
+          "width": 756,
+          "height": 1008,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "sharpen",
+          "width": 756,
+          "height": 1008,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "upscale-sharpen",
+          "width": 1512,
+          "height": 2016,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "adaptive-threshold",
+          "width": 756,
+          "height": 1008,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "cylindrical-horizontal",
+          "width": 756,
+          "height": 1008,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "cylindrical-vertical",
+          "width": 756,
+          "height": 1008,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        }
+      ],
+      "regions": [
+        {
+          "id": 1,
+          "box": {
+            "score": 0.9986469149589539,
+            "x": 273.5245061433595,
+            "y": 275.51634102459155,
+            "right": 488.32652699326536,
+            "bottom": 553.0683486904112
+          },
+          "outcome": "undecoded",
+          "covered": false,
+          "curvedAttempted": true,
+          "crop": {
+            "width": 302,
+            "height": 389,
+            "left": 230,
+            "top": 220,
+            "moduleSizeHint": null,
+            "paddingMode": "percentage-fallback"
+          },
+          "curved": {
+            "tps": {
+              "width": 302,
+              "height": 389,
+              "finders": [
+                {
+                  "x": 236.0991452991453,
+                  "y": 201.66666666666666
+                },
+                {
+                  "x": 148.17254901960786,
+                  "y": 272.9764705882353
+                },
+                {
+                  "x": 152.8141993957704,
+                  "y": 114.25679758308156
+                }
+              ],
+              "models": 3,
+              "finderMode": "gray",
+              "moduleSize": 8.06225774829855,
+              "finderGroups": 1,
+              "groupsAttempted": 1,
+              "elapsedMs": 90,
+              "analysisWidth": 302,
+              "analysisHeight": 389,
+              "rescaled": false,
+              "resolutionMode": "base",
+              "moduleSizeHint": null,
+              "attempted": 3,
+              "decoded": 0,
+              "geometryReason": null,
+              "reason": "models-undecodable"
+            },
+            "selectedFamily": "original-fallback",
+            "width": 302,
+            "height": 389,
+            "finders": [
+              {
+                "x": 236.0991452991453,
+                "y": 201.66666666666666
+              },
+              {
+                "x": 148.17254901960786,
+                "y": 272.9764705882353
+              },
+              {
+                "x": 152.8141993957704,
+                "y": 114.25679758308156
+              }
+            ],
+            "models": 56,
+            "finderMode": "gray",
+            "moduleSize": 8.06225774829855,
+            "finderGroups": 1,
+            "groupsAttempted": 1,
+            "elapsedMs": 93,
+            "analysisWidth": 302,
+            "analysisHeight": 389,
+            "rescaled": false,
+            "resolutionMode": "base",
+            "moduleSizeHint": null,
+            "attempted": 12,
+            "decoded": 0,
+            "geometryReason": null,
+            "reason": "models-undecodable"
+          },
+          "curvedDecoded": 0,
+          "reason": "models-undecodable"
+        },
+        {
+          "id": 2,
+          "box": {
+            "score": 0.9511831402778625,
+            "x": 315.92587707669105,
+            "y": 614.1621712161518,
+            "right": 477.2128823733643,
+            "bottom": 756.7286391793452
+          },
+          "outcome": "curved-decoded",
+          "covered": true,
+          "curvedAttempted": true,
+          "crop": {
+            "width": 229,
+            "height": 209,
+            "left": 282,
+            "top": 581,
+            "moduleSizeHint": 5.82141639885766,
+            "paddingMode": "modules"
+          },
+          "curved": {
+            "tps": {
+              "width": 229,
+              "height": 209,
+              "finders": [
+                {
+                  "x": 63.26086956521739,
+                  "y": 141.40434782608696
+                },
+                {
+                  "x": 67.25816993464052,
+                  "y": 67.73856209150327
+                },
+                {
+                  "x": 158.4393442622951,
+                  "y": 154.64262295081969
+                }
+              ],
+              "models": 3,
+              "finderMode": "gray",
+              "moduleSize": 5.82141639885766,
+              "finderGroups": 2,
+              "groupsAttempted": 2,
+              "elapsedMs": 32,
+              "analysisWidth": 229,
+              "analysisHeight": 209,
+              "rescaled": false,
+              "resolutionMode": "module-aware",
+              "moduleSizeHint": 5.82141639885766,
+              "attempted": 3,
+              "decoded": 0,
+              "geometryReason": null,
+              "reason": "models-undecodable"
+            },
+            "selectedFamily": "original-fallback",
+            "width": 229,
+            "height": 209,
+            "finders": [
+              {
+                "x": 63.26086956521739,
+                "y": 141.40434782608696
+              },
+              {
+                "x": 67.25816993464052,
+                "y": 67.73856209150327
+              },
+              {
+                "x": 158.4393442622951,
+                "y": 154.64262295081969
+              }
+            ],
+            "models": 16,
+            "finderMode": "gray",
+            "moduleSize": 5.82141639885766,
+            "finderGroups": 2,
+            "groupsAttempted": 2,
+            "elapsedMs": 51,
+            "analysisWidth": 229,
+            "analysisHeight": 209,
+            "rescaled": false,
+            "resolutionMode": "module-aware",
+            "moduleSizeHint": 5.82141639885766,
+            "reason": null,
+            "geometryReason": null,
+            "attempted": 1,
+            "decoded": 1,
+            "dimension": 21,
+            "axis": 1,
+            "curvature": 0.4,
+            "family": "cylindrical"
+          },
+          "curvedDecoded": 1,
+          "reason": null
+        }
+      ],
+      "codes": [
+        {
+          "id": 1,
+          "source": "wechat-local-curved",
+          "points": [
+            {
+              "x": 324.34759536756,
+              "y": 730.2059403063488
+            },
+            {
+              "x": 328.05347825794377,
+              "y": 621.8704136818683
+            },
+            {
+              "x": 480.28396326128257,
+              "y": 642.6838731188607
+            },
+            {
+              "x": 461.68778352940865,
+              "y": 748.8560903494682
+            }
+          ]
+        }
+      ],
+      "zxingCandidates": [],
+      "detection": {
+        "status": "ok",
+        "sessionRequestedBefore": false,
+        "postprocess": {
+          "confidenceThreshold": 0.20000000298023224,
+          "nmsThreshold": 0.44999998807907104,
+          "topK": 100,
+          "keepTopK": 100,
+          "aboveThresholdValidBoxes": 30,
+          "afterTopK": 30,
+          "visited": 30,
+          "nmsSuppressed": 28,
+          "selected": 2
+        },
+        "inputSize": 400,
+        "anchors": 7806,
+        "candidateCount": 2,
+        "reason": null
+      },
+      "decodedCount": 1,
+      "totalMs": 1871.7,
+      "finishedAt": "2026-10-23T08:39:41.131Z",
+      "unresolvedRegionCount": 1,
+      "failedStageCount": 0
+    }
+  },
+  {
+    "kind": "baseline",
+    "file": "curved/image026.jpg",
+    "count": 0,
+    "record": {
+      "schemaVersion": 2,
+      "startedAt": "2026-10-23T08:39:41.294Z",
+      "filename": "curved/image026.jpg",
+      "fileBytes": 0,
+      "source": null,
+      "run": {},
+      "settings": {
+        "reordered": false,
+        "useTPS": true,
+        "fullVariants": 7,
+        "tryHarder": true,
+        "returnErrors": false,
+        "regionLimit": 8,
+        "curvedRegionLimit": 2,
+        "curvedModelLimit": 12,
+        "geometryBudgetMs": 2000,
+        "tpsExtraGeometryBudgetMs": 2000,
+        "tpsExtraModelLimit": 12
+      },
+      "manualReview": {
+        "missedQRCodeCount": null,
+        "falseCandidateCount": null,
+        "notes": ""
+      },
+      "status": "候选未全部识别",
+      "stages": [
+        {
+          "name": "preprocess_next",
+          "offsetMs": 0,
+          "elapsedMs": 323.9,
+          "status": "ok",
+          "variant": "original",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 324,
+          "variant": "original",
+          "elapsedMs": 145.2,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 469.3,
+          "elapsedMs": 173.6,
+          "status": "ok",
+          "variant": "contrast",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 643,
+          "variant": "contrast",
+          "elapsedMs": 175.7,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 818.8,
+          "elapsedMs": 1471.9,
+          "status": "ok",
+          "variant": "sharpen",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 2290.7,
+          "variant": "sharpen",
+          "elapsedMs": 181.2,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 2472,
+          "elapsedMs": 3590.9,
+          "status": "ok",
+          "variant": "upscale-sharpen",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 6062.9,
+          "variant": "upscale-sharpen",
+          "elapsedMs": 174.2,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 6237.2,
+          "elapsedMs": 340.8,
+          "status": "ok",
+          "variant": "adaptive-threshold",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 6578,
+          "variant": "adaptive-threshold",
+          "elapsedMs": 122.3,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 6700.4,
+          "elapsedMs": 534.6,
+          "status": "ok",
+          "variant": "cylindrical-horizontal",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 7235,
+          "variant": "cylindrical-horizontal",
+          "elapsedMs": 141.2,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 7376.3,
+          "elapsedMs": 676.3,
+          "status": "ok",
+          "variant": "cylindrical-vertical",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 8052.6,
+          "variant": "cylindrical-vertical",
+          "elapsedMs": 159.7,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 8212.4,
+          "elapsedMs": 0.4,
+          "status": "ok",
+          "variant": null,
+          "done": true
+        },
+        {
+          "name": "wechat_init",
+          "offsetMs": 8212.8,
+          "sessionRequestedBefore": true,
+          "elapsedMs": 0,
+          "status": "ok"
+        },
+        {
+          "name": "wechat_prepare",
+          "offsetMs": 8212.8,
+          "inputSize": 400,
+          "elapsedMs": 27.6,
+          "status": "ok"
+        },
+        {
+          "name": "wechat_inference",
+          "offsetMs": 8240.4,
+          "elapsedMs": 15.5,
+          "status": "ok"
+        },
+        {
+          "name": "wechat_postprocess",
+          "offsetMs": 8256,
+          "elapsedMs": 1.1,
+          "status": "ok"
+        },
+        {
+          "name": "region_crop",
+          "offsetMs": 8257.4,
+          "regionId": 1,
+          "elapsedMs": 92.2,
+          "status": "ok"
+        },
+        {
+          "name": "region_read",
+          "offsetMs": 8349.8,
+          "regionId": 1,
+          "elapsedMs": 2.4,
+          "status": "ok"
+        },
+        {
+          "name": "region_decode",
+          "offsetMs": 8352.2,
+          "regionId": 1,
+          "elapsedMs": 7,
+          "status": "ok"
+        },
+        {
+          "name": "curved_total",
+          "offsetMs": 8359.2,
+          "regionId": 1,
+          "parent": true,
+          "elapsedMs": 1161.1,
+          "status": "ok"
+        },
+        {
+          "name": "tps_total",
+          "offsetMs": 8359.4,
+          "regionId": 1,
+          "parent": true,
+          "elapsedMs": 401.4,
+          "status": "ok"
+        },
+        {
+          "name": "curved_geometry",
+          "offsetMs": 8359.4,
+          "regionId": 1,
+          "family": "tps",
+          "elapsedMs": 401.1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_geometry",
+          "offsetMs": 8760.9,
+          "regionId": 1,
+          "family": "cylindrical",
+          "elapsedMs": 669.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 9430.5,
+          "regionId": 1,
+          "step": "source-read",
+          "family": "cylindrical",
+          "elapsedMs": 1.8,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 9432.3,
+          "regionId": 1,
+          "model": 1,
+          "family": "cylindrical",
+          "elapsedMs": 70.2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 9502.5,
+          "regionId": 1,
+          "model": 1,
+          "family": "cylindrical",
+          "elapsedMs": 2.4,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 9505,
+          "regionId": 1,
+          "model": 2,
+          "family": "cylindrical",
+          "elapsedMs": 2.8,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 9507.8,
+          "regionId": 1,
+          "model": 2,
+          "family": "cylindrical",
+          "elapsedMs": 2.7,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 9510.5,
+          "regionId": 1,
+          "model": 3,
+          "family": "cylindrical",
+          "elapsedMs": 2.3,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 9512.8,
+          "regionId": 1,
+          "model": 3,
+          "family": "cylindrical",
+          "elapsedMs": 2.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 9515.4,
+          "regionId": 1,
+          "model": 4,
+          "family": "cylindrical",
+          "elapsedMs": 2.3,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 9517.7,
+          "regionId": 1,
+          "model": 4,
+          "family": "cylindrical",
+          "elapsedMs": 2.3,
+          "status": "ok"
+        }
+      ],
+      "variants": [
+        {
+          "name": "original",
+          "width": 3024,
+          "height": 4032,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "contrast",
+          "width": 3024,
+          "height": 4032,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "sharpen",
+          "width": 3024,
+          "height": 4032,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "upscale-sharpen",
+          "width": 3024,
+          "height": 4032,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "adaptive-threshold",
+          "width": 3024,
+          "height": 4032,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "cylindrical-horizontal",
+          "width": 3024,
+          "height": 4032,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "cylindrical-vertical",
+          "width": 3024,
+          "height": 4032,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        }
+      ],
+      "regions": [
+        {
+          "id": 1,
+          "box": {
+            "score": 0.9993717074394226,
+            "x": 1405.6954303806906,
+            "y": 2171.5890707380527,
+            "right": 1885.9612733748186,
+            "bottom": 2825.1094711049222
+          },
+          "outcome": "undecoded",
+          "covered": false,
+          "curvedAttempted": true,
+          "crop": {
+            "width": 612,
+            "height": 785,
+            "left": 1340,
+            "top": 2106,
+            "moduleSizeHint": 11.57045855125915,
+            "paddingMode": "modules"
+          },
+          "curved": {
+            "tps": {
+              "width": 612,
+              "height": 785,
+              "finders": [
+                {
+                  "x": 139.6901670751405,
+                  "y": 184.8347141229571
+                },
+                {
+                  "x": 496.5676578023509,
+                  "y": 111.81236227534963
+                },
+                {
+                  "x": 181.94697806549723,
+                  "y": 648.5509252021951
+                }
+              ],
+              "models": 0,
+              "finderMode": "local-contrast",
+              "moduleSize": 9.972183534434395,
+              "finderGroups": 1,
+              "groupsAttempted": 1,
+              "reason": "no-accepted-model",
+              "elapsedMs": 396,
+              "analysisWidth": 529,
+              "analysisHeight": 679,
+              "rescaled": true,
+              "resolutionMode": "module-aware",
+              "moduleSizeHint": 11.57045855125915,
+              "attempted": 0,
+              "decoded": 0,
+              "geometryReason": "no-accepted-model"
+            },
+            "selectedFamily": "original-fallback",
+            "width": 612,
+            "height": 785,
+            "finders": [
+              {
+                "x": 139.6901670751405,
+                "y": 184.8347141229571
+              },
+              {
+                "x": 496.5676578023509,
+                "y": 111.81236227534963
+              },
+              {
+                "x": 181.94697806549723,
+                "y": 648.5509252021951
+              }
+            ],
+            "models": 4,
+            "finderMode": "local-contrast",
+            "moduleSize": 9.972183534434395,
+            "finderGroups": 1,
+            "groupsAttempted": 1,
+            "elapsedMs": 663,
+            "analysisWidth": 529,
+            "analysisHeight": 679,
+            "rescaled": true,
+            "resolutionMode": "module-aware",
+            "moduleSizeHint": 11.57045855125915,
+            "attempted": 4,
+            "decoded": 0,
+            "geometryReason": null,
+            "reason": "models-undecodable"
+          },
+          "curvedDecoded": 0,
+          "reason": "models-undecodable"
+        }
+      ],
+      "codes": [],
+      "zxingCandidates": [],
+      "detection": {
+        "status": "ok",
+        "sessionRequestedBefore": true,
+        "postprocess": {
+          "confidenceThreshold": 0.20000000298023224,
+          "nmsThreshold": 0.44999998807907104,
+          "topK": 100,
+          "keepTopK": 100,
+          "aboveThresholdValidBoxes": 14,
+          "afterTopK": 14,
+          "visited": 14,
+          "nmsSuppressed": 13,
+          "selected": 1
+        },
+        "inputSize": 400,
+        "anchors": 7806,
+        "candidateCount": 1,
+        "reason": null
+      },
+      "decodedCount": 0,
+      "totalMs": 9520.5,
+      "finishedAt": "2026-10-23T08:39:50.815Z",
+      "unresolvedRegionCount": 1,
+      "failedStageCount": 0
+    }
+  },
+  {
+    "kind": "candidate",
+    "file": "curved/image017.jpg",
+    "count": 1,
+    "record": {
+      "schemaVersion": 2,
+      "startedAt": "2026-10-23T08:39:50.884Z",
+      "filename": "curved/image017.jpg",
+      "fileBytes": 0,
+      "source": null,
+      "run": {},
+      "settings": {
+        "reordered": false,
+        "useTPS": true,
+        "fullVariants": 7,
+        "tryHarder": true,
+        "returnErrors": false,
+        "decoderRevision": "3.9-gray-retry",
+        "continuousResample": false,
+        "continuousModelLimit": 0,
+        "regionLimit": 8,
+        "curvedRegionLimit": 2,
+        "curvedModelLimit": 12,
+        "geometryBudgetMs": 2000,
+        "tpsExtraGeometryBudgetMs": 2000,
+        "tpsExtraModelLimit": 12
+      },
+      "manualReview": {
+        "missedQRCodeCount": null,
+        "falseCandidateCount": null,
+        "notes": ""
+      },
+      "status": "候选未全部识别",
+      "stages": [
+        {
+          "name": "preprocess_next",
+          "offsetMs": 0.3,
+          "elapsedMs": 28.9,
+          "status": "ok",
+          "variant": "original",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 29.3,
+          "variant": "original",
+          "elapsedMs": 51.4,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 80.8,
+          "elapsedMs": 10.1,
+          "status": "ok",
+          "variant": "contrast",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 90.9,
+          "variant": "contrast",
+          "elapsedMs": 11.7,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 102.6,
+          "elapsedMs": 63.8,
+          "status": "ok",
+          "variant": "sharpen",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 166.5,
+          "variant": "sharpen",
+          "elapsedMs": 10.1,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 176.8,
+          "elapsedMs": 422.6,
+          "status": "ok",
+          "variant": "upscale-sharpen",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 599.5,
+          "variant": "upscale-sharpen",
+          "elapsedMs": 40.6,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 640.2,
+          "elapsedMs": 29.6,
+          "status": "ok",
+          "variant": "adaptive-threshold",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 669.9,
+          "variant": "adaptive-threshold",
+          "elapsedMs": 10,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 679.9,
+          "elapsedMs": 30.6,
+          "status": "ok",
+          "variant": "cylindrical-horizontal",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 710.6,
+          "variant": "cylindrical-horizontal",
+          "elapsedMs": 10.5,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 721.2,
+          "elapsedMs": 48.4,
+          "status": "ok",
+          "variant": "cylindrical-vertical",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 769.6,
+          "variant": "cylindrical-vertical",
+          "elapsedMs": 17.6,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 787.2,
+          "elapsedMs": 0.6,
+          "status": "ok",
+          "variant": null,
+          "done": true
+        },
+        {
+          "name": "wechat_init",
+          "offsetMs": 788.3,
+          "sessionRequestedBefore": false,
+          "elapsedMs": 179.8,
+          "status": "ok"
+        },
+        {
+          "name": "wechat_prepare",
+          "offsetMs": 968.2,
+          "inputSize": 400,
+          "elapsedMs": 9.2,
+          "status": "ok"
+        },
+        {
+          "name": "wechat_inference",
+          "offsetMs": 977.4,
+          "elapsedMs": 18.3,
+          "status": "ok"
+        },
+        {
+          "name": "wechat_postprocess",
+          "offsetMs": 995.8,
+          "elapsedMs": 2,
+          "status": "ok"
+        },
+        {
+          "name": "region_crop",
+          "offsetMs": 998.1,
+          "regionId": 1,
+          "elapsedMs": 124.6,
+          "status": "ok"
+        },
+        {
+          "name": "region_read",
+          "offsetMs": 1122.9,
+          "regionId": 1,
+          "elapsedMs": 0.9,
+          "status": "ok"
+        },
+        {
+          "name": "region_decode",
+          "offsetMs": 1123.9,
+          "regionId": 1,
+          "elapsedMs": 2.4,
+          "status": "ok"
+        },
+        {
+          "name": "curved_total",
+          "offsetMs": 1126.3,
+          "regionId": 1,
+          "parent": true,
+          "elapsedMs": 231.2,
+          "status": "ok"
+        },
+        {
+          "name": "tps_total",
+          "offsetMs": 1126.8,
+          "regionId": 1,
+          "parent": true,
+          "elapsedMs": 102.1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_geometry",
+          "offsetMs": 1126.8,
+          "regionId": 1,
+          "family": "tps",
+          "elapsedMs": 94.4,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1221.2,
+          "regionId": 1,
+          "model": 1,
+          "family": "tps",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1222.2,
+          "regionId": 1,
+          "model": 1,
+          "family": "tps",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1.8,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1224.1,
+          "regionId": 1,
+          "model": 2,
+          "family": "tps",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.4,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1224.5,
+          "regionId": 1,
+          "model": 2,
+          "family": "tps",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1.7,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1226.3,
+          "regionId": 1,
+          "model": 3,
+          "family": "tps",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1226.8,
+          "regionId": 1,
+          "model": 3,
+          "family": "tps",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1.3,
+          "status": "ok"
+        },
+        {
+          "name": "curved_geometry",
+          "offsetMs": 1228.9,
+          "regionId": 1,
+          "family": "cylindrical",
+          "elapsedMs": 101.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1330.4,
+          "regionId": 1,
+          "model": 1,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1331.4,
+          "regionId": 1,
+          "model": 1,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1.9,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1333.3,
+          "regionId": 1,
+          "model": 2,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1333.9,
+          "regionId": 1,
+          "model": 2,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1.4,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1335.4,
+          "regionId": 1,
+          "model": 3,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1335.9,
+          "regionId": 1,
+          "model": 3,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 6.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1342.4,
+          "regionId": 1,
+          "model": 4,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1342.5,
+          "regionId": 1,
+          "model": 4,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1344,
+          "regionId": 1,
+          "model": 5,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1344,
+          "regionId": 1,
+          "model": 5,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1345,
+          "regionId": 1,
+          "model": 6,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1345.1,
+          "regionId": 1,
+          "model": 6,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1.7,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1346.8,
+          "regionId": 1,
+          "model": 7,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1347.3,
+          "regionId": 1,
+          "model": 7,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1.7,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1349.1,
+          "regionId": 1,
+          "model": 8,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.3,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1349.4,
+          "regionId": 1,
+          "model": 8,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1.3,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1350.7,
+          "regionId": 1,
+          "model": 9,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1350.9,
+          "regionId": 1,
+          "model": 9,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1352.4,
+          "regionId": 1,
+          "model": 10,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1352.6,
+          "regionId": 1,
+          "model": 10,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1354.1,
+          "regionId": 1,
+          "model": 11,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.3,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1354.4,
+          "regionId": 1,
+          "model": 11,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1.3,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1355.7,
+          "regionId": 1,
+          "model": 12,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.3,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1356,
+          "regionId": 1,
+          "model": 12,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1.2,
+          "status": "ok"
+        },
+        {
+          "name": "region_crop",
+          "offsetMs": 1357.5,
+          "regionId": 2,
+          "elapsedMs": 18.8,
+          "status": "ok"
+        },
+        {
+          "name": "region_read",
+          "offsetMs": 1376.5,
+          "regionId": 2,
+          "elapsedMs": 0.4,
+          "status": "ok"
+        },
+        {
+          "name": "region_decode",
+          "offsetMs": 1376.9,
+          "regionId": 2,
+          "elapsedMs": 1.4,
+          "status": "ok"
+        },
+        {
+          "name": "curved_total",
+          "offsetMs": 1378.3,
+          "regionId": 2,
+          "parent": true,
+          "elapsedMs": 91.5,
+          "status": "ok"
+        },
+        {
+          "name": "tps_total",
+          "offsetMs": 1378.3,
+          "regionId": 2,
+          "parent": true,
+          "elapsedMs": 38.6,
+          "status": "ok"
+        },
+        {
+          "name": "curved_geometry",
+          "offsetMs": 1378.3,
+          "regionId": 2,
+          "family": "tps",
+          "elapsedMs": 33.7,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1412.1,
+          "regionId": 2,
+          "model": 1,
+          "family": "tps",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1412.2,
+          "regionId": 2,
+          "model": 1,
+          "family": "tps",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1.8,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1414,
+          "regionId": 2,
+          "model": 2,
+          "family": "tps",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1414.1,
+          "regionId": 2,
+          "model": 2,
+          "family": "tps",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1.2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1415.3,
+          "regionId": 2,
+          "model": 3,
+          "family": "tps",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1415.5,
+          "regionId": 2,
+          "model": 3,
+          "family": "tps",
+          "samplingMode": "module-binary",
+          "elapsedMs": 1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_geometry",
+          "offsetMs": 1416.9,
+          "regionId": 2,
+          "family": "cylindrical",
+          "elapsedMs": 50,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 1466.9,
+          "regionId": 2,
+          "model": 1,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 0.2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 1467.1,
+          "regionId": 2,
+          "model": 1,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 2.3,
+          "status": "ok"
+        }
+      ],
+      "variants": [
+        {
+          "name": "original",
+          "width": 756,
+          "height": 1008,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "contrast",
+          "width": 756,
+          "height": 1008,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "sharpen",
+          "width": 756,
+          "height": 1008,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "upscale-sharpen",
+          "width": 1512,
+          "height": 2016,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "adaptive-threshold",
+          "width": 756,
+          "height": 1008,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "cylindrical-horizontal",
+          "width": 756,
+          "height": 1008,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "cylindrical-vertical",
+          "width": 756,
+          "height": 1008,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        }
+      ],
+      "regions": [
+        {
+          "id": 1,
+          "box": {
+            "score": 0.9986469149589539,
+            "x": 273.5245061433595,
+            "y": 275.51634102459155,
+            "right": 488.32652699326536,
+            "bottom": 553.0683486904112
+          },
+          "outcome": "undecoded",
+          "covered": false,
+          "curvedAttempted": true,
+          "crop": {
+            "width": 302,
+            "height": 389,
+            "left": 230,
+            "top": 220,
+            "moduleSizeHint": null,
+            "paddingMode": "percentage-fallback"
+          },
+          "curved": {
+            "tps": {
+              "width": 302,
+              "height": 389,
+              "finders": [
+                {
+                  "x": 236.0991452991453,
+                  "y": 201.66666666666666
+                },
+                {
+                  "x": 148.17254901960786,
+                  "y": 272.9764705882353
+                },
+                {
+                  "x": 152.8141993957704,
+                  "y": 114.25679758308156
+                }
+              ],
+              "models": 3,
+              "finderMode": "gray",
+              "moduleSize": 8.06225774829855,
+              "finderGroups": 1,
+              "groupsAttempted": 1,
+              "elapsedMs": 94,
+              "analysisWidth": 302,
+              "analysisHeight": 389,
+              "rescaled": false,
+              "resolutionMode": "base",
+              "moduleSizeHint": null,
+              "attempted": 3,
+              "continuousAttempted": 0,
+              "decoded": 0,
+              "geometryReason": null,
+              "reason": "models-undecodable"
+            },
+            "selectedFamily": "original-fallback",
+            "width": 302,
+            "height": 389,
+            "finders": [
+              {
+                "x": 236.0991452991453,
+                "y": 201.66666666666666
+              },
+              {
+                "x": 148.17254901960786,
+                "y": 272.9764705882353
+              },
+              {
+                "x": 152.8141993957704,
+                "y": 114.25679758308156
+              }
+            ],
+            "models": 56,
+            "finderMode": "gray",
+            "moduleSize": 8.06225774829855,
+            "finderGroups": 1,
+            "groupsAttempted": 1,
+            "elapsedMs": 101,
+            "analysisWidth": 302,
+            "analysisHeight": 389,
+            "rescaled": false,
+            "resolutionMode": "base",
+            "moduleSizeHint": null,
+            "attempted": 12,
+            "continuousAttempted": 0,
+            "decoded": 0,
+            "geometryReason": null,
+            "reason": "models-undecodable"
+          },
+          "curvedDecoded": 0,
+          "reason": "models-undecodable"
+        },
+        {
+          "id": 2,
+          "box": {
+            "score": 0.9511831402778625,
+            "x": 315.92587707669105,
+            "y": 614.1621712161518,
+            "right": 477.2128823733643,
+            "bottom": 756.7286391793452
+          },
+          "outcome": "curved-decoded",
+          "covered": true,
+          "curvedAttempted": true,
+          "crop": {
+            "width": 229,
+            "height": 209,
+            "left": 282,
+            "top": 581,
+            "moduleSizeHint": 5.82141639885766,
+            "paddingMode": "modules"
+          },
+          "curved": {
+            "tps": {
+              "width": 229,
+              "height": 209,
+              "finders": [
+                {
+                  "x": 63.26086956521739,
+                  "y": 141.40434782608696
+                },
+                {
+                  "x": 67.25816993464052,
+                  "y": 67.73856209150327
+                },
+                {
+                  "x": 158.4393442622951,
+                  "y": 154.64262295081969
+                }
+              ],
+              "models": 3,
+              "finderMode": "gray",
+              "moduleSize": 5.82141639885766,
+              "finderGroups": 2,
+              "groupsAttempted": 2,
+              "elapsedMs": 34,
+              "analysisWidth": 229,
+              "analysisHeight": 209,
+              "rescaled": false,
+              "resolutionMode": "module-aware",
+              "moduleSizeHint": 5.82141639885766,
+              "attempted": 3,
+              "continuousAttempted": 0,
+              "decoded": 0,
+              "geometryReason": null,
+              "reason": "models-undecodable"
+            },
+            "selectedFamily": "original-fallback",
+            "width": 229,
+            "height": 209,
+            "finders": [
+              {
+                "x": 63.26086956521739,
+                "y": 141.40434782608696
+              },
+              {
+                "x": 67.25816993464052,
+                "y": 67.73856209150327
+              },
+              {
+                "x": 158.4393442622951,
+                "y": 154.64262295081969
+              }
+            ],
+            "models": 16,
+            "finderMode": "gray",
+            "moduleSize": 5.82141639885766,
+            "finderGroups": 2,
+            "groupsAttempted": 2,
+            "elapsedMs": 50,
+            "analysisWidth": 229,
+            "analysisHeight": 209,
+            "rescaled": false,
+            "resolutionMode": "module-aware",
+            "moduleSizeHint": 5.82141639885766,
+            "reason": null,
+            "geometryReason": null,
+            "attempted": 1,
+            "continuousAttempted": 0,
+            "samplingMode": "module-binary",
+            "decoded": 1,
+            "dimension": 21,
+            "axis": 1,
+            "curvature": 0.4,
+            "family": "cylindrical"
+          },
+          "curvedDecoded": 1,
+          "reason": null
+        }
+      ],
+      "codes": [
+        {
+          "id": 1,
+          "source": "wechat-local-curved",
+          "points": [
+            {
+              "x": 324.34759536756,
+              "y": 730.2059403063488
+            },
+            {
+              "x": 328.05347825794377,
+              "y": 621.8704136818683
+            },
+            {
+              "x": 480.28396326128257,
+              "y": 642.6838731188607
+            },
+            {
+              "x": 461.68778352940865,
+              "y": 748.8560903494682
+            }
+          ]
+        }
+      ],
+      "zxingCandidates": [],
+      "detection": {
+        "status": "ok",
+        "sessionRequestedBefore": false,
+        "postprocess": {
+          "confidenceThreshold": 0.20000000298023224,
+          "nmsThreshold": 0.44999998807907104,
+          "topK": 100,
+          "keepTopK": 100,
+          "aboveThresholdValidBoxes": 30,
+          "afterTopK": 30,
+          "visited": 30,
+          "nmsSuppressed": 28,
+          "selected": 2
+        },
+        "inputSize": 400,
+        "anchors": 7806,
+        "candidateCount": 2,
+        "reason": null
+      },
+      "decodedCount": 1,
+      "totalMs": 1470.6,
+      "finishedAt": "2026-10-23T08:39:52.355Z",
+      "unresolvedRegionCount": 1,
+      "failedStageCount": 0
+    }
+  },
+  {
+    "kind": "candidate",
+    "file": "curved/image026.jpg",
+    "count": 0,
+    "record": {
+      "schemaVersion": 2,
+      "startedAt": "2026-10-23T08:39:52.405Z",
+      "filename": "curved/image026.jpg",
+      "fileBytes": 0,
+      "source": null,
+      "run": {},
+      "settings": {
+        "reordered": false,
+        "useTPS": true,
+        "fullVariants": 7,
+        "tryHarder": true,
+        "returnErrors": false,
+        "decoderRevision": "3.9-gray-retry",
+        "continuousResample": false,
+        "continuousModelLimit": 0,
+        "regionLimit": 8,
+        "curvedRegionLimit": 2,
+        "curvedModelLimit": 12,
+        "geometryBudgetMs": 2000,
+        "tpsExtraGeometryBudgetMs": 2000,
+        "tpsExtraModelLimit": 12
+      },
+      "manualReview": {
+        "missedQRCodeCount": null,
+        "falseCandidateCount": null,
+        "notes": ""
+      },
+      "status": "候选未全部识别",
+      "stages": [
+        {
+          "name": "preprocess_next",
+          "offsetMs": 0.1,
+          "elapsedMs": 236.1,
+          "status": "ok",
+          "variant": "original",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 236.2,
+          "variant": "original",
+          "elapsedMs": 149.8,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 386.1,
+          "elapsedMs": 173.8,
+          "status": "ok",
+          "variant": "contrast",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 559.9,
+          "variant": "contrast",
+          "elapsedMs": 175.7,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 735.7,
+          "elapsedMs": 1530,
+          "status": "ok",
+          "variant": "sharpen",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 2265.8,
+          "variant": "sharpen",
+          "elapsedMs": 189.2,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 2455,
+          "elapsedMs": 3553.8,
+          "status": "ok",
+          "variant": "upscale-sharpen",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 6008.8,
+          "variant": "upscale-sharpen",
+          "elapsedMs": 182.3,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 6191.1,
+          "elapsedMs": 314.4,
+          "status": "ok",
+          "variant": "adaptive-threshold",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 6505.6,
+          "variant": "adaptive-threshold",
+          "elapsedMs": 135.4,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 6641.1,
+          "elapsedMs": 532.2,
+          "status": "ok",
+          "variant": "cylindrical-horizontal",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 7173.3,
+          "variant": "cylindrical-horizontal",
+          "elapsedMs": 141.8,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 7315.2,
+          "elapsedMs": 661.8,
+          "status": "ok",
+          "variant": "cylindrical-vertical",
+          "done": false
+        },
+        {
+          "name": "full_decode",
+          "offsetMs": 7977.1,
+          "variant": "cylindrical-vertical",
+          "elapsedMs": 147.2,
+          "status": "ok"
+        },
+        {
+          "name": "preprocess_next",
+          "offsetMs": 8124.4,
+          "elapsedMs": 0.5,
+          "status": "ok",
+          "variant": null,
+          "done": true
+        },
+        {
+          "name": "wechat_init",
+          "offsetMs": 8125,
+          "sessionRequestedBefore": true,
+          "elapsedMs": 0,
+          "status": "ok"
+        },
+        {
+          "name": "wechat_prepare",
+          "offsetMs": 8125,
+          "inputSize": 400,
+          "elapsedMs": 12.3,
+          "status": "ok"
+        },
+        {
+          "name": "wechat_inference",
+          "offsetMs": 8137.3,
+          "elapsedMs": 16.1,
+          "status": "ok"
+        },
+        {
+          "name": "wechat_postprocess",
+          "offsetMs": 8153.4,
+          "elapsedMs": 1.4,
+          "status": "ok"
+        },
+        {
+          "name": "region_crop",
+          "offsetMs": 8155.1,
+          "regionId": 1,
+          "elapsedMs": 127.5,
+          "status": "ok"
+        },
+        {
+          "name": "region_read",
+          "offsetMs": 8282.9,
+          "regionId": 1,
+          "elapsedMs": 2.2,
+          "status": "ok"
+        },
+        {
+          "name": "region_decode",
+          "offsetMs": 8285.1,
+          "regionId": 1,
+          "elapsedMs": 9.8,
+          "status": "ok"
+        },
+        {
+          "name": "curved_total",
+          "offsetMs": 8294.9,
+          "regionId": 1,
+          "parent": true,
+          "elapsedMs": 1220.8,
+          "status": "ok"
+        },
+        {
+          "name": "tps_total",
+          "offsetMs": 8294.9,
+          "regionId": 1,
+          "parent": true,
+          "elapsedMs": 422.8,
+          "status": "ok"
+        },
+        {
+          "name": "curved_geometry",
+          "offsetMs": 8294.9,
+          "regionId": 1,
+          "family": "tps",
+          "elapsedMs": 422.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_geometry",
+          "offsetMs": 8717.7,
+          "regionId": 1,
+          "family": "cylindrical",
+          "elapsedMs": 712.8,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 9430.5,
+          "regionId": 1,
+          "step": "source-read",
+          "family": "cylindrical",
+          "elapsedMs": 1.9,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 9432.4,
+          "regionId": 1,
+          "model": 1,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 62.8,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 9495.3,
+          "regionId": 1,
+          "model": 1,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 6.1,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 9501.4,
+          "regionId": 1,
+          "model": 2,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 2.5,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 9503.9,
+          "regionId": 1,
+          "model": 2,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 2.2,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 9506.1,
+          "regionId": 1,
+          "model": 3,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 2.3,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 9508.4,
+          "regionId": 1,
+          "model": 3,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 2.4,
+          "status": "ok"
+        },
+        {
+          "name": "curved_resample",
+          "offsetMs": 9510.8,
+          "regionId": 1,
+          "model": 4,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 2.4,
+          "status": "ok"
+        },
+        {
+          "name": "curved_decode",
+          "offsetMs": 9513.2,
+          "regionId": 1,
+          "model": 4,
+          "family": "cylindrical",
+          "samplingMode": "module-binary",
+          "elapsedMs": 2.2,
+          "status": "ok"
+        }
+      ],
+      "variants": [
+        {
+          "name": "original",
+          "width": 3024,
+          "height": 4032,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "contrast",
+          "width": 3024,
+          "height": 4032,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "sharpen",
+          "width": 3024,
+          "height": 4032,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "upscale-sharpen",
+          "width": 3024,
+          "height": 4032,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "adaptive-threshold",
+          "width": 3024,
+          "height": 4032,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "cylindrical-horizontal",
+          "width": 3024,
+          "height": 4032,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        },
+        {
+          "name": "cylindrical-vertical",
+          "width": 3024,
+          "height": 4032,
+          "preprocessBackend": "worker",
+          "readerBackend": "worker",
+          "uniqueBefore": 0,
+          "status": "ok",
+          "decoded": 0,
+          "rawResultCount": 0,
+          "reason": "no-valid-result",
+          "uniqueAfter": 0,
+          "failedCandidates": []
+        }
+      ],
+      "regions": [
+        {
+          "id": 1,
+          "box": {
+            "score": 0.9993717074394226,
+            "x": 1405.6954303806906,
+            "y": 2171.5890707380527,
+            "right": 1885.9612733748186,
+            "bottom": 2825.1094711049222
+          },
+          "outcome": "undecoded",
+          "covered": false,
+          "curvedAttempted": true,
+          "crop": {
+            "width": 612,
+            "height": 785,
+            "left": 1340,
+            "top": 2106,
+            "moduleSizeHint": 11.57045855125915,
+            "paddingMode": "modules"
+          },
+          "curved": {
+            "tps": {
+              "width": 612,
+              "height": 785,
+              "finders": [
+                {
+                  "x": 139.6901670751405,
+                  "y": 184.8347141229571
+                },
+                {
+                  "x": 496.5676578023509,
+                  "y": 111.81236227534963
+                },
+                {
+                  "x": 181.94697806549723,
+                  "y": 648.5509252021951
+                }
+              ],
+              "models": 0,
+              "finderMode": "local-contrast",
+              "moduleSize": 9.972183534434395,
+              "finderGroups": 1,
+              "groupsAttempted": 1,
+              "reason": "no-accepted-model",
+              "elapsedMs": 417,
+              "analysisWidth": 529,
+              "analysisHeight": 679,
+              "rescaled": true,
+              "resolutionMode": "module-aware",
+              "moduleSizeHint": 11.57045855125915,
+              "attempted": 0,
+              "continuousAttempted": 0,
+              "decoded": 0,
+              "geometryReason": "no-accepted-model"
+            },
+            "selectedFamily": "original-fallback",
+            "width": 612,
+            "height": 785,
+            "finders": [
+              {
+                "x": 139.6901670751405,
+                "y": 184.8347141229571
+              },
+              {
+                "x": 496.5676578023509,
+                "y": 111.81236227534963
+              },
+              {
+                "x": 181.94697806549723,
+                "y": 648.5509252021951
+              }
+            ],
+            "models": 4,
+            "finderMode": "local-contrast",
+            "moduleSize": 9.972183534434395,
+            "finderGroups": 1,
+            "groupsAttempted": 1,
+            "elapsedMs": 707,
+            "analysisWidth": 529,
+            "analysisHeight": 679,
+            "rescaled": true,
+            "resolutionMode": "module-aware",
+            "moduleSizeHint": 11.57045855125915,
+            "attempted": 4,
+            "continuousAttempted": 0,
+            "decoded": 0,
+            "geometryReason": null,
+            "reason": "models-undecodable"
+          },
+          "curvedDecoded": 0,
+          "reason": "models-undecodable"
+        }
+      ],
+      "codes": [],
+      "zxingCandidates": [],
+      "detection": {
+        "status": "ok",
+        "sessionRequestedBefore": true,
+        "postprocess": {
+          "confidenceThreshold": 0.20000000298023224,
+          "nmsThreshold": 0.44999998807907104,
+          "topK": 100,
+          "keepTopK": 100,
+          "aboveThresholdValidBoxes": 14,
+          "afterTopK": 14,
+          "visited": 14,
+          "nmsSuppressed": 13,
+          "selected": 1
+        },
+        "inputSize": 400,
+        "anchors": 7806,
+        "candidateCount": 1,
+        "reason": null
+      },
+      "decodedCount": 0,
+      "totalMs": 9516,
+      "finishedAt": "2026-10-23T08:39:59.718Z",
+      "unresolvedRegionCount": 1,
+      "failedStageCount": 0
+    }
+  }
+]

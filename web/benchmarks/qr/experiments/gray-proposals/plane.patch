@@ -1,0 +1,68 @@
+--- js/curved-region.js
++++ js/curved-region.js
+@@ -431,6 +431,32 @@
+             if (performance.now() > groupDeadline) { diagnostics.groupBudgetLimited = (diagnostics.groupBudgetLimited || 0) + 1; break; }
+             const ideal = idealPoints(n), flat = flatMap(ideal, observed, n, width);
+             if (!flat) continue;
++            if(limits.grayProposalOnly){
++                if(!dimensions.slice(0,10).includes(n))continue;
++                if(!validateTPS(flat,n,width,height))continue;
++                let squareError=0;
++                ideal.forEach((p,i)=>{squareError+=distance(flat(p.x,p.y),observed[i])**2;});
++                const rms=Math.sqrt(squareError/ideal.length);
++                if(rms>moduleSize*.8)continue;
++                const samples=sampleGrid(flat,normalized,width,height,n);
++                if(!samples)continue;
++                let timing=0,formatErrors=30;
++                for(const cutoff of [.4,.5,.6,.7]){
++                    let correct=0,total=0;
++                    for(let i=8;i<n-8;i++){
++                        correct+=Number((samples[6*n+i]<cutoff)===(i%2===0));
++                        correct+=Number((samples[i*n+6]<cutoff)===(i%2===0));total+=2;
++                    }
++                    timing=Math.max(timing,correct/total);
++                    const info=formatInformation(samples,n,cutoff);
++                    if(info)formatErrors=Math.min(formatErrors,info[0].errors+info[1].errors);
++                }
++                if(timing<.55)continue;
++                models.push({dimension:n,curvature:0,axis:null,cutoff:.5,timing,rms,
++                    score:timing-.15*rms/moduleSize-.005*formatErrors,samples,map:flat,
++                    groupIndex,moduleSize,finders,family:'planar-gray-proposal'});
++                await sleepTick();continue;
++            }
+             const predicted = flat(n - 6.5, n - 6.5);
+             let alignment = null, best = Infinity;
+             for (const a of alignments) {
+@@ -644,8 +670,8 @@
+     };
+     let attempted = 0, continuousAttempted = 0, sourceGray = null;
+     // Keep the original decoding order, then retry at most three fitted models.
+-    const queue = models.map(model => ({model, samplingMode:'module-binary'}));
+-    if (options.continuousResample) queue.push(...models.slice(0, 3)
++    const queue = options.grayProposalOnly?[]:models.map(model => ({model, samplingMode:'module-binary'}));
++    if (options.continuousResample) queue.push(...models.slice(0, options.grayProposalOnly?6:3)
+         .map(model => ({model, samplingMode:'continuous-gray'})));
+     for (const {model, samplingMode} of queue) {
+         const resampleEnd=trace?.start('curved_resample',{regionId:options.regionId,model:attempted+1,family,samplingMode});
+--- js/wechat-decoder.js
++++ js/wechat-decoder.js
+@@ -160,11 +160,18 @@
+                 return result;
+             });
+             report('curved','正在校正第 '+curvedAttempted+' 个区域…');
+-            const corrected=await measureQR(trace,'curved_total',{regionId:id,parent:true},()=>
++            let corrected=await measureQR(trace,'curved_total',{regionId:id,parent:true},()=>
+                 decodeCurvedRegion(canvas,{maxPixels:360000,maxModels:12,geometryMs:2000,
+                     continuousResample:true,
+                     moduleSizeHint:crop.moduleSizeHint,trace,regionId:id,statistics:record.curved,
+                     useTPS:options.useTPS===true}));
++            if(!corrected.length){
++                record.planar={};
++                corrected=await measureQR(trace,'planar_total',{regionId:id,parent:true},()=>
++                    decodeCurvedRegion(canvas,{maxPixels:360000,maxModels:6,geometryMs:1200,
++                        continuousResample:true,grayProposalOnly:true,
++                        moduleSizeHint:crop.moduleSizeHint,trace,regionId:id,statistics:record.planar}));
++            }
+             decoded.push(...corrected.map(qr=>translateResult(qr,crop.left,crop.top)));
+             Object.assign(record,{outcome:covered(box)?'curved-decoded':'undecoded',
+                 curvedDecoded:corrected.length,reason:covered(box)?null:record.curved.reason||'not-covered'});

@@ -1,5 +1,6 @@
 import {readBarcodes,getReaderBackend} from './reader-client.js';
-import { measureQR } from './qr-statistics.js';
+import { measureQR, normalizeQROptions } from './qr-statistics.js';
+import { iterateBackgroundVariants } from './preprocess-client.js';
 import { report } from "./runtime-status.js";
 import {
     decodeWechatFallback, isRegionCovered
@@ -220,11 +221,12 @@ function recordCoverage(trace, codes) {
     }
 }
 export async function decodeQRCode(
-    variants,
     sourceCanvas,
     trace = null,
     options = {}
 ) {
+    options = normalizeQROptions(options);
+    const variants = iterateBackgroundVariants(sourceCanvas,{originalOnly:true});
     const decoded = [];
     const candidates = [];
 
@@ -267,9 +269,9 @@ export async function decodeQRCode(
                 error
             );
         } finally {if(variant.releaseAfterDecode)variant.imageData=null;}
-        // Yield between passes; do not stop after finding one code in a multi-code image.
+        // One independent full-image pass; continue searching in WeChat regions below.
         await new Promise(resolve=>setTimeout(resolve,0));
-        if(options.reordered)break;
+        break;
     }
 
     const uniqueDecoded = deduplicateResults(decoded);

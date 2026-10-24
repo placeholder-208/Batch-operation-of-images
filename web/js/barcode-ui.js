@@ -3,7 +3,7 @@ import { createFileImport } from './file-import.js';
 import { createTileList, prepareThumbnail, disposeThumbnail, bindBatchNavigation } from './thumbnail-list.js';
 import { $, downloadBlob } from './ui.js';
 import { processFile, canvasToBlob } from './image.js';
-import { iterateBackgroundVariants as createDecodeVariants } from './preprocess-client.js';
+import { iterateBackgroundVariants } from './preprocess-client.js';
 import { decodeBarcodes, cropBarcode, bounds } from './barcode-decoder.js';
 import { barcodeCSV, barcodeZIP } from './barcode-export.js';
 import { containsPoint } from './barcode-geometry.js';
@@ -78,7 +78,7 @@ export function createBarcodeUI(actions) {
     function add(files){return importer.add(files);}
     async function scan(){if(blocked())return;const pending=items.filter(v=>!v.result);if(!pending.length)return;busy=true;actions.onBusy(true);refresh();let count=0,failed=0;
         try{await actions.prepare();for(let i=0;i<pending.length;i++){const item=pending[i];item.processing=true;item.error=null;tell('正在识别 '+(i+1)+' / '+pending.length+'：'+item.file.name);refresh();let source;
-            try{source=await processFile(item.file);const codes=await decodeBarcodes(createDecodeVariants(source.canvas,{curved:false}),text=>{$('barcodeEngine').textContent=text;},source.canvas);const crops=[];
+            try{source=await processFile(item.file);const codes=await decodeBarcodes(iterateBackgroundVariants(source.canvas),text=>{$('barcodeEngine').textContent=text;},source.canvas);const crops=[];
                 for(const code of codes)try{const crop=cropBarcode(source.canvas,code);crops.push(await storeCrop(crop,code.id));}catch(error){console.warn('条形码裁切失败',error);}
                 releaseCrops(item.result);item.result={filename:item.file.name,barcodes:codes,crops};count+=codes.length;
             }catch(error){failed++;item.error=error.message;}finally{if(source)source.canvas.width=source.canvas.height=1;item.processing=false;const percent=Math.round((i+1)/pending.length*100);$('barcodeBar').style.width=percent+'%';$('barcodeProgress').setAttribute('aria-valuenow',String(percent));refresh();}}
