@@ -39,4 +39,14 @@ web/
 
 `.assetsignore` 排除测试数据、评估工具、开发配置与文档；不要删除模型、WASM、PDF.js 字库或供应商许可证。部署、推送和提交由开发者自行执行。
 
+### 部署后首页异常
+
+Cloudflare Git 集成的 Root directory 应为 `web`，部署命令为 `npx wrangler deploy --config wrangler.jsonc`，由该目录的配置同时部署 Worker 和静态资源。不要只上传 `worker.js`，也不要用普通文本变量代替 `assets.binding`。
+
+上线后可直接打开 `/api/deployment-status` 自检。正常返回 `revision: assets-check-2026-10-24`、`assetsBinding: true`、`homepageStatus: 200` 和 `ok: true`。该接口仅读取静态首页，不调用外部 API，不读取或输出密钥、口令、图片或识别内容。`assets-binding-missing` 表示部署中没有可调用的 ASSETS 绑定；`assets-fetch-failed` 表示绑定调用异常；`assets-homepage-unavailable` 表示绑定返回了非 200 的首页响应，结合 `homepageStatus` 检查静态目录。自检正常仅证明当前 Worker 可读取首页，不代表已验证所有前端资源。
+
+静态资源入口的绑定缺失或调用异常现在返回明确的 503 诊断代码，完整原因应查服务端日志。配置已启用 Workers Logs，重新部署后生效；Live 实时日志与保存的 Workers Logs 是不同功能。如果自检仍返回 Cloudflare 1101 HTML，而没有上述 JSON，异常可能发生在处理函数执行之前或平台内部，不能仅凭 1101 判断为绑定缺失。
+
+部署入口检查：`node --experimental-default-type=module --test benchmarks/worker/deployment.test.mjs`。这是路由与异常处理的本地模拟检查，不代替 Cloudflare 线上验证。
+
 QR 评估与当前测试说明见 [benchmarks/qr/README.md](benchmarks/qr/README.md)。分割模型评估见 [benchmarks/segmentation/README.md](benchmarks/segmentation/README.md)。
