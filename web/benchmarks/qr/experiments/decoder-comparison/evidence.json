@@ -1,0 +1,239 @@
+{
+  "images": 95,
+  "targets": 123,
+  "productMatched": 112,
+  "readers": [
+    {
+      "name": "zxing-cpp",
+      "version": "3.1.4",
+      "wholeMatched": 68,
+      "regionsMatched": 78,
+      "combinedMatched": 78,
+      "addedToProduct": 0,
+      "combinedUnmatched": 0,
+      "wholeDecodeMs": 4391.276413000016,
+      "regionsDecodeMs": 1962.0716009999908,
+      "runtimeErrors": 0
+    },
+    {
+      "name": "jsqr",
+      "version": "1.4.0",
+      "wholeMatched": 27,
+      "regionsMatched": 59,
+      "combinedMatched": 59,
+      "addedToProduct": 0,
+      "combinedUnmatched": 0,
+      "wholeDecodeMs": 71691.069736,
+      "regionsDecodeMs": 38367.21431300011,
+      "runtimeErrors": 0
+    },
+    {
+      "name": "zbar",
+      "version": "0.11.0",
+      "wholeMatched": 44,
+      "regionsMatched": 63,
+      "combinedMatched": 63,
+      "addedToProduct": 0,
+      "combinedUnmatched": 0,
+      "wholeDecodeMs": 24644.07008999997,
+      "regionsDecodeMs": 14593.61452000001,
+      "runtimeErrors": 0
+    },
+    {
+      "name": "quirc",
+      "version": "1.0.0-alpha.4",
+      "wholeMatched": 28,
+      "regionsMatched": 52,
+      "combinedMatched": 52,
+      "addedToProduct": 0,
+      "combinedUnmatched": 0,
+      "wholeDecodeMs": 6273.361243999939,
+      "regionsDecodeMs": 3518.994012999986,
+      "runtimeErrors": 0
+    },
+    {
+      "name": "zxing-js",
+      "version": "0.23.0",
+      "wholeMatched": 30,
+      "regionsMatched": 60,
+      "combinedMatched": 60,
+      "addedToProduct": 0,
+      "combinedUnmatched": 0,
+      "wholeDecodeMs": 22129.566037999968,
+      "regionsDecodeMs": 8995.561943000052,
+      "runtimeErrors": 0
+    },
+    {
+      "name": "zxing-cpp-new",
+      "version": "3.1.6",
+      "wholeMatched": 68,
+      "regionsMatched": 78,
+      "combinedMatched": 78,
+      "addedToProduct": 0,
+      "combinedUnmatched": 0,
+      "wholeDecodeMs": 4276.731391000001,
+      "regionsDecodeMs": 1656.6525950000046,
+      "runtimeErrors": 0
+    }
+  ],
+  "nativeGrids": [
+    {
+      "route": "zxing-cpp/rendered-image",
+      "grids": 61,
+      "decoded": 24,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "jsqr/rendered-image",
+      "grids": 61,
+      "decoded": 25,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "zbar/rendered-image",
+      "grids": 61,
+      "decoded": 25,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "quirc/rendered-image",
+      "grids": 61,
+      "decoded": 25,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "zxing-js/rendered-image",
+      "grids": 61,
+      "decoded": 26,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "zxing-cpp-new/rendered-image",
+      "grids": 61,
+      "decoded": 24,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "zxing-cpp/cpp-pure-rendered",
+      "grids": 61,
+      "decoded": 27,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "zxing-cpp-new/cpp-pure-rendered",
+      "grids": 61,
+      "decoded": 27,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "quirc/direct-grid",
+      "grids": 61,
+      "decoded": 28,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "zxing-js/direct-grid",
+      "grids": 61,
+      "decoded": 28,
+      "runtimeErrors": 0
+    }
+  ],
+  "generated": [
+    {
+      "route": "zxing-cpp/rendered-image",
+      "regions": 11,
+      "decoded": 0,
+      "attempts": 2729,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "jsqr/rendered-image",
+      "regions": 11,
+      "decoded": 0,
+      "attempts": 2729,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "zbar/rendered-image",
+      "regions": 11,
+      "decoded": 0,
+      "attempts": 2729,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "quirc/rendered-image",
+      "regions": 11,
+      "decoded": 0,
+      "attempts": 2729,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "zxing-js/rendered-image",
+      "regions": 11,
+      "decoded": 0,
+      "attempts": 2729,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "zxing-cpp/cpp-pure-rendered",
+      "regions": 11,
+      "decoded": 0,
+      "attempts": 2729,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "quirc/direct-grid",
+      "regions": 11,
+      "decoded": 0,
+      "attempts": 2678,
+      "runtimeErrors": 0
+    },
+    {
+      "route": "zxing-js/direct-grid",
+      "regions": 11,
+      "decoded": 0,
+      "attempts": 2678,
+      "runtimeErrors": 0
+    }
+  ],
+  "ensemble": {
+    "withoutProductMatched": 81,
+    "matched": 112,
+    "unmatched": 0
+  },
+  "sources": [
+    {
+      "file": "local-decoders-whole.jsonl",
+      "sha256": "3f19853ae67340fd787cf8b96ad95a7f705ced6c456fa91cb79cbd389964bb8f"
+    },
+    {
+      "file": "local-decoders-whole-new-cpp.jsonl",
+      "sha256": "89e5a0766b3012dab093b40672b1103de88621c8d11c47ecae5d00dbe15d7758"
+    },
+    {
+      "file": "local-decoders-regions.jsonl",
+      "sha256": "75c9c363b2d4cf613f3751f9d54020499d89369fcce80a2a51842560db0ece7f"
+    },
+    {
+      "file": "local-decoders-regions-quirc-corrected.jsonl",
+      "sha256": "4c159374bff1d5e5f6639843951b6957ce9322834e81dd66d3cf07628d10e59c"
+    },
+    {
+      "file": "local-decoders-regions-new-cpp.jsonl",
+      "sha256": "249e8fe8728e854010c2ed5975dc96fc318750f982e75b6cb205b6cb8c25e5b3"
+    },
+    {
+      "file": "local-decoders-native-grids.jsonl",
+      "sha256": "30d2e75fe7c8b52313f6bf39b37243ba316666a6f6a86720eea3595072c9efd3"
+    },
+    {
+      "file": "local-decoders-generated.jsonl",
+      "sha256": "f03ed2f229ae71cae58bee9d496e8897bc7992f1a25a01ab09dd751e76511a31"
+    }
+  ],
+  "nativeGridsTotal": 61,
+  "nativeImages": 95,
+  "nativeConflictingHashes": 0,
+  "generatedRegions": 11,
+  "generatedEqualInputs": true
+}

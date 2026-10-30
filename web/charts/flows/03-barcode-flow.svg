@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2050" height="1030" viewBox="0 0 2050 1030" role="img">
+<title>条形码识别与裁剪</title>
+<defs><marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 11 5.5 L 0 11 z" fill="#627b74"/></marker></defs>
+<style>
+text{font-family:"Microsoft YaHei","SimHei","Noto Sans CJK SC",sans-serif}
+.title{font-size:39px;font-weight:700;fill:#173a32}
+.node{font-size:25px;font-weight:600;fill:#183d34;text-anchor:middle}
+.white{fill:white}
+.edge-label{font-size:20px;font-weight:700;fill:#45645b;text-anchor:middle}
+.note{font-size:20px;fill:#657b74}
+</style>
+<rect width="100%" height="100%" fill="#fcfdfb"/>
+<rect width="100%" height="10" fill="#197866"/>
+<text class="title" x="70" y="77">条形码识别与裁剪</text>
+
+<rect x="50" y="164" width="310" height="112" rx="17" fill="#f5f8f6" stroke="#90aaa0" stroke-width="2.5"/>
+<text class="node" x="205" y="211.5" style="font-size:25px">文件导入与图像增强</text>
+<text class="node" x="205" y="244.5" style="font-size:25px">同二维码共用处理</text>
+<rect x="465" y="164" width="270" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="600" y="228" style="font-size:25px">补充旋转版本</text>
+<rect x="835" y="164" width="310" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="990" y="228" style="font-size:25px">ZXing 一维码解码</text>
+<polygon points="1390,142 1517.5,220 1390,298 1262.5,220" fill="#fff4df" stroke="#cf9c43" stroke-width="2.5"/>
+<text class="node" x="1390" y="228" style="font-size:23px">有有效结果？</text>
+<rect x="1640" y="164" width="300" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1790" y="228" style="font-size:25px">映射原图坐标</text>
+<polyline points="360,220 465,220" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="735,220 835,220" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1145,220 1263,220" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1518,220 1640,220" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1575" y="192">是</text>
+<polygon points="1790,408 1922.5,490 1790,572 1657.5,490" fill="#fff4df" stroke="#cf9c43" stroke-width="2.5"/>
+<text class="node" x="1790" y="483" style="font-size:23px">条形码定位框</text>
+<text class="node" x="1790" y="513" style="font-size:23px">呈细条状？</text>
+<polyline points="1790,276 1790,408" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1250" y="434" width="280" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1390" y="498" style="font-size:25px">估计条纹范围</text>
+<polyline points="1658,490 1530,490" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1595" y="463">是</text>
+<polygon points="990,408 1122.5,490 990,572 857.5,490" fill="#fff4df" stroke="#cf9c43" stroke-width="2.5"/>
+<text class="node" x="990" y="498" style="font-size:23px">扩展证据可靠？</text>
+<polyline points="1250,490 1123,490" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="462.5" y="434" width="275" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="600" y="498" style="font-size:25px">采用修正范围</text>
+<polyline points="858,490 738,490" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="798" y="462">是</text>
+<rect x="825" y="704" width="330" height="112" rx="17" fill="#f5f8f6" stroke="#90aaa0" stroke-width="2.5"/>
+<text class="node" x="990" y="768" style="font-size:25px">保留原框并提示检查</text>
+<polyline points="990,572 990,704" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1025" y="650">否</text>
+<rect x="435" y="704" width="330" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="600" y="768" style="font-size:25px">空间去重与冲突提示</text>
+<polyline points="600,546 600,704" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="825,760 765,760" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1923,490 1985,490 1985,900 600,900 600,816" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1955" y="665">否</text>
+<rect x="50" y="704" width="310" height="112" rx="17" fill="#176d5e" stroke="#176d5e" stroke-width="2.5"/>
+<text class="node white" x="205" y="751.5" style="font-size:25px">结果预览与批量导出</text>
+<text class="node white" x="205" y="784.5" style="font-size:25px">同二维码共用处理</text>
+<polyline points="435,760 360,760" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1240" y="315" width="300" height="70" rx="17" fill="#f5f8f6" stroke="#90aaa0" stroke-width="2.5"/>
+<text class="node" x="1390" y="358" style="font-size:25px">记录未识别／异常</text>
+<polyline points="1390,298 1390,315" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1430" y="313">否</text>
+<text class="note" x="75" y="990">共用导入、增强与导出能力；条形码单独执行一维码解码、条纹范围修正及结果冲突处理。</text>
+</svg>

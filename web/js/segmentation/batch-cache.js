@@ -36,7 +36,7 @@ export function createMaskCache(maxBytes=128*1024*1024){
   importEntries(saved){
    for(const entry of saved||[]){
     const metadata=entry?.metadata,count=metadata?.width*metadata?.height,candidates=metadata?.candidates;
-    if(!Number.isSafeInteger(entry?.id)||entry.id<1||!Number.isSafeInteger(entry.revision)||entry.revision<1||!(entry.blob instanceof Blob)||!Number.isSafeInteger(count)||count<1||count>1024*1024||!Array.isArray(candidates)||!candidates.length||candidates.length>8||!Array.isArray(metadata.order))throw new Error('保存的蒙版缓存格式无效');
+    if(!Number.isSafeInteger(entry?.id)||entry.id<1||!Number.isSafeInteger(entry.revision)||entry.revision<1||!(entry.blob instanceof Blob)||!Number.isSafeInteger(count)||count<1||count>1024*1024||!Array.isArray(candidates)||!candidates.length||candidates.length>8||!Array.isArray(metadata.order)||![undefined,'logits','alpha'].includes(metadata.valueType))throw new Error('保存的蒙版缓存格式无效');
     if(entry.gzip&&typeof DecompressionStream==='undefined')throw new Error('此浏览器无法恢复压缩蒙版，请使用支持解压的新版浏览器');
     if(!entry.gzip&&entry.blob.size!==count*candidates.length*4)throw new Error('保存的蒙版缓存尺寸无效');
     insert(entry.id,{revision:entry.revision,metadata:structuredClone({...metadata,cacheRevision:entry.revision}),blob:entry.blob,gzip:Boolean(entry.gzip)});

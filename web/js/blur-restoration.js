@@ -7,6 +7,7 @@ export const RESTORATION_LIMITS=Object.freeze({baseEdge:384,maxEdge:448,detailed
 const gaussian=[1,1.5,2,2.5,3].map(sigma=>({sigma,regularization:.01}));
 const filters=[...gaussian];
 for(const length of [5,9,13])for(const angle of [0,45,90,135])filters.push({length,angle,sigma:.6,regularization:.02});
+export const restorationFilters=()=>filters.map(config=>({...config}));
 
 export async function decodeBlurredRegion(sourceCanvas,crop,{trace,regionId,statistics={},budgetMs=1500,
  detailedRecovery=false,accept=()=>true}={}){

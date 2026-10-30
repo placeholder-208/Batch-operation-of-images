@@ -1,12 +1,14 @@
+import {setBatchSize} from '../thumbnail-list.js';
 import { createEditCache } from './edit-cache.js';
 import { createThumbnailItem, updateThumbnailItem, prepareThumbnail, disposeThumbnail } from '../thumbnail-list.js';
 import { workspaceTemplate } from './workspace-template.js';
 import { createMaskCache, csvCell } from './batch-cache.js';
-import { interpolatedAlpha, paintStrokes, applyAlphaRGBA } from './postprocess.js';
+import { paintStrokes, applyAlphaRGBA } from './postprocess.js';
+import { maskAlpha } from './alpha-utils.js';
 import { createMaskBrush } from './mask-brush.js';
 import { createMagnifier } from './magnifier.js';
 import { findSmallRegions, applyRegionRemoval } from './region-cleanup.js';
-import { encodeImage, releaseEncoding, segmentBox } from './inference-client.js';
+import { encodeImage, releaseEncoding, segmentBox, mattePortrait } from './inference-client.js';
 import { normalizedBox, maskBounds, cropRelativePrompts, intersectBox } from './mask-utils.js';
 import { hitBox, boxCursor, editBox } from './box-editor.js';
 export function createSamWorkspace(actions) {
@@ -27,7 +29,7 @@ const brush=createMaskBrush({canvas:resultCanvas,container:$('previewStage'),isB
     readRadius:()=>Number($('brushRadius').value),readMode:()=>$('brushMode').value,
     readTool:()=>$('brushTool').value,onStatus:tell,
     getAlpha:()=>({alpha:editedAlpha(segmentation.width,segmentation.height),width:segmentation.width,height:segmentation.height}),
-    onMode:mode=>{$('brushMode').value=mode;brushLens.refresh();tell(mode==='add'?'画笔：增加保留区域。':'画笔：删除保留区域。');},
+    onMode:mode=>{$('brushMode').value=mode;$('brushMode').dispatchEvent(new Event('input',{bubbles:true}));brushLens.refresh();tell(mode==='add'?'画笔：增加保留区域。':'画笔：删除保留区域。');},
     onChange:render,onHistory:refresh});
 const pointLens=createMagnifier({canvas,isEnabled:()=>$('magnify').checked,
     isAvailable:()=>!root.hidden&&!blocked()&&Boolean(bitmap)&&['positive','negative'].includes($('mode').value),
@@ -48,7 +50,16 @@ function refresh(){
     if(blocked()){pointLens.hide();brushLens.hide();}
     for(const id of ['choose','chooseEmpty','file','mode','undo','clear','clearPrompt','overlay','tight'])$(id).disabled=blocked();
     $('segment').disabled=blocked()||brush.isDrawing()||!bitmap;
+    $('engine').disabled=blocked()||brush.isDrawing();
+    const portrait=$('engine').value==='modnet',alphaResult=segmentation?.valueType==='alpha';
+    root.dataset.resultType=segmentation?.valueType||'logits';
+    const running=busy||batchBusy;
+    if(root.dataset.running!==String(running)){root.dataset.running=String(running);root.dispatchEvent(new CustomEvent('studio:taskchange'));}
+    $('engineHelp').textContent=portrait?'人物模式约 26 MB，按需加载。仅白框限定输入；蓝框与提示点不参与推理，可能保留多个人物。切换模式后须点击生成，已有结果保留。':'通用模式支持蓝框、保留点和排除点。批量生成使用当前模式，跳过已有结果。';
+    for(const option of $('mode').options)option.disabled=portrait&&option.value!=='box';
+    if(portrait)$('mode').value='box';
     for(const id of ['candidate','threshold','invert','smooth','download','maskDownload','diagnostic','brushTool','brushMode','brushRadius'])$(id).disabled=blocked()||brush.isDrawing()||!segmentation;
+    if(alphaResult)for(const id of ['candidate','threshold','smooth'])$(id).disabled=true;
     for(const id of ['curveUndo','curveClear'])$(id).disabled=blocked()||brush.isDrawing()||!brush.getShapes().length;
     $('curveInfo').textContent=brush.getShapes().length+' 个图形 · 最多 30 个 · 互不重叠';
     $('circleTools').hidden=$('brushTool').value==='curve';$('curveTools').hidden=$('brushTool').value!=='curve';
@@ -56,6 +67,7 @@ function refresh(){
     for(const id of ['minArea','cleanAreas'])$(id).disabled=blocked()||brush.isDrawing()||!segmentation;
     $('undoAreas').disabled=blocked()||brush.isDrawing()||!areaCleanup;
     $('undo').disabled=blocked()||!points.length;
+    if(portrait){$('undo').disabled=true;$('clearPrompt').disabled=true;}
     for(const id of ['batchGenerate','batchZip','batchApply','removeImage','clearBatch','batchFormat'])$(id).disabled=blocked()||brush.isDrawing()||!records.length;
     $('batchApply').disabled=blocked()||brush.isDrawing()||!segmentation;
     $('batchZip').disabled=blocked()||brush.isDrawing()||!records.some(record=>record.hasResult);
@@ -64,9 +76,11 @@ function refresh(){
     const lock=busy||batchBusy;
     if(lock!==publishedBusy){publishedBusy=lock;actions.onBusy?.(lock);}
     refreshList();refreshNavigation();
+    root.dispatchEvent(new CustomEvent('sam:ui-update'));
     changed();
 }
 function refreshList(){
+    setBatchSize($('imageList'),records.length);
     $('batchInfo').textContent=records.length+' 张图片';$('batchInfo').title=records.filter(r=>r.hasResult).length+' 张已生成 · 蒙版缓存 '+(cache.getBytes()/1024/1024).toFixed(1)+' MiB';
     for(const [index,record] of records.entries())if(record.button){
         record.button.disabled=blocked()||brush.isDrawing();record.button.setAttribute('aria-current',index===activeIndex?'true':'false');
@@ -84,6 +98,14 @@ function refreshNavigation(){
 }
 function readSettings(){return Object.fromEntries(settingIds.map(id=>[id,{value:$(id).value,checked:$(id).checked}]));}
 function writeSettings(settings){for(const id of settingIds)if(settings?.[id]){$(id).value=settings[id].value;$(id).checked=settings[id].checked;}$('brushRadiusValue').textContent=$('brushRadius').value;}
+function fillCandidates(){
+    $('candidate').replaceChildren();
+    if(segmentation)for(const candidate of segmentation.order){
+        const option=document.createElement('option');option.value=String(candidate.index);
+        option.textContent=segmentation.valueType==='alpha'?'人物连续透明度 · MODNet FP32':'候选 '+(candidate.index+1)+' · 预测 IoU '+(candidate.score===null?'未知':candidate.score.toFixed(3));
+        $('candidate').append(option);
+    }
+}
 function captureActive(){
     const record=records[activeIndex];if(!record)return;
     if(!bitmap){record.hasResult=false;return;}
@@ -107,7 +129,8 @@ async function selectRecord(index,internal=false){
         const state=record.state;
         if(state){crop=state.crop;promptBox=state.promptBox;points=state.points;areaCleanup=state.areaCleanup;lastDiagnostic=state.lastDiagnostic;writeSettings(state.settings);
             segmentation=record.hasResult?await cache.get(record.id):null;
-            $('candidate').replaceChildren();if(segmentation)for(const candidate of segmentation.order){const option=document.createElement('option');option.value=String(candidate.index);option.textContent='候选 '+(candidate.index+1)+' · 预测 IoU '+(candidate.score===null?'未知':candidate.score.toFixed(3));$('candidate').append(option);}
+            fillCandidates();
+            if(segmentation)$('modelState').textContent=segmentation.valueType==='alpha'?'MODNet FP32 · 已保存结果':'SlimSAM-77 q8 · 已保存结果';
             writeSettings(state.settings);brush.restore(state.brush);$('areaInfo').textContent=state.areaText;$('encodeState').textContent=state.lastDiagnostic?'上次 '+state.lastDiagnostic.encodeMs+' ms · 切图后待重新编码':'切图后待重新编码';$('decodeState').textContent=state.decodeText;draw();if(segmentation)render();tell(state.status);
         }
         record.error=null;return true;
@@ -169,9 +192,9 @@ function draw(){
     const sx=canvas.width/bitmap.width,sy=canvas.height/bitmap.height;
     const shown=drag?(drag.action==='new'?normalizedBox(drag.start,drag.end,bitmap.width,bitmap.height):drag.preview):null;
     drawFrame(drag?.kind==='crop'?shown:crop,'#ffffff',$('mode').value==='box','裁剪范围');
-    drawFrame(drag?.kind==='prompt'?shown:promptBox,'#365ee8',$('mode').value==='prompt','目标提示');
+    if($('engine').value!=='modnet')drawFrame(drag?.kind==='prompt'?shown:promptBox,'#365ee8',$('mode').value==='prompt','目标提示');
     ctx.font='bold 14px system-ui';
-    for(const p of points){const x=p.x*sx,y=p.y*sy;ctx.fillStyle=p.label===1?'#15a568':'#e05245';ctx.beginPath();ctx.arc(x,y,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='white';ctx.fillText(p.label===1?'+':'−',x-4,y+5);}
+    for(const p of ($('engine').value==='modnet'?[]:points)){const x=p.x*sx,y=p.y*sy;ctx.fillStyle=p.label===1?'#15a568':'#e05245';ctx.beginPath();ctx.arc(x,y,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='white';ctx.fillText(p.label===1?'+':'−',x-4,y+5);}
     pointLens.refresh();
 }
 function pointer(event){const rect=canvas.getBoundingClientRect();return {x:Math.max(0,Math.min(bitmap.width,(event.clientX-rect.left)/rect.width*bitmap.width)),y:Math.max(0,Math.min(bitmap.height,(event.clientY-rect.top)/rect.height*bitmap.height))};}
@@ -218,7 +241,7 @@ canvas.onpointercancel=()=>{drag=null;canvas.style.cursor='crosshair';draw();};
 canvas.oncontextmenu=event=>{
     if(!bitmap)return;const p=pointer(event);
     const contains=b=>b&&p.x>=b[0]&&p.x<=b[2]&&p.y>=b[1]&&p.y<=b[3];
-    const deletePrompt=contains(promptBox),deleteCrop=!deletePrompt&&contains(crop);
+    const deletePrompt=$('engine').value!=='modnet'&&contains(promptBox),deleteCrop=!deletePrompt&&contains(crop);
     if(!deletePrompt&&!deleteCrop)return;
     event.preventDefault();if(blocked())return;
     drag=null;
@@ -238,32 +261,41 @@ async function openFile(file,internal=false){
         bitmap?.close();bitmap=next;next=null;discardEncoding();filename=file.name;crop=null;promptBox=null;points=[];drag=null;invalidate();
         const scale=Math.min(1,1024/Math.max(bitmap.width,bitmap.height));canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));
         canvas.hidden=false;$('empty').hidden=true;$('filename').textContent=filename+' · '+bitmap.width+' × '+bitmap.height;
-        $('encodeState').textContent='等待任务';$('decodeState').textContent='等待任务';draw();tell('可直接生成蒙版。白框裁剪处理范围；未画蓝框时默认提示为当前输入图的完整范围，不显示提示框。');return true;
+        $('encodeState').textContent='等待任务';$('decodeState').textContent='等待任务';draw();tell($('engine').value==='modnet'?'可直接生成人物蒙版；白框限定处理范围，蓝框和提示点不参与推理。':'可直接生成蒙版。白框裁剪处理范围；未画蓝框时默认提示为当前输入图的完整范围，不显示提示框。');return true;
     }catch(error){tell('读取失败：'+error.message);return false;}finally{next?.close();busy=false;refresh();}
 }
 async function run(internal=false){
-    if(internal!==true&&blocked()||brush.isDrawing()||!bitmap)return;areaCleanup=null;$('areaInfo').textContent='尚未执行区域清理';brush.reset();alphaCache=null;busy=true;refresh();tell('正在分割裁剪范围内的图片…');
+    if(internal!==true&&blocked()||brush.isDrawing()||!bitmap)return;
+    const previous=segmentation,previousDiagnostic=lastDiagnostic,previousCandidate=$('candidate').value;
+    alphaCache=null;previewPixels=null;editCache.clear();busy=true;refresh();tell('正在分割裁剪范围内的图片…');
     const region=[...activeCrop()],cw=region[2]-region[0],ch=region[3]-region[1];
     try{
-        if(!encoded){
+        const portrait=$('engine').value==='modnet';
+        let next;
+        if(portrait||!encoded){
             const scale=Math.min(1,1024/Math.max(cw,ch)),clean=document.createElement('canvas');clean.width=Math.max(1,Math.round(cw*scale));clean.height=Math.max(1,Math.round(ch*scale));
             const c=clean.getContext('2d');c.fillStyle='white';c.fillRect(0,0,clean.width,clean.height);
             // Only cropped pixels enter the encoder; no rectangles or annotations are painted here.
             c.drawImage(bitmap,region[0],region[1],cw,ch,0,0,clean.width,clean.height);
-            try{encoded=await encodeImage(clean,text=>{$('modelState').textContent=text;});}finally{clean.width=clean.height=1;}
-            $('encodeState').textContent=encoded.elapsedMs+' ms · 仅裁剪图';
+            try{
+                if(portrait){discardEncoding();next=await mattePortrait(clean,text=>{$('modelState').textContent=text;});$('encodeState').textContent='人物图直接推理 · 仅裁剪图';}
+                else{encoded=await encodeImage(clean,text=>{$('modelState').textContent=text;});$('encodeState').textContent=encoded.elapsedMs+' ms · 仅裁剪图';}
+            }finally{clean.width=clean.height=1;}
         }else $('encodeState').textContent=encoded.elapsedMs+' ms · 本次复用裁剪图';
         const effectivePrompt=promptBox||region;
         const prompts=cropRelativePrompts(region,effectivePrompt,points);
-        segmentation=await segmentBox(encoded,prompts.box,prompts.points,cw,ch);segmentation.region=region;segmentation.cacheRevision=++cacheRevision;
-        $('decodeState').textContent=segmentation.elapsedMs+' ms · 工作图 '+segmentation.width+' × '+segmentation.height;$('modelState').textContent='SlimSAM-77 q8 · WASM';
-        const select=$('candidate');select.replaceChildren();for(const candidate of segmentation.order){const option=document.createElement('option');option.value=String(candidate.index);option.textContent='候选 '+(candidate.index+1)+' · 预测 IoU '+(candidate.score===null?'未知':candidate.score.toFixed(3));select.append(option);}
+        if(!portrait)next=await segmentBox(encoded,prompts.box,prompts.points,cw,ch);
+        segmentation=next;segmentation.region=region;segmentation.cacheRevision=++cacheRevision;
+        if(!previous||previous.region.some((v,i)=>v!==region[i])){areaCleanup=null;brush.reset();$('areaInfo').textContent='尚未执行区域清理';}
+        $('decodeState').textContent=segmentation.elapsedMs+' ms · 工作图 '+segmentation.width+' × '+segmentation.height;$('modelState').textContent=portrait?'MODNet FP32 · 连续透明度 · WASM':'SlimSAM-77 q8 · WASM';
+        fillCandidates();const select=$('candidate');
         select.value=String(segmentation.order[0].index);$('threshold').value='0';$('invert').checked=false;
-        lastDiagnostic={revision:'xincai-segmentation-v2.7',filename,model:'Xenova/slimsam-77-uniform',dtype:'q8',backend:'wasm',threads:1,
-            originalSize:[bitmap.width,bitmap.height],crop:[...region],cropSize:[cw,ch],workingSize:[encoded.width,encoded.height],promptBox:promptBox?[...promptBox]:null,
-            promptMode:promptBox?'manual':'default',effectivePromptBox:[...effectivePrompt],localPrompts:prompts,points:points.map(p=>({...p})),encodeMs:encoded.elapsedMs,decodeMs:segmentation.elapsedMs,candidates:segmentation.order};
-        render();tell(promptBox?'蒙版已生成，使用手动蓝框作为目标提示。':'蒙版已生成，使用当前输入图的完整范围作为默认目标提示（不显示蓝框）。');return true;
-    }catch(error){segmentation=null;currentMask=null;resultCanvas.hidden=true;$('resultEmpty').hidden=false;$('resultEmpty').textContent='分割失败';$('modelState').textContent='任务失败';tell('分割失败：'+error.message);console.error('[SlimSAM 分割]',error);return false;}
+        if(areaCleanup)areaCleanup.key=cleanupKey();
+        lastDiagnostic={revision:'xincai-segmentation-v2.8',filename,model:portrait?'Xenova/modnet':'Xenova/slimsam-77-uniform',dtype:portrait?'fp32':'q8',valueType:segmentation.valueType||'logits',backend:'wasm',threads:1,
+            originalSize:[bitmap.width,bitmap.height],crop:[...region],cropSize:[cw,ch],workingSize:[segmentation.width,segmentation.height],promptBox:portrait?null:promptBox?[...promptBox]:null,
+            promptMode:portrait?'not-used':promptBox?'manual':'default',effectivePromptBox:portrait?null:[...effectivePrompt],localPrompts:portrait?null:prompts,points:portrait?[]:points.map(p=>({...p})),encodeMs:portrait?0:encoded.elapsedMs,decodeMs:segmentation.elapsedMs,candidates:segmentation.order,inputShape:segmentation.inputShape,outputRange:segmentation.outputRange};
+        render();tell((portrait?'人物连续蒙版已生成；蓝框和提示点未参与推理。':promptBox?'蒙版已生成，使用手动蓝框作为目标提示。':'蒙版已生成，使用当前输入图的完整范围作为默认目标提示（不显示蓝框）。')+(previous?' 已保留当前裁剪范围内的画笔修整和区域清理。':''));return true;
+    }catch(error){segmentation=previous;lastDiagnostic=previousDiagnostic;fillCandidates();$('candidate').value=previousCandidate;if(segmentation)render();else{currentMask=null;resultCanvas.hidden=true;$('resultEmpty').hidden=false;$('resultEmpty').textContent='分割失败';}$('modelState').textContent='任务失败';tell('分割失败：'+error.message+(previous?'；原有结果与修整已保留。':''));console.error('[本地分割]',error);return false;}
     finally{if(records[activeIndex]){records[activeIndex].hasResult=Boolean(segmentation);records[activeIndex].error=segmentation?null:$('status').textContent;}busy=false;refresh();if(segmentation&&internal!==true&&typeof CustomEvent!=='undefined')root.dispatchEvent(new CustomEvent('sam:generated'));}
 }
 function editedAlpha(width,height,includeCleanup=true){
@@ -272,11 +304,11 @@ function editedAlpha(width,height,includeCleanup=true){
     let alpha;
     if(width===segmentation.width&&height===segmentation.height){
         if(!alphaCache||alphaCache.candidate!==candidate||alphaCache.threshold!==threshold||alphaCache.invert!==invert||alphaCache.smooth!==smooth)
-            alphaCache={candidate,threshold,invert,smooth,alpha:interpolatedAlpha(candidate.logits,segmentation.width,segmentation.height,width,height,threshold,invert,smooth)};
+            alphaCache={candidate,threshold,invert,smooth,alpha:maskAlpha(segmentation,candidate,width,height,{threshold,invert,smooth})};
         const [l,t,r,b]=segmentation.region;
         const update=editCache.update(alphaCache.alpha,width,height,r-l,b-t,brush.getStrokes(),includeCleanup?areaCleanup:null);
         previewDirty=update.dirty;return update.alpha;
-    }else alpha=interpolatedAlpha(candidate.logits,segmentation.width,segmentation.height,width,height,threshold,invert,smooth);
+    }else alpha=maskAlpha(segmentation,candidate,width,height,{threshold,invert,smooth});
     const [l,t,r,b]=segmentation.region;
     const strokes=brush.getStrokes();
     if(includeCleanup&&areaCleanup){
@@ -292,7 +324,7 @@ function render(){
     if(!bitmap||!segmentation)return;
     if(areaCleanup&&areaCleanup.key!==cleanupKey())resetCleanup('蒙版设置已更改，区域清理已撤销；确认新蒙版后可再次清理。');
     const index=Number($('candidate').value),threshold=Number($('threshold').value),candidate=segmentation.candidates[index];if(!candidate)return;
-    currentMask=editedAlpha(segmentation.width,segmentation.height);$('thresholdValue').textContent=threshold.toFixed(1);
+    currentMask=editedAlpha(segmentation.width,segmentation.height);$('thresholdValue').textContent=segmentation.valueType==='alpha'?'不适用':threshold.toFixed(1);
     const [l,t,r,b]=segmentation.region;if(!previewPixels||previewPixels.bitmap!==bitmap||previewPixels.segmentation!==segmentation){
         resultCanvas.width=segmentation.width;resultCanvas.height=segmentation.height;
         resultCtx.drawImage(bitmap,l,t,r-l,b-t,0,0,resultCanvas.width,resultCanvas.height);
@@ -314,9 +346,9 @@ function render(){
     brush.drawOverlay();brushLens.refresh();
     if(brush.isDrawing())return;
     const bounds=maskBounds(currentMask.map(a=>a>=1/255?1:0),segmentation.width,segmentation.height),retained=currentMask.reduce((sum,a)=>sum+a,0)/currentMask.length;
-    $('maskInfo').textContent='裁剪图内保留 '+(retained*100).toFixed(1)+'%'+(retained>.98?' · 当前候选几乎保留整个裁剪图，若包含背景，请更换候选或补充提示点。':'');
-    if(lastDiagnostic){lastDiagnostic.selectedCandidate=index+1;lastDiagnostic.threshold=threshold;lastDiagnostic.inverted=$('invert').checked;lastDiagnostic.foregroundPixels=bounds?.count||0;lastDiagnostic.retainedFraction=retained;lastDiagnostic.postprocess={continuousInterpolation:true,narrowAntialias:$('smooth').checked,brushStrokeCount:brush.getStrokes().length};}
-    if(!bounds)tell('当前候选在此阈值下为空，可更换候选或降低阈值。');
+    $('maskInfo').textContent=(segmentation.valueType==='alpha'?'人物连续透明度 · ':'')+'裁剪图内保留 '+(retained*100).toFixed(1)+'%'+(retained>.98?(segmentation.valueType==='alpha'?' · 几乎保留整图，可调整白框或用画笔删除背景。':' · 当前候选几乎保留整个裁剪图，若包含背景，请更换候选或补充提示点。'):'');
+    if(lastDiagnostic){lastDiagnostic.selectedCandidate=index+1;lastDiagnostic.threshold=segmentation.valueType==='alpha'?null:threshold;lastDiagnostic.inverted=$('invert').checked;lastDiagnostic.foregroundPixels=bounds?.count||0;lastDiagnostic.retainedFraction=retained;lastDiagnostic.postprocess={continuousInterpolation:true,narrowAntialias:segmentation.valueType==='alpha'?false:$('smooth').checked,brushStrokeCount:brush.getStrokes().length};}
+    if(!bounds)tell(segmentation.valueType==='alpha'?'人物蒙版为空，可扩大白框、使用画笔补画，或改用通用对象模式。':'当前候选在此阈值下为空，可更换候选或降低阈值。');
     if(lastDiagnostic)lastDiagnostic.regionCleanup=areaCleanup?{minPercent:areaCleanup.minPercent,connectivity:8,throughEditId:areaCleanup.throughEditId,alphaCutoff:1/255,regions:areaCleanup.regions,removedRegions:areaCleanup.removedRegions,removedWorkingPixels:areaCleanup.removedPixels,workingSize:[segmentation.width,segmentation.height]}:null;
 }
 async function cleanAreas(){
@@ -382,10 +414,10 @@ async function exportBatch(){
                 }catch(e){status='导出失败';error=e.message;}
             }
             const info=record.state?.lastDiagnostic;
-            rows.push([index+1,record.file.name,status,error,info?.originalSize?.join('x'),info?.workingSize?.join('x'),sizes.join(';'),record.state?.settings?.threshold?.value,record.state?.settings?.invert?.checked]);
+            rows.push([index+1,record.file.name,status,error,info?.originalSize?.join('x'),info?.workingSize?.join('x'),sizes.join(';'),info?.valueType==='alpha'?'':record.state?.settings?.threshold?.value,record.state?.settings?.invert?.checked,info?.model,info?.dtype]);
             refresh();await new Promise(resolve=>setTimeout(resolve,0));
         }
-        const header=['序号','文件名','导出状态','错误','原图尺寸','工作图尺寸','输出尺寸','蒙版阈值','反转'];zip.file('manifest.csv','\ufeff'+[header,...rows].map(row=>row.map(csvCell).join(',')).join('\r\n'));
+        const header=['序号','文件名','导出状态','错误','原图尺寸','工作图尺寸','输出尺寸','蒙版阈值','反转','模型','模型精度'];zip.file('manifest.csv','\ufeff'+[header,...rows].map(row=>row.map(csvCell).join(',')).join('\r\n'));
         if(!exported){summary='没有可导出的非空蒙版；未生成 ZIP，请逐图检查。';return;}
         $('batchProgress').textContent='正在打包 '+exported+' 张图片…';const blob=await zip.generateAsync({type:'blob',compression:'STORE'});save(blob,'xincai-segmentation-results.zip');
         summary='已导出 '+exported+' 张图片及 CSV 清单。'+(cancelBatch?'本次为停止后的部分结果。':'');
@@ -394,8 +426,12 @@ async function exportBatch(){
 async function applyBatchSettings(){
     if(blocked()||brush.isDrawing()||!segmentation)return;batchBusy=true;batchOperation='settings';refresh();
     try{await saveActive();const current=readSettings();let count=0;
-        for(const record of records)if(record.hasResult&&record.state){for(const id of ['threshold','invert','smooth','tight'])record.state.settings[id]={...current[id]};record.state.areaCleanup=null;record.state.areaText='批量参数已修改，请按需重新清理区域。';count++;}
-        areaCleanup=null;$('areaInfo').textContent='批量参数已修改，请按需重新清理区域。';render();tell('已将阈值、反转、抗锯齿和透明裁切设置应用到 '+count+' 张已生成图片；候选和修整各自保留。');
+        for(const record of records)if(record.hasResult&&record.state){
+            const sameType=(record.state.lastDiagnostic?.valueType==='alpha')===(segmentation.valueType==='alpha');
+            for(const id of (sameType?['threshold','invert','smooth','tight']:['invert','tight']))record.state.settings[id]={...current[id]};
+            record.state.areaCleanup=null;record.state.areaText='批量参数已修改，请按需重新清理区域。';count++;
+        }
+        areaCleanup=null;$('areaInfo').textContent='批量参数已修改，请按需重新清理区域。';render();tell('已调整 '+count+' 张图片；反转和透明裁切对两种模型生效，阈值与抗锯齿仅在相同结果类型间应用。候选和修整各自保留。');
     }catch(error){tell('批量调整失败：'+error.message);}finally{batchBusy=false;batchOperation='';refresh();}
 }
 function emptyView(){discardEncoding();bitmap?.close();bitmap=null;crop=promptBox=null;points=[];drag=null;invalidate();canvas.hidden=true;$('empty').hidden=false;$('filename').textContent='未选择图片';}
@@ -411,11 +447,12 @@ $('stage').ondragleave=()=>$('empty').classList.remove('drag');
 $('stage').ondrop=event=>{event.preventDefault();$('empty').classList.remove('drag');addFiles(event.dataTransfer.files);};
 $('batchGenerate').onclick=generateBatch;$('batchZip').onclick=exportBatch;$('batchApply').onclick=applyBatchSettings;
 $('batchStop').onclick=()=>{if(!batchBusy||!['generate','export'].includes(batchOperation))return;cancelBatch=true;$('batchProgress').textContent='将在当前图片处理结束后停止…';refresh();};
-$('removeImage').onclick=removeImage;$('clearBatch').onclick=()=>{if(blocked()||brush.isDrawing())return;records.forEach(disposeThumbnail);records=[];activeIndex=-1;cache.clear();$('imageList').replaceChildren();emptyView();tell('本批图片与蒙版已清空，正在同步本地保存。');refresh();if(typeof CustomEvent!=='undefined')root.dispatchEvent(new CustomEvent('sam:source-ready'));};
+$('removeImage').onclick=removeImage;$('clearBatch').onclick=()=>{if(blocked()||brush.isDrawing())return;records.forEach(disposeThumbnail);records=[];activeIndex=-1;cache.clear();$('imageList').replaceChildren();emptyView();tell('已清空。');refresh();if(typeof CustomEvent!=='undefined')root.dispatchEvent(new CustomEvent('sam:source-ready'));};
 $('undo').onclick=()=>{if(blocked()||!points.length)return;const removed=points.pop();invalidate();draw();tell('已撤销最近添加的'+(removed.label===1?'保留点':'排除点')+'，剩余 '+points.length+' 个提示点。请重新生成蒙版。');};
 $('clearPrompt').onclick=()=>{if(blocked())return;promptBox=null;points=[];invalidate();draw();tell('手动蓝框和提示点已清除，恢复当前输入图完整范围的默认目标提示。白色裁剪范围不变。');};
 $('clear').onclick=()=>{if(blocked())return;crop=null;promptBox=null;points=[];discardEncoding();invalidate();draw();tell('两个框和提示点已清除，模型输入恢复整图。');};
 $('segment').onclick=run;$('candidate').onchange=$('threshold').oninput=$('overlay').onchange=()=>{render();changed();};
+$('engine').onchange=()=>{drag=null;refresh();draw();tell('接下来的生成将使用'+($('engine').value==='modnet'?'人物精细抠图。仅白色裁剪范围作为输入，蓝框和提示点不参与推理。':'通用对象分割。')+' 当前已生成的结果与修整保留。');};
 $('smooth').onchange=()=>{render();changed();};
 $('cleanAreas').onclick=cleanAreas;
 $('undoAreas').onclick=()=>{if(blocked()||brush.isDrawing()||!areaCleanup)return;resetCleanup('已撤销区域清理，模型蒙版与画笔修改保留。');render();tell('已撤销区域清理。');};
@@ -427,9 +464,10 @@ $('curveUndo').onclick=()=>brush.removeLastShape();$('curveClear').onclick=()=>b
 $('brushUndo').onclick=()=>brush.undo();$('brushClear').onclick=()=>brush.clear();
 $('invert').onchange=()=>{render();tell($('invert').checked?'已反转裁剪图内的保留区域。':'已恢复模型原始保留区域。');changed();};
 $('download').onclick=()=>exportPNG();$('maskDownload').onclick=()=>exportPNG(true);
-$('diagnostic').onclick=()=>{if(!blocked()&&lastDiagnostic)save(new Blob([JSON.stringify(lastDiagnostic,null,2)],{type:'application/json'}),'slimsam-diagnostics.json');};
+$('diagnostic').onclick=()=>{if(!blocked()&&lastDiagnostic)save(new Blob([JSON.stringify(lastDiagnostic,null,2)],{type:'application/json'}),'segmentation-diagnostics.json');};
 
  root.addEventListener('sam:beforeviewchange',event=>{if(blocked()||brush.isDrawing())event.preventDefault();});
+ root.addEventListener('studio:zoomchange',()=>{if(bitmap){draw();brush.drawOverlay();pointLens.hide();brushLens.hide();}});
  root.addEventListener('sam:viewchange',()=>{pointLens.hide();brushLens.hide();draw();brush.refreshTool();});
  refresh();
  async function openCrop(blob,name) {
@@ -443,7 +481,7 @@ $('diagnostic').onclick=()=>{if(!blocked()&&lastDiagnostic)save(new Blob([JSON.s
  async function snapshot(){
   const active=captureActive();
   const saved={version:1,records:records.map(record=>({id:record.id,file:record.file,state:structuredClone(record.state),hasResult:record.hasResult,error:record.error})),activeIndex,sequence,cacheRevision,
-   settings:readSettings(),magnify:$('magnify').checked,magnifyZoom:$('magnifyZoom').value,batchFormat:$('batchFormat').value};
+   settings:readSettings(),engine:$('engine').value,magnify:$('magnify').checked,magnifyZoom:$('magnifyZoom').value,batchFormat:$('batchFormat').value};
   // Capture the queue before compression yields. Later user edits get a separate save.
   const entries=new Map(cache.exportEntries().map(entry=>[entry.id,entry]));
   if(active){if(active.result)entries.set(active.record.id,{id:active.record.id,...await cache.put(active.record.id,active.result)});else{cache.remove(active.record.id);entries.delete(active.record.id);}}
@@ -465,6 +503,7 @@ $('diagnostic').onclick=()=>{if(!blocked()&&lastDiagnostic)save(new Blob([JSON.s
    records=saved.records.map(record=>({...record,state:structuredClone(record.state),hasResult:record.hasResult===true}));
    for(const record of records){record.thumbnail=createThumbnailItem(()=>selectRecord(records.indexOf(record)));record.button=record.thumbnail.button;$('imageList').append(record.button);prepareThumbnail(record,refreshList);}
    writeSettings(saved.settings);
+   $('engine').value=saved.engine==='modnet'?'modnet':'slimsam';
    $('magnify').checked=$('magnifyPreview').checked=saved.magnify!==false;
    if(['2','4','6','8'].includes(saved.magnifyZoom))$('magnifyZoom').value=$('magnifyZoomPreview').value=saved.magnifyZoom;
    if(['transparent','mask','both'].includes(saved.batchFormat))$('batchFormat').value=saved.batchFormat;

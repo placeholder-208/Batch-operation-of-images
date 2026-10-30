@@ -48,6 +48,9 @@ export function createMaskUI(actions) {
     const $ = id => document.getElementById(id);
     const canvas = $('maskCanvas'), ctx = canvas.getContext('2d');
     let items = [], position = -1, image = null, imageToken = 0, start = null, drag = null, busy = false, restoring = false, importBusy = false;
+    let stopRequested=false;
+    const stop=document.createElement('button');stop.id='maskStop';stop.type='button';stop.className='secondary full';stop.textContent='停止本批';stop.hidden=true;stop.onclick=()=>{stopRequested=true;stop.disabled=true;stop.textContent='当前图片结束后停止';};$('maskStart').after(stop);
+    const root=$('maskWorkspace');
     const current = () => items[position];
     const tell = text => { $('maskStatus').textContent = text; };
     const blocked = () => busy || importBusy || actions.isBlocked();
@@ -58,6 +61,7 @@ export function createMaskUI(actions) {
     function update() {
         const item = current(), lock = blocked();
         $('maskChoose').disabled = $('maskAdd').disabled = $('maskReset').disabled = lock;
+        if(root.dataset.running!=='true')$('maskStart').textContent=items.some(item=>item.error&&!item.detected)?'重试未完成图片':'批量自动检测';
         $('maskStart').disabled = lock || !items.some(i => !i.detected);
         $('maskDownload').disabled = lock || !item || !masks(item).length;
         $('maskZip').disabled = lock || !items.some(i => masks(i).length);
@@ -99,10 +103,12 @@ export function createMaskUI(actions) {
     function add(files){return importer.add(files);}
     async function detect() {
         if(blocked())return;
+        stopRequested=false;root.dataset.running='true';root.dispatchEvent(new CustomEvent('studio:taskchange'));stop.hidden=false;stop.disabled=false;stop.textContent='停止本批';
         busy=true;actions.onBusy(true);update();
         const pending=items.filter(item=>!item.detected);
         try {
             for(let index=0;index<pending.length;index++) {
+                if(stopRequested)break;$('maskStart').textContent='检测中 '+(index+1)+' / '+pending.length;
                 const item=pending[index];item.processing=true;item.error=null;tell('正在检测 '+(index+1)+' / '+pending.length+'：'+item.file.name);update();
                 try {
                     const found=await actions.detect(item.file);
@@ -115,8 +121,8 @@ export function createMaskUI(actions) {
                 item.processing=false;$('maskProgress').textContent=(index+1)+' / '+pending.length;update();draw();
                 await new Promise(resolve=>setTimeout(resolve,0));
             }
-            tell('检测完成。请检查每张图的遮盖预览，未检出和异常图片需人工检查。');
-        } finally {busy=false;actions.onBusy(false);update();draw();}
+            tell((stopRequested?'已停止。':'检测完成。')+'请检查每张图的遮盖预览，未检出和异常图片需人工检查。');
+        } finally {root.dataset.running='false';root.dispatchEvent(new CustomEvent('studio:taskchange'));stop.hidden=true;busy=false;actions.onBusy(false);update();draw();}
     }
     async function output(item) {
         const img=new Image();img.src=item.url;await img.decode();

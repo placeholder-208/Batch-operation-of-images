@@ -12,7 +12,11 @@ try{
  const expected={'curved/image017.jpg':2,'curved/image021.jpg':2,'curved/image024.jpg':2,
   'curved/image026.jpg':1,'curved/image036.jpg':1,'curved/image042.jpg':1,'blurred/image015.jpg':2,
   'blurred/image016.jpg':3,'blurred/image018.jpg':3,'blurred/image021.jpg':1,'blurred/image008.jpg':1};
- if(process.argv.includes('--detailed'))expected['blurred/image005.jpg']=1;
+ if(process.argv.includes('--detailed')){
+  expected['blurred/image005.jpg']=3;
+  expected['blurred/image019.jpg']=1;
+  expected['blurred/image021.jpg']=2;
+ }
  const filter=process.argv.find(a=>a.startsWith('--files='));
  const files=filter?filter.slice(8).split(','):Object.keys(expected);
  for(const file of files){
@@ -32,6 +36,14 @@ try{
    assert.equal(row.count,expected[file],file);
    assert.equal(row.record.variants.length,1);
    assert.equal(row.record.settings.continuousResample,true);
+   if(file==='blurred/image005.jpg'&&process.argv.includes('--detailed')){
+    assert.equal(row.record.regions.filter(r=>r.structureSampling?.status==='decoded').length,2);
+    assert.ok(row.record.stages.some(s=>s.name==='structure_decode'));
+   }
+   if(file==='blurred/image021.jpg'&&process.argv.includes('--detailed')){
+    assert.ok(row.record.stages.some(s=>s.samplingMode==='module-recovery'));
+    assert.ok(row.record.regions.some(r=>r.restoredGeometry?.trials?.some(t=>t.geometry?.samplingMode==='module-recovery')));
+   }
  }
  await fs.writeFile(new URL('./results/local-browser'+(process.argv.includes('--tps')?'-tps':'')+(process.argv.includes('--detailed')?'-detailed':'')+'.json',import.meta.url),JSON.stringify(rows,null,2));
 }finally{await browser.close();}

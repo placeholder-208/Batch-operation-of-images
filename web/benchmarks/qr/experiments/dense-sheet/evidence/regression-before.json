@@ -1,0 +1,6389 @@
+{
+  "phase": "baseline",
+  "rows": [
+    {
+      "file": "blurred/image001.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 468,
+              "y": 298
+            },
+            {
+              "x": 256,
+              "y": 275
+            },
+            {
+              "x": 262,
+              "y": 79
+            },
+            {
+              "x": 517,
+              "y": 87
+            }
+          ],
+          "hash": "27583241fb53d5f4b07411456f7382073abf6f84dbcc59e8c0d635ffa8462513"
+        }
+      ],
+      "ms": 506.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image002.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 656,
+              "y": 225
+            },
+            {
+              "x": 843,
+              "y": 277
+            },
+            {
+              "x": 784,
+              "y": 428
+            },
+            {
+              "x": 578,
+              "y": 346
+            }
+          ],
+          "hash": "de1978c64f1a0415cdecc1278f9c40a362377880711e5aa90973c1aa219262a2"
+        }
+      ],
+      "ms": 46.3,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image003.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 509,
+              "y": 449
+            },
+            {
+              "x": 255,
+              "y": 552
+            },
+            {
+              "x": 107,
+              "y": 314
+            },
+            {
+              "x": 405,
+              "y": 201
+            }
+          ],
+          "hash": "1b84eb59e475035c7e2c8cd4d55897bf9f7c7a81f0163decce97efde6528995d"
+        }
+      ],
+      "ms": 48.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image004.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 516,
+              "y": 303
+            },
+            {
+              "x": 403,
+              "y": 327
+            },
+            {
+              "x": 378,
+              "y": 213
+            },
+            {
+              "x": 491,
+              "y": 188
+            }
+          ],
+          "hash": "1b84eb59e475035c7e2c8cd4d55897bf9f7c7a81f0163decce97efde6528995d"
+        }
+      ],
+      "ms": 39.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image005.jpg",
+      "detailed": false,
+      "codes": [],
+      "ms": 6406.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image006.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1372,
+              "y": 2129
+            },
+            {
+              "x": 2012,
+              "y": 2166
+            },
+            {
+              "x": 1961,
+              "y": 2744
+            },
+            {
+              "x": 1356,
+              "y": 2697
+            }
+          ],
+          "hash": "158584987982ba3b398c283edac5a2da0bd96139dd2a2b0a176c3f6fe75a20fc"
+        }
+      ],
+      "ms": 461.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image007.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 343,
+              "y": 532
+            },
+            {
+              "x": 503,
+              "y": 542
+            },
+            {
+              "x": 490,
+              "y": 685
+            },
+            {
+              "x": 339,
+              "y": 675
+            }
+          ],
+          "hash": "158584987982ba3b398c283edac5a2da0bd96139dd2a2b0a176c3f6fe75a20fc"
+        }
+      ],
+      "ms": 52.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image008.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 271.77777777777777,
+              "y": 127.77008928571428
+            },
+            {
+              "x": 456.3703703703704,
+              "y": 265.8169642857143
+            },
+            {
+              "x": 329.85185185185185,
+              "y": 443.30580357142856
+            },
+            {
+              "x": 144.22222222222223,
+              "y": 301.10714285714283
+            }
+          ],
+          "hash": "2c5f312ef5583e79ca654b335c44394d56f3a186c692adc1b0d382b63ba213ac"
+        }
+      ],
+      "ms": 1246.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image009.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1490,
+              "y": 2284
+            },
+            {
+              "x": 1735,
+              "y": 2290
+            },
+            {
+              "x": 1726,
+              "y": 2538
+            },
+            {
+              "x": 1481,
+              "y": 2528
+            }
+          ],
+          "hash": "ac1c87ad962ef8fe2bf64023d5dcec4b52ac714074ea4d47eab4dc83dbb64f78"
+        }
+      ],
+      "ms": 458.9,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image010.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 2000,
+              "y": 1424
+            },
+            {
+              "x": 2016,
+              "y": 1584
+            },
+            {
+              "x": 1853,
+              "y": 1597
+            },
+            {
+              "x": 1840,
+              "y": 1440
+            }
+          ],
+          "hash": "3c99c10a802e68e7c5f0f42315354a537b111fcb55b631e2a7a9ff97ef404faa"
+        }
+      ],
+      "ms": 545.9,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image011.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 625,
+              "y": 207
+            },
+            {
+              "x": 1074,
+              "y": 156
+            },
+            {
+              "x": 1121,
+              "y": 598
+            },
+            {
+              "x": 669,
+              "y": 671
+            }
+          ],
+          "hash": "ac1c87ad962ef8fe2bf64023d5dcec4b52ac714074ea4d47eab4dc83dbb64f78"
+        }
+      ],
+      "ms": 52.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image012.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1012,
+              "y": 410
+            },
+            {
+              "x": 1018,
+              "y": 595
+            },
+            {
+              "x": 828,
+              "y": 602
+            },
+            {
+              "x": 822,
+              "y": 414
+            }
+          ],
+          "hash": "3c99c10a802e68e7c5f0f42315354a537b111fcb55b631e2a7a9ff97ef404faa"
+        }
+      ],
+      "ms": 85,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image013.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 249,
+              "y": 34
+            },
+            {
+              "x": 254,
+              "y": 222
+            },
+            {
+              "x": 64,
+              "y": 228
+            },
+            {
+              "x": 58,
+              "y": 40
+            }
+          ],
+          "hash": "3c99c10a802e68e7c5f0f42315354a537b111fcb55b631e2a7a9ff97ef404faa"
+        }
+      ],
+      "ms": 23,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image014.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 142,
+              "y": 180
+            },
+            {
+              "x": 211,
+              "y": 185
+            },
+            {
+              "x": 211,
+              "y": 264
+            },
+            {
+              "x": 142,
+              "y": 259
+            }
+          ],
+          "hash": "84eb3d04fd3283b0c7b98aeb1a92585bb1a706417dab61903725788ba5f83182"
+        }
+      ],
+      "ms": 38.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image015.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 172,
+              "y": 135
+            },
+            {
+              "x": 275,
+              "y": 141
+            },
+            {
+              "x": 274,
+              "y": 244
+            },
+            {
+              "x": 161,
+              "y": 243
+            }
+          ],
+          "hash": "c9ea6c97c8ad8aa3cd9cd6e3173877f75c919acd3f254b5de655f72f3eb3717a"
+        },
+        {
+          "points": [
+            {
+              "x": 336.4932894628405,
+              "y": 143.5311900675905
+            },
+            {
+              "x": 438.1899650766104,
+              "y": 145.73473367694842
+            },
+            {
+              "x": 449.9283975575043,
+              "y": 250.08675575897894
+            },
+            {
+              "x": 340.1804504900293,
+              "y": 245.83214012826068
+            }
+          ],
+          "hash": "02b124f6c4c7372284d3837ada8b5f240f863672d49da323f4574a2bcd6c0f30"
+        }
+      ],
+      "ms": 269.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image016.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1321.7109375,
+              "y": 1397.0914127423823
+            },
+            {
+              "x": 1362.7265625,
+              "y": 2164.9473684210525
+            },
+            {
+              "x": 606.8671875,
+              "y": 2188.3933518005542
+            },
+            {
+              "x": 539.484375,
+              "y": 1429.3296398891966
+            }
+          ],
+          "hash": "f86a496d9e5deceb7497f13e5dd8527b80ca66b9e452f93adea8a54d3f56d3ab"
+        },
+        {
+          "points": [
+            {
+              "x": 1841.8645833333333,
+              "y": 2150.8167115902966
+            },
+            {
+              "x": 2263.0104166666665,
+              "y": 2167.0161725067387
+            },
+            {
+              "x": 2241.953125,
+              "y": 2573.622641509434
+            },
+            {
+              "x": 1819.1875,
+              "y": 2557.423180592992
+            }
+          ],
+          "hash": "fe7162532814ab74e3ea14c27b573534bf8f4384bf5da07887d297f4126e09d3"
+        },
+        {
+          "points": [
+            {
+              "x": 2058.8125,
+              "y": 1439.9592391304348
+            },
+            {
+              "x": 2427.3020833333335,
+              "y": 1429.6304347826087
+            },
+            {
+              "x": 2425.828125,
+              "y": 1798.516304347826
+            },
+            {
+              "x": 2057.3385416666665,
+              "y": 1808.845108695652
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        }
+      ],
+      "ms": 5277.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image017.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1298,
+              "y": 1214
+            },
+            {
+              "x": 1354,
+              "y": 2027
+            },
+            {
+              "x": 562,
+              "y": 2062
+            },
+            {
+              "x": 474,
+              "y": 1261
+            }
+          ],
+          "hash": "f86a496d9e5deceb7497f13e5dd8527b80ca66b9e452f93adea8a54d3f56d3ab"
+        },
+        {
+          "points": [
+            {
+              "x": 2086,
+              "y": 1250
+            },
+            {
+              "x": 2476,
+              "y": 1236
+            },
+            {
+              "x": 2476,
+              "y": 1633
+            },
+            {
+              "x": 2085,
+              "y": 1642
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        },
+        {
+          "points": [
+            {
+              "x": 1859,
+              "y": 2006
+            },
+            {
+              "x": 2308,
+              "y": 2019
+            },
+            {
+              "x": 2282,
+              "y": 2450
+            },
+            {
+              "x": 1846,
+              "y": 2436
+            }
+          ],
+          "hash": "fe7162532814ab74e3ea14c27b573534bf8f4384bf5da07887d297f4126e09d3"
+        }
+      ],
+      "ms": 355.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image018.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 2127,
+              "y": 1239
+            },
+            {
+              "x": 2526,
+              "y": 1233
+            },
+            {
+              "x": 2526,
+              "y": 1638
+            },
+            {
+              "x": 2124,
+              "y": 1644
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        },
+        {
+          "points": [
+            {
+              "x": 1893,
+              "y": 2012
+            },
+            {
+              "x": 2349,
+              "y": 2027
+            },
+            {
+              "x": 2319,
+              "y": 2462
+            },
+            {
+              "x": 1878,
+              "y": 2450
+            }
+          ],
+          "hash": "fe7162532814ab74e3ea14c27b573534bf8f4384bf5da07887d297f4126e09d3"
+        },
+        {
+          "points": [
+            {
+              "x": 1329,
+              "y": 1200.1230366492146
+            },
+            {
+              "x": 1380,
+              "y": 2028.84554973822
+            },
+            {
+              "x": 582,
+              "y": 2058.8717277486912
+            },
+            {
+              "x": 486,
+              "y": 1245.1623036649214
+            }
+          ],
+          "hash": "f86a496d9e5deceb7497f13e5dd8527b80ca66b9e452f93adea8a54d3f56d3ab"
+        }
+      ],
+      "ms": 3822.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image019.jpg",
+      "detailed": false,
+      "codes": [],
+      "ms": 6833.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image020.jpg",
+      "detailed": false,
+      "codes": [],
+      "ms": 6246.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image021.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 2170.4427083333335,
+              "y": 1300.7354497354497
+            },
+            {
+              "x": 2570.53125,
+              "y": 1291.005291005291
+            },
+            {
+              "x": 2557.5729166666665,
+              "y": 1693.1851851851852
+            },
+            {
+              "x": 2170.4427083333335,
+              "y": 1701.2936507936508
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        }
+      ],
+      "ms": 6072.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image022.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 459,
+              "y": 1260
+            },
+            {
+              "x": 2448,
+              "y": 1269
+            },
+            {
+              "x": 2466,
+              "y": 3303
+            },
+            {
+              "x": 468,
+              "y": 3321
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        }
+      ],
+      "ms": 323.3,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image023.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 720,
+              "y": 1116
+            },
+            {
+              "x": 2673,
+              "y": 1503
+            },
+            {
+              "x": 2313,
+              "y": 3510
+            },
+            {
+              "x": 297,
+              "y": 3123
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        }
+      ],
+      "ms": 331.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image024.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 975,
+              "y": 696
+            },
+            {
+              "x": 2859,
+              "y": 1632
+            },
+            {
+              "x": 1959,
+              "y": 3546
+            },
+            {
+              "x": 15,
+              "y": 2619
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        }
+      ],
+      "ms": 360.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image025.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 46,
+              "y": 150
+            },
+            {
+              "x": 48,
+              "y": 26
+            },
+            {
+              "x": 169,
+              "y": 31
+            },
+            {
+              "x": 164,
+              "y": 155
+            }
+          ],
+          "hash": "826723291f48ab6fd311c756b2f652319dc46f64ca459ecfcbe1b430af4943e5"
+        },
+        {
+          "points": [
+            {
+              "x": 35,
+              "y": 482
+            },
+            {
+              "x": 40,
+              "y": 364
+            },
+            {
+              "x": 156,
+              "y": 371
+            },
+            {
+              "x": 152,
+              "y": 489
+            }
+          ],
+          "hash": "826723291f48ab6fd311c756b2f652319dc46f64ca459ecfcbe1b430af4943e5"
+        }
+      ],
+      "ms": 23.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image026.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1124,
+              "y": 1727
+            },
+            {
+              "x": 870,
+              "y": 1578
+            },
+            {
+              "x": 1011,
+              "y": 1334
+            },
+            {
+              "x": 1272,
+              "y": 1483
+            }
+          ],
+          "hash": "826723291f48ab6fd311c756b2f652319dc46f64ca459ecfcbe1b430af4943e5"
+        },
+        {
+          "points": [
+            {
+              "x": 417,
+              "y": 1350
+            },
+            {
+              "x": 144,
+              "y": 1225
+            },
+            {
+              "x": 273,
+              "y": 965
+            },
+            {
+              "x": 549,
+              "y": 1101
+            }
+          ],
+          "hash": "826723291f48ab6fd311c756b2f652319dc46f64ca459ecfcbe1b430af4943e5"
+        }
+      ],
+      "ms": 161.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image027.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 208.5,
+              "y": 675
+            },
+            {
+              "x": 72.5,
+              "y": 612.5
+            },
+            {
+              "x": 136.5,
+              "y": 483.5
+            },
+            {
+              "x": 274.5,
+              "y": 551
+            }
+          ],
+          "hash": "826723291f48ab6fd311c756b2f652319dc46f64ca459ecfcbe1b430af4943e5"
+        },
+        {
+          "points": [
+            {
+              "x": 562,
+              "y": 864
+            },
+            {
+              "x": 435,
+              "y": 789
+            },
+            {
+              "x": 505,
+              "y": 670
+            },
+            {
+              "x": 636,
+              "y": 742
+            }
+          ],
+          "hash": "826723291f48ab6fd311c756b2f652319dc46f64ca459ecfcbe1b430af4943e5"
+        }
+      ],
+      "ms": 163.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image028.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1018,
+              "y": 522
+            },
+            {
+              "x": 819,
+              "y": 990
+            },
+            {
+              "x": 348,
+              "y": 767
+            },
+            {
+              "x": 572,
+              "y": 291
+            }
+          ],
+          "hash": "3dc50e93671b27fdd26a91044be1d55c09ef841f941056bbaf3be786dd200365"
+        }
+      ],
+      "ms": 60.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image029.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 339,
+              "y": 411
+            },
+            {
+              "x": 846,
+              "y": 435
+            },
+            {
+              "x": 765,
+              "y": 864
+            },
+            {
+              "x": 282,
+              "y": 855
+            }
+          ],
+          "hash": "3dc50e93671b27fdd26a91044be1d55c09ef841f941056bbaf3be786dd200365"
+        }
+      ],
+      "ms": 70.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image030.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1844,
+              "y": 2182
+            },
+            {
+              "x": 2321,
+              "y": 2219
+            },
+            {
+              "x": 2313,
+              "y": 2729
+            },
+            {
+              "x": 1826,
+              "y": 2711
+            }
+          ],
+          "hash": "3dc50e93671b27fdd26a91044be1d55c09ef841f941056bbaf3be786dd200365"
+        }
+      ],
+      "ms": 355.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image031.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1296,
+              "y": 2229
+            },
+            {
+              "x": 1746,
+              "y": 2565
+            },
+            {
+              "x": 1401,
+              "y": 3021
+            },
+            {
+              "x": 939,
+              "y": 2694
+            }
+          ],
+          "hash": "3dc50e93671b27fdd26a91044be1d55c09ef841f941056bbaf3be786dd200365"
+        }
+      ],
+      "ms": 262.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image032.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 765,
+              "y": 1560
+            },
+            {
+              "x": 1947,
+              "y": 1458
+            },
+            {
+              "x": 2055,
+              "y": 2589
+            },
+            {
+              "x": 909,
+              "y": 2781
+            }
+          ],
+          "hash": "39c58e9e02aa8f009eacd5ac78cca235a1dc0ed457d049c6a1f8b3528803ce51"
+        }
+      ],
+      "ms": 268.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image033.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 696,
+              "y": 1467
+            },
+            {
+              "x": 1938,
+              "y": 1368
+            },
+            {
+              "x": 2049,
+              "y": 2565
+            },
+            {
+              "x": 849,
+              "y": 2760
+            }
+          ],
+          "hash": "39c58e9e02aa8f009eacd5ac78cca235a1dc0ed457d049c6a1f8b3528803ce51"
+        }
+      ],
+      "ms": 317.9,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image034.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 585,
+              "y": 264
+            },
+            {
+              "x": 1416,
+              "y": 756
+            },
+            {
+              "x": 963,
+              "y": 1587
+            },
+            {
+              "x": 93,
+              "y": 1137
+            }
+          ],
+          "hash": "3e7b5149f5d2772bacf4739c738b398edde65a8e01b724b3359a472a000f6b96"
+        }
+      ],
+      "ms": 100.6,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image035.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 183,
+              "y": 969
+            },
+            {
+              "x": 258,
+              "y": 258
+            },
+            {
+              "x": 1011,
+              "y": 288
+            },
+            {
+              "x": 927,
+              "y": 1059
+            }
+          ],
+          "hash": "316fa64270636ffeaa89abf08a6c80d2a570005c491a70436890b86ffdb115b7"
+        }
+      ],
+      "ms": 57.3,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image036.jpg",
+      "detailed": false,
+      "codes": [],
+      "ms": 2937.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image037.jpg",
+      "detailed": false,
+      "codes": [],
+      "ms": 1491.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image038.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 351,
+              "y": 228
+            },
+            {
+              "x": 690,
+              "y": 423
+            },
+            {
+              "x": 489,
+              "y": 750
+            },
+            {
+              "x": 150,
+              "y": 555
+            }
+          ],
+          "hash": "b4dd28d2a411d4cd692d0c6e3bb69578630f01d7f6c1c7e30323d95a800be3a2"
+        }
+      ],
+      "ms": 46.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image039.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 307,
+              "y": 310
+            },
+            {
+              "x": 402,
+              "y": 308
+            },
+            {
+              "x": 410,
+              "y": 404
+            },
+            {
+              "x": 310,
+              "y": 407
+            }
+          ],
+          "hash": "dc79a0f09603ba4b3816e8b0569b09cff027d173534bb808faea536dbe757753"
+        }
+      ],
+      "ms": 29.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image040.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 311.5,
+              "y": 325.5
+            },
+            {
+              "x": 413.5,
+              "y": 331.5
+            },
+            {
+              "x": 409,
+              "y": 432.5
+            },
+            {
+              "x": 307.5,
+              "y": 426.5
+            }
+          ],
+          "hash": "dc79a0f09603ba4b3816e8b0569b09cff027d173534bb808faea536dbe757753"
+        }
+      ],
+      "ms": 102.9,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image041.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 476,
+              "y": 292
+            },
+            {
+              "x": 565,
+              "y": 477
+            },
+            {
+              "x": 373,
+              "y": 573
+            },
+            {
+              "x": 291,
+              "y": 381
+            }
+          ],
+          "hash": "b4dd28d2a411d4cd692d0c6e3bb69578630f01d7f6c1c7e30323d95a800be3a2"
+        }
+      ],
+      "ms": 37.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image042.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 54,
+              "y": 41
+            },
+            {
+              "x": 248,
+              "y": 52
+            },
+            {
+              "x": 241,
+              "y": 252
+            },
+            {
+              "x": 43,
+              "y": 243
+            }
+          ],
+          "hash": "dc79a0f09603ba4b3816e8b0569b09cff027d173534bb808faea536dbe757753"
+        }
+      ],
+      "ms": 20.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image043.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 365,
+              "y": 426
+            },
+            {
+              "x": 328,
+              "y": 224
+            },
+            {
+              "x": 524,
+              "y": 189
+            },
+            {
+              "x": 569,
+              "y": 386
+            }
+          ],
+          "hash": "c9ea6c97c8ad8aa3cd9cd6e3173877f75c919acd3f254b5de655f72f3eb3717a"
+        }
+      ],
+      "ms": 30.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image044.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 309,
+              "y": 442
+            },
+            {
+              "x": 268,
+              "y": 223
+            },
+            {
+              "x": 478,
+              "y": 184
+            },
+            {
+              "x": 527,
+              "y": 392
+            }
+          ],
+          "hash": "c9ea6c97c8ad8aa3cd9cd6e3173877f75c919acd3f254b5de655f72f3eb3717a"
+        }
+      ],
+      "ms": 31.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image045.jpg",
+      "detailed": false,
+      "codes": [],
+      "ms": 742.3,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image001.png",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 388.43677458536155,
+              "y": 105.13137906684463
+            },
+            {
+              "x": 468.0927160303244,
+              "y": 163.27731235688054
+            },
+            {
+              "x": 420.3178396717181,
+              "y": 250.35123701063526
+            },
+            {
+              "x": 334.5280381603517,
+              "y": 193.4961576932589
+            }
+          ],
+          "hash": "3696500fcc53a9db3438c7738ed37ddc5062e78111452083eac544cdb58015a5"
+        }
+      ],
+      "ms": 248.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image002.png",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 257,
+              "y": 125
+            },
+            {
+              "x": 353,
+              "y": 133
+            },
+            {
+              "x": 346,
+              "y": 231
+            },
+            {
+              "x": 249,
+              "y": 222
+            }
+          ],
+          "hash": "3696500fcc53a9db3438c7738ed37ddc5062e78111452083eac544cdb58015a5"
+        }
+      ],
+      "ms": 29.3,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image003.png",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 210,
+              "y": 82
+            },
+            {
+              "x": 314,
+              "y": 95
+            },
+            {
+              "x": 301,
+              "y": 198
+            },
+            {
+              "x": 201,
+              "y": 185
+            }
+          ],
+          "hash": "3696500fcc53a9db3438c7738ed37ddc5062e78111452083eac544cdb58015a5"
+        }
+      ],
+      "ms": 26.3,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image004.png",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 109,
+              "y": 134
+            },
+            {
+              "x": 241,
+              "y": 152
+            },
+            {
+              "x": 224,
+              "y": 281
+            },
+            {
+              "x": 84,
+              "y": 270
+            }
+          ],
+          "hash": "3696500fcc53a9db3438c7738ed37ddc5062e78111452083eac544cdb58015a5"
+        }
+      ],
+      "ms": 24.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image005.png",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 321.9047129315957,
+              "y": 32.18067852629435
+            },
+            {
+              "x": 451.0912657320815,
+              "y": 42.625942234896094
+            },
+            {
+              "x": 431.34993480948765,
+              "y": 172.711888431382
+            },
+            {
+              "x": 309.22031204958006,
+              "y": 164.74248118410011
+            }
+          ],
+          "hash": "3696500fcc53a9db3438c7738ed37ddc5062e78111452083eac544cdb58015a5"
+        }
+      ],
+      "ms": 349.9,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image006.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1383.607949591645,
+              "y": 2638.793608582376
+            },
+            {
+              "x": 1653.42167939485,
+              "y": 2547.559877294796
+            },
+            {
+              "x": 1825.1565223192279,
+              "y": 2883.816695888165
+            },
+            {
+              "x": 1556.3626093812004,
+              "y": 3007.215990812108
+            }
+          ],
+          "hash": "d7df9fcbcd54e1dac33a914685de08fbe5308127e536354725a413dfbb98ebcd"
+        }
+      ],
+      "ms": 1056.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image007.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 669,
+              "y": 728
+            },
+            {
+              "x": 1194,
+              "y": 821
+            },
+            {
+              "x": 1092,
+              "y": 1328
+            },
+            {
+              "x": 585,
+              "y": 1214
+            }
+          ],
+          "hash": "db93f8993fcb676daa3c0e395b9bc89548b22f03d9937b2b6736fa0ff2c7c26f"
+        }
+      ],
+      "ms": 181.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image008.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 337,
+              "y": 329
+            },
+            {
+              "x": 625,
+              "y": 261
+            },
+            {
+              "x": 725,
+              "y": 552
+            },
+            {
+              "x": 429,
+              "y": 637
+            }
+          ],
+          "hash": "d7df9fcbcd54e1dac33a914685de08fbe5308127e536354725a413dfbb98ebcd"
+        }
+      ],
+      "ms": 43,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image009.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 205,
+              "y": 122
+            },
+            {
+              "x": 338,
+              "y": 116
+            },
+            {
+              "x": 348,
+              "y": 255
+            },
+            {
+              "x": 213,
+              "y": 263
+            }
+          ],
+          "hash": "d7df9fcbcd54e1dac33a914685de08fbe5308127e536354725a413dfbb98ebcd"
+        }
+      ],
+      "ms": 23.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image010.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 567,
+              "y": 1107
+            },
+            {
+              "x": 828,
+              "y": 1158
+            },
+            {
+              "x": 780,
+              "y": 1410
+            },
+            {
+              "x": 528,
+              "y": 1356
+            }
+          ],
+          "hash": "db93f8993fcb676daa3c0e395b9bc89548b22f03d9937b2b6736fa0ff2c7c26f"
+        }
+      ],
+      "ms": 112.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image011.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1083.7541770008231,
+              "y": 1619.9891517920992
+            },
+            {
+              "x": 1969.2474008552078,
+              "y": 1507.9430762859063
+            },
+            {
+              "x": 1976.2573627479019,
+              "y": 2241.6420407045975
+            },
+            {
+              "x": 1202.9587792616267,
+              "y": 2423.1839329759277
+            }
+          ],
+          "hash": "18fdd549b2ed367ac0c74cbec1214644728515b30edbcb78e7d322757a7c8359"
+        }
+      ],
+      "ms": 2330.9,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image012.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1059.2621433028066,
+              "y": 1901.8309839511546
+            },
+            {
+              "x": 1897.294557396262,
+              "y": 1879.8274428980412
+            },
+            {
+              "x": 1916.7630921977,
+              "y": 2561.035682833509
+            },
+            {
+              "x": 1164.0997926714615,
+              "y": 2630.2133272324427
+            }
+          ],
+          "hash": "18fdd549b2ed367ac0c74cbec1214644728515b30edbcb78e7d322757a7c8359"
+        }
+      ],
+      "ms": 2118.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image013.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 974.5867852678989,
+              "y": 1690.1669104245502
+            },
+            {
+              "x": 1653.381246807323,
+              "y": 1748.9681766368171
+            },
+            {
+              "x": 1689.179470866191,
+              "y": 2436.0683201737256
+            },
+            {
+              "x": 1044.1162408817743,
+              "y": 2367.8882572134717
+            }
+          ],
+          "hash": "18fdd549b2ed367ac0c74cbec1214644728515b30edbcb78e7d322757a7c8359"
+        }
+      ],
+      "ms": 1858,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image014.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1129.0286578787436,
+              "y": 1658.2332100145948
+            },
+            {
+              "x": 1820.2335291419874,
+              "y": 1429.021913281733
+            },
+            {
+              "x": 2015.822227463534,
+              "y": 1998.8485912561662
+            },
+            {
+              "x": 1397.4774637005662,
+              "y": 2248.005950616135
+            }
+          ],
+          "hash": "18fdd549b2ed367ac0c74cbec1214644728515b30edbcb78e7d322757a7c8359"
+        }
+      ],
+      "ms": 2250.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image015.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1941,
+              "y": 1723
+            },
+            {
+              "x": 1621,
+              "y": 2038
+            },
+            {
+              "x": 1305,
+              "y": 1703
+            },
+            {
+              "x": 1658,
+              "y": 1378
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 1424,
+              "y": 2783
+            },
+            {
+              "x": 1461,
+              "y": 2378
+            },
+            {
+              "x": 1879,
+              "y": 2383
+            },
+            {
+              "x": 1843,
+              "y": 2789
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 356.9,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image016.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 364.34559498935084,
+              "y": 713.5908248364445
+            },
+            {
+              "x": 371.5837138009754,
+              "y": 613.6273833367605
+            },
+            {
+              "x": 464.93008671012706,
+              "y": 606.4632115883759
+            },
+            {
+              "x": 457.19582252351984,
+              "y": 700.5470896709869
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        },
+        {
+          "points": [
+            {
+              "x": 474.5811871772048,
+              "y": 444.3873570331116
+            },
+            {
+              "x": 410.43790966846274,
+              "y": 527.4176877596435
+            },
+            {
+              "x": 336.93998673826934,
+              "y": 444.84662525286933
+            },
+            {
+              "x": 416.66512253020994,
+              "y": 365.1519350710647
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        }
+      ],
+      "ms": 279.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image017.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 504.66683855834,
+              "y": 419.45941224108077
+            },
+            {
+              "x": 376.24763698688855,
+              "y": 528.6800460148743
+            },
+            {
+              "x": 283.02942599607985,
+              "y": 395.5422706059064
+            },
+            {
+              "x": 384.103570826432,
+              "y": 291.76019211028455
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 324.34759536756,
+              "y": 730.2059403063488
+            },
+            {
+              "x": 328.05347825794377,
+              "y": 621.8704136818683
+            },
+            {
+              "x": 480.28396326128257,
+              "y": 642.6838731188607
+            },
+            {
+              "x": 461.68778352940865,
+              "y": 748.8560903494682
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 441.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image018.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 2159,
+              "y": 1556
+            },
+            {
+              "x": 1484,
+              "y": 2270
+            },
+            {
+              "x": 701,
+              "y": 1559
+            },
+            {
+              "x": 1493,
+              "y": 773
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 1174.4562948276598,
+              "y": 3689.795264797414
+            },
+            {
+              "x": 1184.78070558315,
+              "y": 2948.7399772138715
+            },
+            {
+              "x": 2058.7787822943965,
+              "y": 2903.2622013839896
+            },
+            {
+              "x": 1971.2877214791633,
+              "y": 3641.482487302331
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 2057.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image019.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 500,
+              "y": 294
+            },
+            {
+              "x": 343,
+              "y": 447
+            },
+            {
+              "x": 166,
+              "y": 240
+            },
+            {
+              "x": 370,
+              "y": 84
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 230.09728043112423,
+              "y": 846.7955211890142
+            },
+            {
+              "x": 250.74082882913692,
+              "y": 629.7342162056775
+            },
+            {
+              "x": 461.61695126028405,
+              "y": 631.7952892446622
+            },
+            {
+              "x": 434.05842363613544,
+              "y": 831.2583940130469
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 299.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image020.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 469,
+              "y": 325
+            },
+            {
+              "x": 401,
+              "y": 393
+            },
+            {
+              "x": 334,
+              "y": 319
+            },
+            {
+              "x": 411,
+              "y": 246
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 356.8236568304444,
+              "y": 555.5476444832589
+            },
+            {
+              "x": 365.07175181854836,
+              "y": 467.37638852367485
+            },
+            {
+              "x": 453.6407879740757,
+              "y": 469.80995790052054
+            },
+            {
+              "x": 443.1434988164039,
+              "y": 555.5682966013705
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 291,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image021.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 2754,
+              "y": 1722
+            },
+            {
+              "x": 1851,
+              "y": 2085
+            },
+            {
+              "x": 1467,
+              "y": 1167
+            },
+            {
+              "x": 2526,
+              "y": 753
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 1016.5100708326272,
+              "y": 3118.5303308018
+            },
+            {
+              "x": 1315.46211857187,
+              "y": 2534.3019658622293
+            },
+            {
+              "x": 2036.9163217503074,
+              "y": 2824.4458850513333
+            },
+            {
+              "x": 1696.2441688864333,
+              "y": 3355.718735174857
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 2145.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image022.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 486,
+              "y": 431
+            },
+            {
+              "x": 405,
+              "y": 509
+            },
+            {
+              "x": 327,
+              "y": 426
+            },
+            {
+              "x": 414,
+              "y": 345
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 356.4155420779325,
+              "y": 692.2168743242212
+            },
+            {
+              "x": 364.4480552666235,
+              "y": 591.4823051080081
+            },
+            {
+              "x": 469.94031730641984,
+              "y": 592.8239667174444
+            },
+            {
+              "x": 458.18989855841284,
+              "y": 693.4010177824694
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 252.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image023.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 540,
+              "y": 390
+            },
+            {
+              "x": 372,
+              "y": 567
+            },
+            {
+              "x": 177,
+              "y": 390
+            },
+            {
+              "x": 372,
+              "y": 192
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 292.4568312713383,
+              "y": 922.0651176776597
+            },
+            {
+              "x": 294.13896131655974,
+              "y": 736.4821123561137
+            },
+            {
+              "x": 517.4735556914588,
+              "y": 726.0388896567504
+            },
+            {
+              "x": 495.0001417514887,
+              "y": 907.9043684983614
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 215.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image024.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 688,
+              "y": 430
+            },
+            {
+              "x": 463,
+              "y": 521
+            },
+            {
+              "x": 366,
+              "y": 292
+            },
+            {
+              "x": 632,
+              "y": 188
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 253.60986401561647,
+              "y": 778.5177605008421
+            },
+            {
+              "x": 329.33573488027844,
+              "y": 631.8299572707633
+            },
+            {
+              "x": 511.6180269273352,
+              "y": 706.8990742083921
+            },
+            {
+              "x": 424.4317470348375,
+              "y": 838.7433762235072
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 288.6,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image025.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1108,
+              "y": 1949
+            },
+            {
+              "x": 1832,
+              "y": 1956
+            },
+            {
+              "x": 1826,
+              "y": 2677
+            },
+            {
+              "x": 1103,
+              "y": 2671
+            }
+          ],
+          "hash": "d1de94707028899d38096c29f52269223d0264397706f0c409dcf25f1f8211f0"
+        }
+      ],
+      "ms": 297.3,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image026.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1429.4933767357495,
+              "y": 2244.6104962234394
+            },
+            {
+              "x": 1861.6890792251138,
+              "y": 2163.5243035428407
+            },
+            {
+              "x": 1905.1823940309164,
+              "y": 2674.470638041267
+            },
+            {
+              "x": 1482.3769786617597,
+              "y": 2816.7221006696086
+            }
+          ],
+          "hash": "d1de94707028899d38096c29f52269223d0264397706f0c409dcf25f1f8211f0"
+        }
+      ],
+      "ms": 1685.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image027.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 702,
+              "y": 1117
+            },
+            {
+              "x": 885,
+              "y": 1146
+            },
+            {
+              "x": 857,
+              "y": 1318
+            },
+            {
+              "x": 677,
+              "y": 1294
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 110.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image028.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 781,
+              "y": 1070
+            },
+            {
+              "x": 957,
+              "y": 1089
+            },
+            {
+              "x": 924,
+              "y": 1256
+            },
+            {
+              "x": 755,
+              "y": 1248
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 92.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image029.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1541,
+              "y": 2182
+            },
+            {
+              "x": 1680,
+              "y": 2230
+            },
+            {
+              "x": 1634,
+              "y": 2366
+            },
+            {
+              "x": 1495,
+              "y": 2320
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 271.9,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image030.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 871,
+              "y": 660
+            },
+            {
+              "x": 1264,
+              "y": 627
+            },
+            {
+              "x": 1312,
+              "y": 1041
+            },
+            {
+              "x": 914,
+              "y": 1059
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 106.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image031.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1345,
+              "y": 2461
+            },
+            {
+              "x": 1787,
+              "y": 2406
+            },
+            {
+              "x": 1850,
+              "y": 2851
+            },
+            {
+              "x": 1406,
+              "y": 2914
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 278,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image032.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1083.1633316692732,
+              "y": 2166.7531549021423
+            },
+            {
+              "x": 1419.3889322912028,
+              "y": 1891.8541441828515
+            },
+            {
+              "x": 1725.3925090664425,
+              "y": 2269.580189003731
+            },
+            {
+              "x": 1381.9267397194185,
+              "y": 2512.964600864285
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 2066.9,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image033.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 342,
+              "y": 625
+            },
+            {
+              "x": 454,
+              "y": 611
+            },
+            {
+              "x": 470,
+              "y": 724
+            },
+            {
+              "x": 357,
+              "y": 740
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 50.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image034.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 275.07927313603426,
+              "y": 550.3791918178441
+            },
+            {
+              "x": 359.5527849798374,
+              "y": 479.7306418605973
+            },
+            {
+              "x": 438.26134421563233,
+              "y": 575.3827355239085
+            },
+            {
+              "x": 350.60735736666425,
+              "y": 637.8342462225232
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 465.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image035.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 281,
+              "y": 495
+            },
+            {
+              "x": 465,
+              "y": 497
+            },
+            {
+              "x": 464,
+              "y": 680
+            },
+            {
+              "x": 279,
+              "y": 679
+            }
+          ],
+          "hash": "d1de94707028899d38096c29f52269223d0264397706f0c409dcf25f1f8211f0"
+        }
+      ],
+      "ms": 43.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image036.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 361.8961620477618,
+              "y": 568.7258831591361
+            },
+            {
+              "x": 473.6738944337079,
+              "y": 547.9086996749259
+            },
+            {
+              "x": 485.62444579833164,
+              "y": 679.2953758360015
+            },
+            {
+              "x": 375.38665507427487,
+              "y": 715.0789967354245
+            }
+          ],
+          "hash": "d1de94707028899d38096c29f52269223d0264397706f0c409dcf25f1f8211f0"
+        }
+      ],
+      "ms": 464.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image037.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 770,
+              "y": 1091
+            },
+            {
+              "x": 840,
+              "y": 1115
+            },
+            {
+              "x": 817,
+              "y": 1183
+            },
+            {
+              "x": 747,
+              "y": 1160
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 118.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image038.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 414,
+              "y": 314
+            },
+            {
+              "x": 602,
+              "y": 298
+            },
+            {
+              "x": 624,
+              "y": 495
+            },
+            {
+              "x": 435,
+              "y": 504
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 40.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image039.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1566.3720281497401,
+              "y": 2419.341130314542
+            },
+            {
+              "x": 2052.8655650206388,
+              "y": 2368.376531610371
+            },
+            {
+              "x": 2044.179631670354,
+              "y": 2799.153485974623
+            },
+            {
+              "x": 1570.0545700694452,
+              "y": 2865.9097795803077
+            }
+          ],
+          "hash": "7270204e1dc7cfe5d229f67d6f71ac4e18426e73952b37712b9b2f8fca0b7518"
+        }
+      ],
+      "ms": 1611.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image040.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1177,
+              "y": 2373
+            },
+            {
+              "x": 1753,
+              "y": 2300
+            },
+            {
+              "x": 1772,
+              "y": 2878
+            },
+            {
+              "x": 1205,
+              "y": 2988
+            }
+          ],
+          "hash": "7270204e1dc7cfe5d229f67d6f71ac4e18426e73952b37712b9b2f8fca0b7518"
+        }
+      ],
+      "ms": 572.3,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image041.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1276,
+              "y": 2341
+            },
+            {
+              "x": 1950,
+              "y": 2297
+            },
+            {
+              "x": 1981,
+              "y": 2949
+            },
+            {
+              "x": 1306,
+              "y": 3010
+            }
+          ],
+          "hash": "7270204e1dc7cfe5d229f67d6f71ac4e18426e73952b37712b9b2f8fca0b7518"
+        }
+      ],
+      "ms": 307.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image042.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1375.0590920247805,
+              "y": 2202.6243823565187
+            },
+            {
+              "x": 1958.3773174117166,
+              "y": 2107.8077516524654
+            },
+            {
+              "x": 1926.551222511989,
+              "y": 2600.4992727492504
+            },
+            {
+              "x": 1379.7286955395732,
+              "y": 2718.683622963836
+            }
+          ],
+          "hash": "7270204e1dc7cfe5d229f67d6f71ac4e18426e73952b37712b9b2f8fca0b7518"
+        }
+      ],
+      "ms": 1719.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image043.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1197,
+              "y": 756
+            },
+            {
+              "x": 744,
+              "y": 1092
+            },
+            {
+              "x": 396,
+              "y": 624
+            },
+            {
+              "x": 852,
+              "y": 288
+            }
+          ],
+          "hash": "e8b32884fcc03ac63b45c12f3231ce2d9645551831b9106062a157484194f44c"
+        }
+      ],
+      "ms": 87.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image044.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 819,
+              "y": 492
+            },
+            {
+              "x": 567,
+              "y": 837
+            },
+            {
+              "x": 225,
+              "y": 579
+            },
+            {
+              "x": 477,
+              "y": 234
+            }
+          ],
+          "hash": "e8b32884fcc03ac63b45c12f3231ce2d9645551831b9106062a157484194f44c"
+        }
+      ],
+      "ms": 52.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image045.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 78,
+              "y": 103
+            },
+            {
+              "x": 409,
+              "y": 75
+            },
+            {
+              "x": 435,
+              "y": 403
+            },
+            {
+              "x": 106,
+              "y": 435
+            }
+          ],
+          "hash": "2973eab0e70f7c55626e24e6a71bd870a93b61e6158cf2db02bea5f9854a69fb"
+        }
+      ],
+      "ms": 30.6,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image046.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 148,
+              "y": 287
+            },
+            {
+              "x": 291,
+              "y": 273
+            },
+            {
+              "x": 293,
+              "y": 416
+            },
+            {
+              "x": 155,
+              "y": 440
+            }
+          ],
+          "hash": "2973eab0e70f7c55626e24e6a71bd870a93b61e6158cf2db02bea5f9854a69fb"
+        }
+      ],
+      "ms": 29.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image047.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 157,
+              "y": 207
+            },
+            {
+              "x": 818,
+              "y": 150
+            },
+            {
+              "x": 871,
+              "y": 808
+            },
+            {
+              "x": 212,
+              "y": 870
+            }
+          ],
+          "hash": "2973eab0e70f7c55626e24e6a71bd870a93b61e6158cf2db02bea5f9854a69fb"
+        }
+      ],
+      "ms": 49.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image048.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 642,
+              "y": 1245
+            },
+            {
+              "x": 1260,
+              "y": 1185
+            },
+            {
+              "x": 1272,
+              "y": 1806
+            },
+            {
+              "x": 669,
+              "y": 1911
+            }
+          ],
+          "hash": "2973eab0e70f7c55626e24e6a71bd870a93b61e6158cf2db02bea5f9854a69fb"
+        }
+      ],
+      "ms": 184.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image049.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 95,
+              "y": 838
+            },
+            {
+              "x": 226,
+              "y": 292
+            },
+            {
+              "x": 767,
+              "y": 426
+            },
+            {
+              "x": 640,
+              "y": 967
+            }
+          ],
+          "hash": "2973eab0e70f7c55626e24e6a71bd870a93b61e6158cf2db02bea5f9854a69fb"
+        }
+      ],
+      "ms": 47,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image050.jpg",
+      "detailed": false,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 334,
+              "y": 480
+            },
+            {
+              "x": 287,
+              "y": 179
+            },
+            {
+              "x": 570,
+              "y": 139
+            },
+            {
+              "x": 632,
+              "y": 424
+            }
+          ],
+          "hash": "c9ea6c97c8ad8aa3cd9cd6e3173877f75c919acd3f254b5de655f72f3eb3717a"
+        }
+      ],
+      "ms": 34,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image001.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 468,
+              "y": 298
+            },
+            {
+              "x": 256,
+              "y": 275
+            },
+            {
+              "x": 262,
+              "y": 79
+            },
+            {
+              "x": 517,
+              "y": 87
+            }
+          ],
+          "hash": "27583241fb53d5f4b07411456f7382073abf6f84dbcc59e8c0d635ffa8462513"
+        }
+      ],
+      "ms": 23.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image002.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 656,
+              "y": 225
+            },
+            {
+              "x": 843,
+              "y": 277
+            },
+            {
+              "x": 784,
+              "y": 428
+            },
+            {
+              "x": 578,
+              "y": 346
+            }
+          ],
+          "hash": "de1978c64f1a0415cdecc1278f9c40a362377880711e5aa90973c1aa219262a2"
+        }
+      ],
+      "ms": 37.6,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image003.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 509,
+              "y": 449
+            },
+            {
+              "x": 255,
+              "y": 552
+            },
+            {
+              "x": 107,
+              "y": 314
+            },
+            {
+              "x": 405,
+              "y": 201
+            }
+          ],
+          "hash": "1b84eb59e475035c7e2c8cd4d55897bf9f7c7a81f0163decce97efde6528995d"
+        }
+      ],
+      "ms": 41.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image004.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 516,
+              "y": 303
+            },
+            {
+              "x": 403,
+              "y": 327
+            },
+            {
+              "x": 378,
+              "y": 213
+            },
+            {
+              "x": 491,
+              "y": 188
+            }
+          ],
+          "hash": "1b84eb59e475035c7e2c8cd4d55897bf9f7c7a81f0163decce97efde6528995d"
+        }
+      ],
+      "ms": 37.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image005.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1026.7152777777778,
+              "y": 1409.4785847299813
+            },
+            {
+              "x": 1058.6041666666667,
+              "y": 2208.4916201117317
+            },
+            {
+              "x": 271.34722222222223,
+              "y": 2216.461824953445
+            },
+            {
+              "x": 195.61111111111111,
+              "y": 1421.4338919925513
+            }
+          ],
+          "hash": "f86a496d9e5deceb7497f13e5dd8527b80ca66b9e452f93adea8a54d3f56d3ab"
+        },
+        {
+          "points": [
+            {
+              "x": 1564.0737525086377,
+              "y": 2202.6663167002944
+            },
+            {
+              "x": 1993.470102445749,
+              "y": 2232.6128830986627
+            },
+            {
+              "x": 1960.5334822706886,
+              "y": 2637.969835362401
+            },
+            {
+              "x": 1535.7253490861685,
+              "y": 2616.7649906523166
+            }
+          ],
+          "hash": "fe7162532814ab74e3ea14c27b573534bf8f4384bf5da07887d297f4126e09d3"
+        },
+        {
+          "points": [
+            {
+              "x": 1805.8006198708313,
+              "y": 1476.6094807790248
+            },
+            {
+              "x": 2182.232362314413,
+              "y": 1487.1961049860543
+            },
+            {
+              "x": 2165.28854854806,
+              "y": 1862.358800899302
+            },
+            {
+              "x": 1800.4843341722208,
+              "y": 1852.4504316678708
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        }
+      ],
+      "ms": 12126.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image006.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1372,
+              "y": 2129
+            },
+            {
+              "x": 2012,
+              "y": 2166
+            },
+            {
+              "x": 1961,
+              "y": 2744
+            },
+            {
+              "x": 1356,
+              "y": 2697
+            }
+          ],
+          "hash": "158584987982ba3b398c283edac5a2da0bd96139dd2a2b0a176c3f6fe75a20fc"
+        }
+      ],
+      "ms": 444.6,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image007.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 343,
+              "y": 532
+            },
+            {
+              "x": 503,
+              "y": 542
+            },
+            {
+              "x": 490,
+              "y": 685
+            },
+            {
+              "x": 339,
+              "y": 675
+            }
+          ],
+          "hash": "158584987982ba3b398c283edac5a2da0bd96139dd2a2b0a176c3f6fe75a20fc"
+        }
+      ],
+      "ms": 47.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image008.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 271.77777777777777,
+              "y": 127.77008928571428
+            },
+            {
+              "x": 456.3703703703704,
+              "y": 265.8169642857143
+            },
+            {
+              "x": 329.85185185185185,
+              "y": 443.30580357142856
+            },
+            {
+              "x": 144.22222222222223,
+              "y": 301.10714285714283
+            }
+          ],
+          "hash": "2c5f312ef5583e79ca654b335c44394d56f3a186c692adc1b0d382b63ba213ac"
+        }
+      ],
+      "ms": 1239.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image009.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1490,
+              "y": 2284
+            },
+            {
+              "x": 1735,
+              "y": 2290
+            },
+            {
+              "x": 1726,
+              "y": 2538
+            },
+            {
+              "x": 1481,
+              "y": 2528
+            }
+          ],
+          "hash": "ac1c87ad962ef8fe2bf64023d5dcec4b52ac714074ea4d47eab4dc83dbb64f78"
+        }
+      ],
+      "ms": 373.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image010.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 2000,
+              "y": 1424
+            },
+            {
+              "x": 2016,
+              "y": 1584
+            },
+            {
+              "x": 1853,
+              "y": 1597
+            },
+            {
+              "x": 1840,
+              "y": 1440
+            }
+          ],
+          "hash": "3c99c10a802e68e7c5f0f42315354a537b111fcb55b631e2a7a9ff97ef404faa"
+        }
+      ],
+      "ms": 517.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image011.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 625,
+              "y": 207
+            },
+            {
+              "x": 1074,
+              "y": 156
+            },
+            {
+              "x": 1121,
+              "y": 598
+            },
+            {
+              "x": 669,
+              "y": 671
+            }
+          ],
+          "hash": "ac1c87ad962ef8fe2bf64023d5dcec4b52ac714074ea4d47eab4dc83dbb64f78"
+        }
+      ],
+      "ms": 56.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image012.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1012,
+              "y": 410
+            },
+            {
+              "x": 1018,
+              "y": 595
+            },
+            {
+              "x": 828,
+              "y": 602
+            },
+            {
+              "x": 822,
+              "y": 414
+            }
+          ],
+          "hash": "3c99c10a802e68e7c5f0f42315354a537b111fcb55b631e2a7a9ff97ef404faa"
+        }
+      ],
+      "ms": 58.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image013.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 249,
+              "y": 34
+            },
+            {
+              "x": 254,
+              "y": 222
+            },
+            {
+              "x": 64,
+              "y": 228
+            },
+            {
+              "x": 58,
+              "y": 40
+            }
+          ],
+          "hash": "3c99c10a802e68e7c5f0f42315354a537b111fcb55b631e2a7a9ff97ef404faa"
+        }
+      ],
+      "ms": 22.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image014.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 142,
+              "y": 180
+            },
+            {
+              "x": 211,
+              "y": 185
+            },
+            {
+              "x": 211,
+              "y": 264
+            },
+            {
+              "x": 142,
+              "y": 259
+            }
+          ],
+          "hash": "84eb3d04fd3283b0c7b98aeb1a92585bb1a706417dab61903725788ba5f83182"
+        }
+      ],
+      "ms": 30.6,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image015.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 172,
+              "y": 135
+            },
+            {
+              "x": 275,
+              "y": 141
+            },
+            {
+              "x": 274,
+              "y": 244
+            },
+            {
+              "x": 161,
+              "y": 243
+            }
+          ],
+          "hash": "c9ea6c97c8ad8aa3cd9cd6e3173877f75c919acd3f254b5de655f72f3eb3717a"
+        },
+        {
+          "points": [
+            {
+              "x": 336.4932894628405,
+              "y": 143.5311900675905
+            },
+            {
+              "x": 438.1899650766104,
+              "y": 145.73473367694842
+            },
+            {
+              "x": 449.9283975575043,
+              "y": 250.08675575897894
+            },
+            {
+              "x": 340.1804504900293,
+              "y": 245.83214012826068
+            }
+          ],
+          "hash": "02b124f6c4c7372284d3837ada8b5f240f863672d49da323f4574a2bcd6c0f30"
+        }
+      ],
+      "ms": 250.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image016.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1321.7109375,
+              "y": 1397.0914127423823
+            },
+            {
+              "x": 1362.7265625,
+              "y": 2164.9473684210525
+            },
+            {
+              "x": 606.8671875,
+              "y": 2188.3933518005542
+            },
+            {
+              "x": 539.484375,
+              "y": 1429.3296398891966
+            }
+          ],
+          "hash": "f86a496d9e5deceb7497f13e5dd8527b80ca66b9e452f93adea8a54d3f56d3ab"
+        },
+        {
+          "points": [
+            {
+              "x": 1841.8645833333333,
+              "y": 2150.8167115902966
+            },
+            {
+              "x": 2263.0104166666665,
+              "y": 2167.0161725067387
+            },
+            {
+              "x": 2241.953125,
+              "y": 2573.622641509434
+            },
+            {
+              "x": 1819.1875,
+              "y": 2557.423180592992
+            }
+          ],
+          "hash": "fe7162532814ab74e3ea14c27b573534bf8f4384bf5da07887d297f4126e09d3"
+        },
+        {
+          "points": [
+            {
+              "x": 2058.8125,
+              "y": 1439.9592391304348
+            },
+            {
+              "x": 2427.3020833333335,
+              "y": 1429.6304347826087
+            },
+            {
+              "x": 2425.828125,
+              "y": 1798.516304347826
+            },
+            {
+              "x": 2057.3385416666665,
+              "y": 1808.845108695652
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        }
+      ],
+      "ms": 5169.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image017.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1298,
+              "y": 1214
+            },
+            {
+              "x": 1354,
+              "y": 2027
+            },
+            {
+              "x": 562,
+              "y": 2062
+            },
+            {
+              "x": 474,
+              "y": 1261
+            }
+          ],
+          "hash": "f86a496d9e5deceb7497f13e5dd8527b80ca66b9e452f93adea8a54d3f56d3ab"
+        },
+        {
+          "points": [
+            {
+              "x": 2086,
+              "y": 1250
+            },
+            {
+              "x": 2476,
+              "y": 1236
+            },
+            {
+              "x": 2476,
+              "y": 1633
+            },
+            {
+              "x": 2085,
+              "y": 1642
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        },
+        {
+          "points": [
+            {
+              "x": 1859,
+              "y": 2006
+            },
+            {
+              "x": 2308,
+              "y": 2019
+            },
+            {
+              "x": 2282,
+              "y": 2450
+            },
+            {
+              "x": 1846,
+              "y": 2436
+            }
+          ],
+          "hash": "fe7162532814ab74e3ea14c27b573534bf8f4384bf5da07887d297f4126e09d3"
+        }
+      ],
+      "ms": 275.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image018.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 2127,
+              "y": 1239
+            },
+            {
+              "x": 2526,
+              "y": 1233
+            },
+            {
+              "x": 2526,
+              "y": 1638
+            },
+            {
+              "x": 2124,
+              "y": 1644
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        },
+        {
+          "points": [
+            {
+              "x": 1893,
+              "y": 2012
+            },
+            {
+              "x": 2349,
+              "y": 2027
+            },
+            {
+              "x": 2319,
+              "y": 2462
+            },
+            {
+              "x": 1878,
+              "y": 2450
+            }
+          ],
+          "hash": "fe7162532814ab74e3ea14c27b573534bf8f4384bf5da07887d297f4126e09d3"
+        },
+        {
+          "points": [
+            {
+              "x": 1329,
+              "y": 1200.1230366492146
+            },
+            {
+              "x": 1380,
+              "y": 2028.84554973822
+            },
+            {
+              "x": 582,
+              "y": 2058.8717277486912
+            },
+            {
+              "x": 486,
+              "y": 1245.1623036649214
+            }
+          ],
+          "hash": "f86a496d9e5deceb7497f13e5dd8527b80ca66b9e452f93adea8a54d3f56d3ab"
+        }
+      ],
+      "ms": 3726.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image019.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 2154.882389881841,
+              "y": 1221.8745989494168
+            },
+            {
+              "x": 2562.100599032057,
+              "y": 1208.8888036909198
+            },
+            {
+              "x": 2555.961237196717,
+              "y": 1619.9018205341163
+            },
+            {
+              "x": 2159.172353129184,
+              "y": 1632.968385562022
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        }
+      ],
+      "ms": 28357.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image020.jpg",
+      "detailed": true,
+      "codes": [],
+      "ms": 24714.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image021.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 2170.4427083333335,
+              "y": 1300.7354497354497
+            },
+            {
+              "x": 2570.53125,
+              "y": 1291.005291005291
+            },
+            {
+              "x": 2557.5729166666665,
+              "y": 1693.1851851851852
+            },
+            {
+              "x": 2170.4427083333335,
+              "y": 1701.2936507936508
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        },
+        {
+          "points": [
+            {
+              "x": 1934.0389285348037,
+              "y": 2067.0931162679312
+            },
+            {
+              "x": 2389.6548857043963,
+              "y": 2080.783421272766
+            },
+            {
+              "x": 2355.898801780602,
+              "y": 2526.89743117713
+            },
+            {
+              "x": 1916.104819479419,
+              "y": 2509.056527886899
+            }
+          ],
+          "hash": "fe7162532814ab74e3ea14c27b573534bf8f4384bf5da07887d297f4126e09d3"
+        }
+      ],
+      "ms": 19630,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image022.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 459,
+              "y": 1260
+            },
+            {
+              "x": 2448,
+              "y": 1269
+            },
+            {
+              "x": 2466,
+              "y": 3303
+            },
+            {
+              "x": 468,
+              "y": 3321
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        }
+      ],
+      "ms": 276.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image023.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 720,
+              "y": 1116
+            },
+            {
+              "x": 2673,
+              "y": 1503
+            },
+            {
+              "x": 2313,
+              "y": 3510
+            },
+            {
+              "x": 297,
+              "y": 3123
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        }
+      ],
+      "ms": 245.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image024.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 975,
+              "y": 696
+            },
+            {
+              "x": 2859,
+              "y": 1632
+            },
+            {
+              "x": 1959,
+              "y": 3546
+            },
+            {
+              "x": 15,
+              "y": 2619
+            }
+          ],
+          "hash": "2f7493db25b91036c440beb7f9695abbc2154938ad57a8eb9acfe890e61a0137"
+        }
+      ],
+      "ms": 284.3,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image025.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 46,
+              "y": 150
+            },
+            {
+              "x": 48,
+              "y": 26
+            },
+            {
+              "x": 169,
+              "y": 31
+            },
+            {
+              "x": 164,
+              "y": 155
+            }
+          ],
+          "hash": "826723291f48ab6fd311c756b2f652319dc46f64ca459ecfcbe1b430af4943e5"
+        },
+        {
+          "points": [
+            {
+              "x": 35,
+              "y": 482
+            },
+            {
+              "x": 40,
+              "y": 364
+            },
+            {
+              "x": 156,
+              "y": 371
+            },
+            {
+              "x": 152,
+              "y": 489
+            }
+          ],
+          "hash": "826723291f48ab6fd311c756b2f652319dc46f64ca459ecfcbe1b430af4943e5"
+        }
+      ],
+      "ms": 22.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image026.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1124,
+              "y": 1727
+            },
+            {
+              "x": 870,
+              "y": 1578
+            },
+            {
+              "x": 1011,
+              "y": 1334
+            },
+            {
+              "x": 1272,
+              "y": 1483
+            }
+          ],
+          "hash": "826723291f48ab6fd311c756b2f652319dc46f64ca459ecfcbe1b430af4943e5"
+        },
+        {
+          "points": [
+            {
+              "x": 417,
+              "y": 1350
+            },
+            {
+              "x": 144,
+              "y": 1225
+            },
+            {
+              "x": 273,
+              "y": 965
+            },
+            {
+              "x": 549,
+              "y": 1101
+            }
+          ],
+          "hash": "826723291f48ab6fd311c756b2f652319dc46f64ca459ecfcbe1b430af4943e5"
+        }
+      ],
+      "ms": 148.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image027.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 208.5,
+              "y": 675
+            },
+            {
+              "x": 72.5,
+              "y": 612.5
+            },
+            {
+              "x": 136.5,
+              "y": 483.5
+            },
+            {
+              "x": 274.5,
+              "y": 551
+            }
+          ],
+          "hash": "826723291f48ab6fd311c756b2f652319dc46f64ca459ecfcbe1b430af4943e5"
+        },
+        {
+          "points": [
+            {
+              "x": 562,
+              "y": 864
+            },
+            {
+              "x": 435,
+              "y": 789
+            },
+            {
+              "x": 505,
+              "y": 670
+            },
+            {
+              "x": 636,
+              "y": 742
+            }
+          ],
+          "hash": "826723291f48ab6fd311c756b2f652319dc46f64ca459ecfcbe1b430af4943e5"
+        }
+      ],
+      "ms": 159.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image028.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1018,
+              "y": 522
+            },
+            {
+              "x": 819,
+              "y": 990
+            },
+            {
+              "x": 348,
+              "y": 767
+            },
+            {
+              "x": 572,
+              "y": 291
+            }
+          ],
+          "hash": "3dc50e93671b27fdd26a91044be1d55c09ef841f941056bbaf3be786dd200365"
+        }
+      ],
+      "ms": 53.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image029.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 339,
+              "y": 411
+            },
+            {
+              "x": 846,
+              "y": 435
+            },
+            {
+              "x": 765,
+              "y": 864
+            },
+            {
+              "x": 282,
+              "y": 855
+            }
+          ],
+          "hash": "3dc50e93671b27fdd26a91044be1d55c09ef841f941056bbaf3be786dd200365"
+        }
+      ],
+      "ms": 88.9,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image030.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1844,
+              "y": 2182
+            },
+            {
+              "x": 2321,
+              "y": 2219
+            },
+            {
+              "x": 2313,
+              "y": 2729
+            },
+            {
+              "x": 1826,
+              "y": 2711
+            }
+          ],
+          "hash": "3dc50e93671b27fdd26a91044be1d55c09ef841f941056bbaf3be786dd200365"
+        }
+      ],
+      "ms": 272.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image031.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1296,
+              "y": 2229
+            },
+            {
+              "x": 1746,
+              "y": 2565
+            },
+            {
+              "x": 1401,
+              "y": 3021
+            },
+            {
+              "x": 939,
+              "y": 2694
+            }
+          ],
+          "hash": "3dc50e93671b27fdd26a91044be1d55c09ef841f941056bbaf3be786dd200365"
+        }
+      ],
+      "ms": 275.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image032.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 765,
+              "y": 1560
+            },
+            {
+              "x": 1947,
+              "y": 1458
+            },
+            {
+              "x": 2055,
+              "y": 2589
+            },
+            {
+              "x": 909,
+              "y": 2781
+            }
+          ],
+          "hash": "39c58e9e02aa8f009eacd5ac78cca235a1dc0ed457d049c6a1f8b3528803ce51"
+        }
+      ],
+      "ms": 266.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image033.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 696,
+              "y": 1467
+            },
+            {
+              "x": 1938,
+              "y": 1368
+            },
+            {
+              "x": 2049,
+              "y": 2565
+            },
+            {
+              "x": 849,
+              "y": 2760
+            }
+          ],
+          "hash": "39c58e9e02aa8f009eacd5ac78cca235a1dc0ed457d049c6a1f8b3528803ce51"
+        }
+      ],
+      "ms": 248.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image034.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 585,
+              "y": 264
+            },
+            {
+              "x": 1416,
+              "y": 756
+            },
+            {
+              "x": 963,
+              "y": 1587
+            },
+            {
+              "x": 93,
+              "y": 1137
+            }
+          ],
+          "hash": "3e7b5149f5d2772bacf4739c738b398edde65a8e01b724b3359a472a000f6b96"
+        }
+      ],
+      "ms": 89.9,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image035.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 183,
+              "y": 969
+            },
+            {
+              "x": 258,
+              "y": 258
+            },
+            {
+              "x": 1011,
+              "y": 288
+            },
+            {
+              "x": 927,
+              "y": 1059
+            }
+          ],
+          "hash": "316fa64270636ffeaa89abf08a6c80d2a570005c491a70436890b86ffdb115b7"
+        }
+      ],
+      "ms": 55.3,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image036.jpg",
+      "detailed": true,
+      "codes": [],
+      "ms": 10372.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image037.jpg",
+      "detailed": true,
+      "codes": [],
+      "ms": 8836.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image038.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 351,
+              "y": 228
+            },
+            {
+              "x": 690,
+              "y": 423
+            },
+            {
+              "x": 489,
+              "y": 750
+            },
+            {
+              "x": 150,
+              "y": 555
+            }
+          ],
+          "hash": "b4dd28d2a411d4cd692d0c6e3bb69578630f01d7f6c1c7e30323d95a800be3a2"
+        }
+      ],
+      "ms": 60.6,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image039.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 307,
+              "y": 310
+            },
+            {
+              "x": 402,
+              "y": 308
+            },
+            {
+              "x": 410,
+              "y": 404
+            },
+            {
+              "x": 310,
+              "y": 407
+            }
+          ],
+          "hash": "dc79a0f09603ba4b3816e8b0569b09cff027d173534bb808faea536dbe757753"
+        }
+      ],
+      "ms": 26.6,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image040.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 311.5,
+              "y": 325.5
+            },
+            {
+              "x": 413.5,
+              "y": 331.5
+            },
+            {
+              "x": 409,
+              "y": 432.5
+            },
+            {
+              "x": 307.5,
+              "y": 426.5
+            }
+          ],
+          "hash": "dc79a0f09603ba4b3816e8b0569b09cff027d173534bb808faea536dbe757753"
+        }
+      ],
+      "ms": 106.6,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image041.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 476,
+              "y": 292
+            },
+            {
+              "x": 565,
+              "y": 477
+            },
+            {
+              "x": 373,
+              "y": 573
+            },
+            {
+              "x": 291,
+              "y": 381
+            }
+          ],
+          "hash": "b4dd28d2a411d4cd692d0c6e3bb69578630f01d7f6c1c7e30323d95a800be3a2"
+        }
+      ],
+      "ms": 36.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image042.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 54,
+              "y": 41
+            },
+            {
+              "x": 248,
+              "y": 52
+            },
+            {
+              "x": 241,
+              "y": 252
+            },
+            {
+              "x": 43,
+              "y": 243
+            }
+          ],
+          "hash": "dc79a0f09603ba4b3816e8b0569b09cff027d173534bb808faea536dbe757753"
+        }
+      ],
+      "ms": 22.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image043.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 365,
+              "y": 426
+            },
+            {
+              "x": 328,
+              "y": 224
+            },
+            {
+              "x": 524,
+              "y": 189
+            },
+            {
+              "x": 569,
+              "y": 386
+            }
+          ],
+          "hash": "c9ea6c97c8ad8aa3cd9cd6e3173877f75c919acd3f254b5de655f72f3eb3717a"
+        }
+      ],
+      "ms": 33.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image044.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 309,
+              "y": 442
+            },
+            {
+              "x": 268,
+              "y": 223
+            },
+            {
+              "x": 478,
+              "y": 184
+            },
+            {
+              "x": 527,
+              "y": 392
+            }
+          ],
+          "hash": "c9ea6c97c8ad8aa3cd9cd6e3173877f75c919acd3f254b5de655f72f3eb3717a"
+        }
+      ],
+      "ms": 34.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "blurred/image045.jpg",
+      "detailed": true,
+      "codes": [],
+      "ms": 3067.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image001.png",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 388.43677458536155,
+              "y": 105.13137906684463
+            },
+            {
+              "x": 468.0927160303244,
+              "y": 163.27731235688054
+            },
+            {
+              "x": 420.3178396717181,
+              "y": 250.35123701063526
+            },
+            {
+              "x": 334.5280381603517,
+              "y": 193.4961576932589
+            }
+          ],
+          "hash": "3696500fcc53a9db3438c7738ed37ddc5062e78111452083eac544cdb58015a5"
+        }
+      ],
+      "ms": 247.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image002.png",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 257,
+              "y": 125
+            },
+            {
+              "x": 353,
+              "y": 133
+            },
+            {
+              "x": 346,
+              "y": 231
+            },
+            {
+              "x": 249,
+              "y": 222
+            }
+          ],
+          "hash": "3696500fcc53a9db3438c7738ed37ddc5062e78111452083eac544cdb58015a5"
+        }
+      ],
+      "ms": 26.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image003.png",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 210,
+              "y": 82
+            },
+            {
+              "x": 314,
+              "y": 95
+            },
+            {
+              "x": 301,
+              "y": 198
+            },
+            {
+              "x": 201,
+              "y": 185
+            }
+          ],
+          "hash": "3696500fcc53a9db3438c7738ed37ddc5062e78111452083eac544cdb58015a5"
+        }
+      ],
+      "ms": 27.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image004.png",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 109,
+              "y": 134
+            },
+            {
+              "x": 241,
+              "y": 152
+            },
+            {
+              "x": 224,
+              "y": 281
+            },
+            {
+              "x": 84,
+              "y": 270
+            }
+          ],
+          "hash": "3696500fcc53a9db3438c7738ed37ddc5062e78111452083eac544cdb58015a5"
+        }
+      ],
+      "ms": 25.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image005.png",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 321.9047129315957,
+              "y": 32.18067852629435
+            },
+            {
+              "x": 451.0912657320815,
+              "y": 42.625942234896094
+            },
+            {
+              "x": 431.34993480948765,
+              "y": 172.711888431382
+            },
+            {
+              "x": 309.22031204958006,
+              "y": 164.74248118410011
+            }
+          ],
+          "hash": "3696500fcc53a9db3438c7738ed37ddc5062e78111452083eac544cdb58015a5"
+        }
+      ],
+      "ms": 330.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image006.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1383.607949591645,
+              "y": 2638.793608582376
+            },
+            {
+              "x": 1653.42167939485,
+              "y": 2547.559877294796
+            },
+            {
+              "x": 1825.1565223192279,
+              "y": 2883.816695888165
+            },
+            {
+              "x": 1556.3626093812004,
+              "y": 3007.215990812108
+            }
+          ],
+          "hash": "d7df9fcbcd54e1dac33a914685de08fbe5308127e536354725a413dfbb98ebcd"
+        }
+      ],
+      "ms": 1039.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image007.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 669,
+              "y": 728
+            },
+            {
+              "x": 1194,
+              "y": 821
+            },
+            {
+              "x": 1092,
+              "y": 1328
+            },
+            {
+              "x": 585,
+              "y": 1214
+            }
+          ],
+          "hash": "db93f8993fcb676daa3c0e395b9bc89548b22f03d9937b2b6736fa0ff2c7c26f"
+        }
+      ],
+      "ms": 156.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image008.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 337,
+              "y": 329
+            },
+            {
+              "x": 625,
+              "y": 261
+            },
+            {
+              "x": 725,
+              "y": 552
+            },
+            {
+              "x": 429,
+              "y": 637
+            }
+          ],
+          "hash": "d7df9fcbcd54e1dac33a914685de08fbe5308127e536354725a413dfbb98ebcd"
+        }
+      ],
+      "ms": 42,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image009.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 205,
+              "y": 122
+            },
+            {
+              "x": 338,
+              "y": 116
+            },
+            {
+              "x": 348,
+              "y": 255
+            },
+            {
+              "x": 213,
+              "y": 263
+            }
+          ],
+          "hash": "d7df9fcbcd54e1dac33a914685de08fbe5308127e536354725a413dfbb98ebcd"
+        }
+      ],
+      "ms": 24.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image010.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 567,
+              "y": 1107
+            },
+            {
+              "x": 828,
+              "y": 1158
+            },
+            {
+              "x": 780,
+              "y": 1410
+            },
+            {
+              "x": 528,
+              "y": 1356
+            }
+          ],
+          "hash": "db93f8993fcb676daa3c0e395b9bc89548b22f03d9937b2b6736fa0ff2c7c26f"
+        }
+      ],
+      "ms": 101.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image011.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1083.7541770008231,
+              "y": 1619.9891517920992
+            },
+            {
+              "x": 1969.2474008552078,
+              "y": 1507.9430762859063
+            },
+            {
+              "x": 1976.2573627479019,
+              "y": 2241.6420407045975
+            },
+            {
+              "x": 1202.9587792616267,
+              "y": 2423.1839329759277
+            }
+          ],
+          "hash": "18fdd549b2ed367ac0c74cbec1214644728515b30edbcb78e7d322757a7c8359"
+        }
+      ],
+      "ms": 2323.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image012.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1059.2621433028066,
+              "y": 1901.8309839511546
+            },
+            {
+              "x": 1897.294557396262,
+              "y": 1879.8274428980412
+            },
+            {
+              "x": 1916.7630921977,
+              "y": 2561.035682833509
+            },
+            {
+              "x": 1164.0997926714615,
+              "y": 2630.2133272324427
+            }
+          ],
+          "hash": "18fdd549b2ed367ac0c74cbec1214644728515b30edbcb78e7d322757a7c8359"
+        }
+      ],
+      "ms": 2150.6,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image013.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 974.5867852678989,
+              "y": 1690.1669104245502
+            },
+            {
+              "x": 1653.381246807323,
+              "y": 1748.9681766368171
+            },
+            {
+              "x": 1689.179470866191,
+              "y": 2436.0683201737256
+            },
+            {
+              "x": 1044.1162408817743,
+              "y": 2367.8882572134717
+            }
+          ],
+          "hash": "18fdd549b2ed367ac0c74cbec1214644728515b30edbcb78e7d322757a7c8359"
+        }
+      ],
+      "ms": 1905.9,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image014.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1129.0286578787436,
+              "y": 1658.2332100145948
+            },
+            {
+              "x": 1820.2335291419874,
+              "y": 1429.021913281733
+            },
+            {
+              "x": 2015.822227463534,
+              "y": 1998.8485912561662
+            },
+            {
+              "x": 1397.4774637005662,
+              "y": 2248.005950616135
+            }
+          ],
+          "hash": "18fdd549b2ed367ac0c74cbec1214644728515b30edbcb78e7d322757a7c8359"
+        }
+      ],
+      "ms": 2242,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image015.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1941,
+              "y": 1723
+            },
+            {
+              "x": 1621,
+              "y": 2038
+            },
+            {
+              "x": 1305,
+              "y": 1703
+            },
+            {
+              "x": 1658,
+              "y": 1378
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 1424,
+              "y": 2783
+            },
+            {
+              "x": 1461,
+              "y": 2378
+            },
+            {
+              "x": 1879,
+              "y": 2383
+            },
+            {
+              "x": 1843,
+              "y": 2789
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 315.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image016.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 364.34559498935084,
+              "y": 713.5908248364445
+            },
+            {
+              "x": 371.5837138009754,
+              "y": 613.6273833367605
+            },
+            {
+              "x": 464.93008671012706,
+              "y": 606.4632115883759
+            },
+            {
+              "x": 457.19582252351984,
+              "y": 700.5470896709869
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        },
+        {
+          "points": [
+            {
+              "x": 474.5811871772048,
+              "y": 444.3873570331116
+            },
+            {
+              "x": 410.43790966846274,
+              "y": 527.4176877596435
+            },
+            {
+              "x": 336.93998673826934,
+              "y": 444.84662525286933
+            },
+            {
+              "x": 416.66512253020994,
+              "y": 365.1519350710647
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        }
+      ],
+      "ms": 278.9,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image017.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 504.66683855834,
+              "y": 419.45941224108077
+            },
+            {
+              "x": 376.24763698688855,
+              "y": 528.6800460148743
+            },
+            {
+              "x": 283.02942599607985,
+              "y": 395.5422706059064
+            },
+            {
+              "x": 384.103570826432,
+              "y": 291.76019211028455
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 324.34759536756,
+              "y": 730.2059403063488
+            },
+            {
+              "x": 328.05347825794377,
+              "y": 621.8704136818683
+            },
+            {
+              "x": 480.28396326128257,
+              "y": 642.6838731188607
+            },
+            {
+              "x": 461.68778352940865,
+              "y": 748.8560903494682
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 436.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image018.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 2159,
+              "y": 1556
+            },
+            {
+              "x": 1484,
+              "y": 2270
+            },
+            {
+              "x": 701,
+              "y": 1559
+            },
+            {
+              "x": 1493,
+              "y": 773
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 1174.4562948276598,
+              "y": 3689.795264797414
+            },
+            {
+              "x": 1184.78070558315,
+              "y": 2948.7399772138715
+            },
+            {
+              "x": 2058.7787822943965,
+              "y": 2903.2622013839896
+            },
+            {
+              "x": 1971.2877214791633,
+              "y": 3641.482487302331
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 2073.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image019.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 500,
+              "y": 294
+            },
+            {
+              "x": 343,
+              "y": 447
+            },
+            {
+              "x": 166,
+              "y": 240
+            },
+            {
+              "x": 370,
+              "y": 84
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 230.09728043112423,
+              "y": 846.7955211890142
+            },
+            {
+              "x": 250.74082882913692,
+              "y": 629.7342162056775
+            },
+            {
+              "x": 461.61695126028405,
+              "y": 631.7952892446622
+            },
+            {
+              "x": 434.05842363613544,
+              "y": 831.2583940130469
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 255.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image020.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 469,
+              "y": 325
+            },
+            {
+              "x": 401,
+              "y": 393
+            },
+            {
+              "x": 334,
+              "y": 319
+            },
+            {
+              "x": 411,
+              "y": 246
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 356.8236568304444,
+              "y": 555.5476444832589
+            },
+            {
+              "x": 365.07175181854836,
+              "y": 467.37638852367485
+            },
+            {
+              "x": 453.6407879740757,
+              "y": 469.80995790052054
+            },
+            {
+              "x": 443.1434988164039,
+              "y": 555.5682966013705
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 291.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image021.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 2754,
+              "y": 1722
+            },
+            {
+              "x": 1851,
+              "y": 2085
+            },
+            {
+              "x": 1467,
+              "y": 1167
+            },
+            {
+              "x": 2526,
+              "y": 753
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 1016.5100708326272,
+              "y": 3118.5303308018
+            },
+            {
+              "x": 1315.46211857187,
+              "y": 2534.3019658622293
+            },
+            {
+              "x": 2036.9163217503074,
+              "y": 2824.4458850513333
+            },
+            {
+              "x": 1696.2441688864333,
+              "y": 3355.718735174857
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 2258.6,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image022.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 486,
+              "y": 431
+            },
+            {
+              "x": 405,
+              "y": 509
+            },
+            {
+              "x": 327,
+              "y": 426
+            },
+            {
+              "x": 414,
+              "y": 345
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 356.4155420779325,
+              "y": 692.2168743242212
+            },
+            {
+              "x": 364.4480552666235,
+              "y": 591.4823051080081
+            },
+            {
+              "x": 469.94031730641984,
+              "y": 592.8239667174444
+            },
+            {
+              "x": 458.18989855841284,
+              "y": 693.4010177824694
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 256,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image023.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 540,
+              "y": 390
+            },
+            {
+              "x": 372,
+              "y": 567
+            },
+            {
+              "x": 177,
+              "y": 390
+            },
+            {
+              "x": 372,
+              "y": 192
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 292.4568312713383,
+              "y": 922.0651176776597
+            },
+            {
+              "x": 294.13896131655974,
+              "y": 736.4821123561137
+            },
+            {
+              "x": 517.4735556914588,
+              "y": 726.0388896567504
+            },
+            {
+              "x": 495.0001417514887,
+              "y": 907.9043684983614
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 220.9,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image024.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 688,
+              "y": 430
+            },
+            {
+              "x": 463,
+              "y": 521
+            },
+            {
+              "x": 366,
+              "y": 292
+            },
+            {
+              "x": 632,
+              "y": 188
+            }
+          ],
+          "hash": "b425b809d9575135ba4467cc6765c6a7f9034ab14971c26c2053581bda9d1d95"
+        },
+        {
+          "points": [
+            {
+              "x": 253.60986401561647,
+              "y": 778.5177605008421
+            },
+            {
+              "x": 329.33573488027844,
+              "y": 631.8299572707633
+            },
+            {
+              "x": 511.6180269273352,
+              "y": 706.8990742083921
+            },
+            {
+              "x": 424.4317470348375,
+              "y": 838.7433762235072
+            }
+          ],
+          "hash": "0f6360072cf8ed9f46f90ce9d01fae4e42f5e8ff629499d2206c68ed403e2fe7"
+        }
+      ],
+      "ms": 284,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image025.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1108,
+              "y": 1949
+            },
+            {
+              "x": 1832,
+              "y": 1956
+            },
+            {
+              "x": 1826,
+              "y": 2677
+            },
+            {
+              "x": 1103,
+              "y": 2671
+            }
+          ],
+          "hash": "d1de94707028899d38096c29f52269223d0264397706f0c409dcf25f1f8211f0"
+        }
+      ],
+      "ms": 271.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image026.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1429.4933767357495,
+              "y": 2244.6104962234394
+            },
+            {
+              "x": 1861.6890792251138,
+              "y": 2163.5243035428407
+            },
+            {
+              "x": 1905.1823940309164,
+              "y": 2674.470638041267
+            },
+            {
+              "x": 1482.3769786617597,
+              "y": 2816.7221006696086
+            }
+          ],
+          "hash": "d1de94707028899d38096c29f52269223d0264397706f0c409dcf25f1f8211f0"
+        }
+      ],
+      "ms": 1715.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image027.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 702,
+              "y": 1117
+            },
+            {
+              "x": 885,
+              "y": 1146
+            },
+            {
+              "x": 857,
+              "y": 1318
+            },
+            {
+              "x": 677,
+              "y": 1294
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 113.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image028.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 781,
+              "y": 1070
+            },
+            {
+              "x": 957,
+              "y": 1089
+            },
+            {
+              "x": 924,
+              "y": 1256
+            },
+            {
+              "x": 755,
+              "y": 1248
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 92.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image029.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1541,
+              "y": 2182
+            },
+            {
+              "x": 1680,
+              "y": 2230
+            },
+            {
+              "x": 1634,
+              "y": 2366
+            },
+            {
+              "x": 1495,
+              "y": 2320
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 269.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image030.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 871,
+              "y": 660
+            },
+            {
+              "x": 1264,
+              "y": 627
+            },
+            {
+              "x": 1312,
+              "y": 1041
+            },
+            {
+              "x": 914,
+              "y": 1059
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 114.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image031.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1345,
+              "y": 2461
+            },
+            {
+              "x": 1787,
+              "y": 2406
+            },
+            {
+              "x": 1850,
+              "y": 2851
+            },
+            {
+              "x": 1406,
+              "y": 2914
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 275.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image032.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1083.1633316692732,
+              "y": 2166.7531549021423
+            },
+            {
+              "x": 1419.3889322912028,
+              "y": 1891.8541441828515
+            },
+            {
+              "x": 1725.3925090664425,
+              "y": 2269.580189003731
+            },
+            {
+              "x": 1381.9267397194185,
+              "y": 2512.964600864285
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 2112.7,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image033.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 342,
+              "y": 625
+            },
+            {
+              "x": 454,
+              "y": 611
+            },
+            {
+              "x": 470,
+              "y": 724
+            },
+            {
+              "x": 357,
+              "y": 740
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 47.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image034.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 275.07927313603426,
+              "y": 550.3791918178441
+            },
+            {
+              "x": 359.5527849798374,
+              "y": 479.7306418605973
+            },
+            {
+              "x": 438.26134421563233,
+              "y": 575.3827355239085
+            },
+            {
+              "x": 350.60735736666425,
+              "y": 637.8342462225232
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 447.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image035.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 281,
+              "y": 495
+            },
+            {
+              "x": 465,
+              "y": 497
+            },
+            {
+              "x": 464,
+              "y": 680
+            },
+            {
+              "x": 279,
+              "y": 679
+            }
+          ],
+          "hash": "d1de94707028899d38096c29f52269223d0264397706f0c409dcf25f1f8211f0"
+        }
+      ],
+      "ms": 40.6,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image036.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 361.8961620477618,
+              "y": 568.7258831591361
+            },
+            {
+              "x": 473.6738944337079,
+              "y": 547.9086996749259
+            },
+            {
+              "x": 485.62444579833164,
+              "y": 679.2953758360015
+            },
+            {
+              "x": 375.38665507427487,
+              "y": 715.0789967354245
+            }
+          ],
+          "hash": "d1de94707028899d38096c29f52269223d0264397706f0c409dcf25f1f8211f0"
+        }
+      ],
+      "ms": 413.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image037.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 770,
+              "y": 1091
+            },
+            {
+              "x": 840,
+              "y": 1115
+            },
+            {
+              "x": 817,
+              "y": 1183
+            },
+            {
+              "x": 747,
+              "y": 1160
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 97.6,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image038.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 414,
+              "y": 314
+            },
+            {
+              "x": 602,
+              "y": 298
+            },
+            {
+              "x": 624,
+              "y": 495
+            },
+            {
+              "x": 435,
+              "y": 504
+            }
+          ],
+          "hash": "6d634185aa328b6f99cbe9143eda0d2bdc35fec940b5a2afdf909ef933620367"
+        }
+      ],
+      "ms": 38.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image039.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1566.3720281497401,
+              "y": 2419.341130314542
+            },
+            {
+              "x": 2052.8655650206388,
+              "y": 2368.376531610371
+            },
+            {
+              "x": 2044.179631670354,
+              "y": 2799.153485974623
+            },
+            {
+              "x": 1570.0545700694452,
+              "y": 2865.9097795803077
+            }
+          ],
+          "hash": "7270204e1dc7cfe5d229f67d6f71ac4e18426e73952b37712b9b2f8fca0b7518"
+        }
+      ],
+      "ms": 1335.3,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image040.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1177,
+              "y": 2373
+            },
+            {
+              "x": 1753,
+              "y": 2300
+            },
+            {
+              "x": 1772,
+              "y": 2878
+            },
+            {
+              "x": 1205,
+              "y": 2988
+            }
+          ],
+          "hash": "7270204e1dc7cfe5d229f67d6f71ac4e18426e73952b37712b9b2f8fca0b7518"
+        }
+      ],
+      "ms": 416.8,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image041.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1276,
+              "y": 2341
+            },
+            {
+              "x": 1950,
+              "y": 2297
+            },
+            {
+              "x": 1981,
+              "y": 2949
+            },
+            {
+              "x": 1306,
+              "y": 3010
+            }
+          ],
+          "hash": "7270204e1dc7cfe5d229f67d6f71ac4e18426e73952b37712b9b2f8fca0b7518"
+        }
+      ],
+      "ms": 365.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image042.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1375.0590920247805,
+              "y": 2202.6243823565187
+            },
+            {
+              "x": 1958.3773174117166,
+              "y": 2107.8077516524654
+            },
+            {
+              "x": 1926.551222511989,
+              "y": 2600.4992727492504
+            },
+            {
+              "x": 1379.7286955395732,
+              "y": 2718.683622963836
+            }
+          ],
+          "hash": "7270204e1dc7cfe5d229f67d6f71ac4e18426e73952b37712b9b2f8fca0b7518"
+        }
+      ],
+      "ms": 1510.9,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image043.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 1197,
+              "y": 756
+            },
+            {
+              "x": 744,
+              "y": 1092
+            },
+            {
+              "x": 396,
+              "y": 624
+            },
+            {
+              "x": 852,
+              "y": 288
+            }
+          ],
+          "hash": "e8b32884fcc03ac63b45c12f3231ce2d9645551831b9106062a157484194f44c"
+        }
+      ],
+      "ms": 76.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image044.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 819,
+              "y": 492
+            },
+            {
+              "x": 567,
+              "y": 837
+            },
+            {
+              "x": 225,
+              "y": 579
+            },
+            {
+              "x": 477,
+              "y": 234
+            }
+          ],
+          "hash": "e8b32884fcc03ac63b45c12f3231ce2d9645551831b9106062a157484194f44c"
+        }
+      ],
+      "ms": 47.4,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image045.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 78,
+              "y": 103
+            },
+            {
+              "x": 409,
+              "y": 75
+            },
+            {
+              "x": 435,
+              "y": 403
+            },
+            {
+              "x": 106,
+              "y": 435
+            }
+          ],
+          "hash": "2973eab0e70f7c55626e24e6a71bd870a93b61e6158cf2db02bea5f9854a69fb"
+        }
+      ],
+      "ms": 25,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image046.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 148,
+              "y": 287
+            },
+            {
+              "x": 291,
+              "y": 273
+            },
+            {
+              "x": 293,
+              "y": 416
+            },
+            {
+              "x": 155,
+              "y": 440
+            }
+          ],
+          "hash": "2973eab0e70f7c55626e24e6a71bd870a93b61e6158cf2db02bea5f9854a69fb"
+        }
+      ],
+      "ms": 28.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image047.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 157,
+              "y": 207
+            },
+            {
+              "x": 818,
+              "y": 150
+            },
+            {
+              "x": 871,
+              "y": 808
+            },
+            {
+              "x": 212,
+              "y": 870
+            }
+          ],
+          "hash": "2973eab0e70f7c55626e24e6a71bd870a93b61e6158cf2db02bea5f9854a69fb"
+        }
+      ],
+      "ms": 47.5,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image048.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 642,
+              "y": 1245
+            },
+            {
+              "x": 1260,
+              "y": 1185
+            },
+            {
+              "x": 1272,
+              "y": 1806
+            },
+            {
+              "x": 669,
+              "y": 1911
+            }
+          ],
+          "hash": "2973eab0e70f7c55626e24e6a71bd870a93b61e6158cf2db02bea5f9854a69fb"
+        }
+      ],
+      "ms": 198.2,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image049.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 95,
+              "y": 838
+            },
+            {
+              "x": 226,
+              "y": 292
+            },
+            {
+              "x": 767,
+              "y": 426
+            },
+            {
+              "x": 640,
+              "y": 967
+            }
+          ],
+          "hash": "2973eab0e70f7c55626e24e6a71bd870a93b61e6158cf2db02bea5f9854a69fb"
+        }
+      ],
+      "ms": 47.1,
+      "dense": null,
+      "errors": []
+    },
+    {
+      "file": "curved/image050.jpg",
+      "detailed": true,
+      "codes": [
+        {
+          "points": [
+            {
+              "x": 334,
+              "y": 480
+            },
+            {
+              "x": 287,
+              "y": 179
+            },
+            {
+              "x": 570,
+              "y": 139
+            },
+            {
+              "x": 632,
+              "y": 424
+            }
+          ],
+          "hash": "c9ea6c97c8ad8aa3cd9cd6e3173877f75c919acd3f254b5de655f72f3eb3717a"
+        }
+      ],
+      "ms": 31.7,
+      "dense": null,
+      "errors": []
+    }
+  ],
+  "errors": []
+}

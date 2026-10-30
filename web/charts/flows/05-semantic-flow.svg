@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2300" height="980" viewBox="0 0 2300 980" role="img">
+<title>语义裁剪 · 云端定位与本地裁图</title>
+<defs><marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 11 5.5 L 0 11 z" fill="#627b74"/></marker></defs>
+<style>
+text{font-family:"Microsoft YaHei","SimHei","Noto Sans CJK SC",sans-serif}
+.title{font-size:39px;font-weight:700;fill:#173a32}
+.node{font-size:25px;font-weight:600;fill:#183d34;text-anchor:middle}
+.white{fill:white}
+.edge-label{font-size:20px;font-weight:700;fill:#45645b;text-anchor:middle}
+.note{font-size:20px;fill:#657b74}
+</style>
+<rect width="100%" height="100%" fill="#fcfdfb"/>
+<rect width="100%" height="10" fill="#197866"/>
+<text class="title" x="70" y="77">语义裁剪 · 云端定位与本地裁图</text>
+
+<rect x="30" y="168" width="250" height="104" rx="17" fill="#f5f8f6" stroke="#90aaa0" stroke-width="2.5"/>
+<text class="node" x="155" y="228" style="font-size:25px">批量导入图片</text>
+<rect x="335" y="164" width="300" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="485" y="211.5" style="font-size:25px">填写目标描述</text>
+<text class="node" x="485" y="244.5" style="font-size:25px">每图独立或统一应用</text>
+<polygon points="850,138 985,220 850,302 715,220" fill="#fff4df" stroke="#cf9c43" stroke-width="2.5"/>
+<text class="node" x="850" y="213" style="font-size:23px">授权联网且</text>
+<text class="node" x="850" y="243" style="font-size:23px">口令、描述完整？</text>
+<rect x="1070" y="164" width="350" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1245" y="211.5" style="font-size:25px">本地生成 JPEG 缩图</text>
+<text class="node" x="1245" y="244.5" style="font-size:25px">长边不超过 1024 px</text>
+<rect x="1475" y="164" width="330" height="112" rx="17" fill="#f7eef8" stroke="#9b6aa0" stroke-width="2.5"/>
+<text class="node" x="1640" y="211.5" style="font-size:25px">Worker 转发请求</text>
+<text class="node" x="1640" y="244.5" style="font-size:25px">Groq 返回目标框</text>
+<polygon points="2010,138 2135,220 2010,302 1885,220" fill="#fff4df" stroke="#cf9c43" stroke-width="2.5"/>
+<text class="node" x="2010" y="213" style="font-size:23px">返回有效</text>
+<text class="node" x="2010" y="243" style="font-size:23px">目标坐标？</text>
+<polyline points="280,220 335,220" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="635,220 715,220" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="985,220 1070,220" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1420,220 1475,220" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1805,220 1885,220" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="695" y="435" width="310" height="100" rx="17" fill="#f5f8f6" stroke="#90aaa0" stroke-width="2.5"/>
+<text class="node" x="850" y="476.5" style="font-size:25px">提示补全设置</text>
+<text class="node" x="850" y="509.5" style="font-size:25px">或确认联网</text>
+<polyline points="850,302 850,435" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="886" y="376">否</text>
+<rect x="1845" y="695" width="330" height="120" rx="17" fill="#f5f8f6" stroke="#90aaa0" stroke-width="2.5"/>
+<text class="node" x="2010" y="746.5" style="font-size:25px">显示无目标、坐标异常</text>
+<text class="node" x="2010" y="779.5" style="font-size:25px">或接口错误</text>
+<polyline points="2135,220 2250,220 2250,755 2175,755" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="2210" y="615">否</text>
+<rect x="1835" y="434" width="350" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="2010" y="481.5" style="font-size:25px">坐标映射回原图</text>
+<text class="node" x="2010" y="514.5" style="font-size:25px">仅裁出目标矩形区域</text>
+<polyline points="2010,302 2010,434" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1960" y="387">是</text>
+<polygon points="1610,408 1740,490 1610,572 1480,490" fill="#fff4df" stroke="#cf9c43" stroke-width="2.5"/>
+<text class="node" x="1610" y="483" style="font-size:23px">勾选转入</text>
+<text class="node" x="1610" y="513" style="font-size:23px">本地分割？</text>
+<polyline points="1835,490 1740,490" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1075" y="434" width="320" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1235" y="481.5" style="font-size:25px">首个裁图交给</text>
+<text class="node" x="1235" y="514.5" style="font-size:25px">本地分割生成蒙版</text>
+<polyline points="1480,490 1395,490" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1436" y="465">是</text>
+<rect x="1062.5" y="734" width="345" height="112" rx="17" fill="#176d5e" stroke="#176d5e" stroke-width="2.5"/>
+<text class="node white" x="1235" y="781.5" style="font-size:25px">预览并导出</text>
+<text class="node white" x="1235" y="814.5" style="font-size:25px">裁图 ZIP、坐标 CSV</text>
+<polyline points="1235,546 1235,734" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1610,572 1610,790 1408,790" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1650" y="665">否</text>
+<text class="note" x="75" y="925">只有检测缩图和描述会按需发送；实际裁图使用浏览器内的原图像素。</text>
+</svg>

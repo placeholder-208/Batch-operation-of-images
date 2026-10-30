@@ -1,6 +1,7 @@
 import {readBarcodes} from './reader-client.js';
-import { measureQR } from './qr-statistics.js';
+import { measureQR,measureQRSync } from './qr-statistics.js';
 import { fitTPS, validateTPS } from './tps.js';
+import {iterateModuleRecovery,MODULE_RECOVERY_LIMITS} from './module-recovery.js';
 const LIMITS = {
     maxPixels: 360000,
     maxModels: 12,
@@ -642,12 +643,32 @@ export async function decodeCurvedRegion(canvas, options = {}) {
         resolutionMode, moduleSizeHint,
         finders: diagnostics.finders.map(p => point((p.x + 0.5) * scaleX - 0.5, (p.y + 0.5) * scaleY - 0.5))
     };
-    let attempted = 0, continuousAttempted = 0, sourceGray = null;
+    let attempted = 0, continuousAttempted = 0, moduleRecoveryAttempted=0, sourceGray = null;
+    let moduleRecoveryBegan=null,moduleRecoverySkipped=false;
     // Keep the original decoding order, then retry at most three fitted models.
-    const queue = models.map(model => ({model, samplingMode:'module-binary'}));
-    if (options.continuousResample) queue.push(...models.slice(0, 3)
+    const originalQueue = models.map(model => ({model, samplingMode:'module-binary'}));
+    if (options.continuousResample) originalQueue.push(...models.slice(0, 3)
         .map(model => ({model, samplingMode:'continuous-gray'})));
-    for (const {model, samplingMode} of queue) {
+    function* queue(){
+        yield* originalQueue;
+        if(!options.moduleRecovery||!models.length)return;
+        moduleRecoveryBegan=performance.now();
+        const expired=()=>{
+            const stop=moduleRecoveryAttempted>=MODULE_RECOVERY_LIMITS.maxAttempts||
+                performance.now()-moduleRecoveryBegan>=MODULE_RECOVERY_LIMITS.budgetMs;
+            if(stop)moduleRecoverySkipped=true;
+            return stop;
+        };
+        const iterator=iterateModuleRecovery(models,{expired});
+        try{
+            while(true){
+                const next=measureQRSync(trace,'curved_module_restore',{regionId:options.regionId,family},()=>iterator.next());
+                if(next.done)break;
+                yield {...next.value,samplingMode:'module-recovery'};
+            }
+        }finally{iterator.return?.();}
+    }
+    for (const {model, samplingMode,recovery} of queue()) {
         const resampleEnd=trace?.start('curved_resample',{regionId:options.regionId,model:attempted+1,family,samplingMode});
         let resampleDone=false;
         try {
@@ -681,24 +702,27 @@ export async function decodeCurvedRegion(canvas, options = {}) {
             if (!rendered) {resampleEnd?.('skipped',{reason:'invalid-samples'});resampleDone=true;continue;}
         } else rendered = renderCurvedModel(samplingModel);
         resampleEnd?.();resampleDone=true;
-        const results = await measureQR(trace,'curved_decode',{regionId:options.regionId,model:attempted+1,family,samplingMode},()=>readBarcodes(new ImageData(rendered.data, rendered.width, rendered.height), {
+        const results = await measureQR(trace,'curved_decode',{regionId:options.regionId,model:attempted+1,family,samplingMode,recovery},()=>readBarcodes(new ImageData(rendered.data, rendered.width, rendered.height), {
             formats: ['QRCode'], tryHarder: true
         }));
         attempted++;
         if(samplingMode==='continuous-gray')continuousAttempted++;
+        if(samplingMode==='module-recovery')moduleRecoveryAttempted++;
         const decoded = results.filter(r => r.isValid !== false && r.text && r.position).map(r => {
             const points = [r.position.topLeft, r.position.topRight, r.position.bottomRight, r.position.bottomLeft]
                 .map(p => originalMap(p.x / 8 - 4, p.y / 8 - 4));
             return {
                 text: r.text, format: r.format || 'QRCode', points,
                 center: point(points.reduce((sum, p) => sum + p.x, 0) / 4, points.reduce((sum, p) => sum + p.y, 0) / 4),
-                source: samplingMode==='continuous-gray'?(options.tpsOnly?'wechat-local-tps-gray':'wechat-local-curved-gray'):
+                source: samplingMode==='module-recovery'?'wechat-module-recovery':samplingMode==='continuous-gray'?(options.tpsOnly?'wechat-local-tps-gray':'wechat-local-curved-gray'):
                     options.tpsOnly?'wechat-local-tps':'wechat-local-curved'
             };
         }).filter(r => r.points.every(p => Number.isFinite(p.x + p.y)));
         if (decoded.length) {
             if(statistics)Object.assign(statistics,logInfo,{reason:null,geometryReason:diagnostics.reason||null,
-                attempted,continuousAttempted,samplingMode,decoded:decoded.length,dimension:model.dimension,axis:model.axis,curvature:model.curvature,
+                attempted,continuousAttempted,moduleRecoveryAttempted,moduleRecoverySkipped,
+                moduleRecoveryMs:moduleRecoveryBegan===null?0:Math.round(performance.now()-moduleRecoveryBegan),
+                selectedRecovery:recovery,samplingMode,decoded:decoded.length,dimension:model.dimension,axis:model.axis,curvature:model.curvature,
                 family,controlPoints:model.controlPoints});
             console.log('[局部曲面解码]', { ...logInfo, finders: model.finders.map(p => point((p.x + 0.5) * scaleX - 0.5, (p.y + 0.5) * scaleY - 0.5)), groupIndex: model.groupIndex, attempted, decoded: decoded.length, dimension: model.dimension, version: (model.dimension - 17) / 4, axis: model.axis, curvature: model.curvature, totalMs: Math.round(performance.now() - started) });
             return decoded;
@@ -706,8 +730,9 @@ export async function decodeCurvedRegion(canvas, options = {}) {
         await sleepTick();
         } catch(error){if(!resampleDone)resampleEnd?.('error',{error:error.message||String(error)});throw error;}
     }
-    if(statistics)Object.assign(statistics,logInfo,{attempted,continuousAttempted,decoded:0,geometryReason:diagnostics.reason||null,
-        reason:!models.length?(diagnostics.reason||'no-accepted-model'):attempted?'models-undecodable':'resampling-failed'});
+    if(statistics)Object.assign(statistics,logInfo,{attempted,continuousAttempted,moduleRecoveryAttempted,moduleRecoverySkipped,
+        moduleRecoveryMs:moduleRecoveryBegan===null?0:Math.round(performance.now()-moduleRecoveryBegan),decoded:0,geometryReason:diagnostics.reason||null,
+        reason:moduleRecoverySkipped?'module-recovery-budget':!models.length?(diagnostics.reason||'no-accepted-model'):attempted?'models-undecodable':'resampling-failed'});
     console.log('[局部曲面解码]', { ...logInfo, attempted, decoded: 0, totalMs: Math.round(performance.now() - started) });
     return [];
     } catch(error){geometryEnd?.('error',{error:error.message||String(error)});throw error;}

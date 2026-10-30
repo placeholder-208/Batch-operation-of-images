@@ -1,0 +1,58 @@
+{
+  "slimsam-q8": {
+    "count": 10,
+    "status": "complete",
+    "loadMs": 915.6999999992549,
+    "iou": 0.7394111396296049,
+    "boundaryF1": 0.4182648700638144,
+    "alphaMAE": 0.1142240022312357,
+    "sad": 99.76760472391133,
+    "transitionMAE": 0.2955931067146971,
+    "edgeBandMAE": 0.26466084243302096,
+    "coreTransitionMAE": 0.38318862274821414,
+    "geometricEdgeMAE": 0.3143342001585172,
+    "inferencePipelineMs": 7776.1899999994785
+  },
+  "slimsam-fp32": {
+    "count": 10,
+    "status": "complete",
+    "loadMs": 544.3999999985099,
+    "iou": 0.6124186189942643,
+    "boundaryF1": 0.33874044272774695,
+    "alphaMAE": 0.19715837125952673,
+    "sad": 171.45922485841817,
+    "transitionMAE": 0.35952382090664,
+    "edgeBandMAE": 0.32735627114701527,
+    "coreTransitionMAE": 0.4187661966729741,
+    "geometricEdgeMAE": 0.3557570904554362,
+    "inferencePipelineMs": 8339.490000000596
+  },
+  "modnet-fp32": {
+    "count": 10,
+    "status": "complete",
+    "loadMs": 121.39999999850988,
+    "iou": 0.9797807766870784,
+    "boundaryF1": 0.8177514874321299,
+    "alphaMAE": 0.00788500169519507,
+    "sad": 5.710318673144639,
+    "transitionMAE": 0.12417763600733564,
+    "edgeBandMAE": 0.10065304032875755,
+    "coreTransitionMAE": 0.19630074979485423,
+    "geometricEdgeMAE": 0.12894510844839452,
+    "inferencePipelineMs": 1914.7300000000746
+  },
+  "modnet-q8": {
+    "count": 10,
+    "status": "complete",
+    "loadMs": 130.40000000223517,
+    "iou": 0.8700675167658302,
+    "boundaryF1": 0.6346581177421213,
+    "alphaMAE": 0.05177651303024605,
+    "sad": 38.92926409884099,
+    "transitionMAE": 0.16823762963964245,
+    "edgeBandMAE": 0.15583223881152425,
+    "coreTransitionMAE": 0.2259466151762335,
+    "geometricEdgeMAE": 0.19369581721856882,
+    "inferencePipelineMs": 1991.229999999702
+  }
+}

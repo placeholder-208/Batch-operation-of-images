@@ -33,6 +33,8 @@ export function createUI(actions) {
     let image = null, imageToken = 0, selectedQR = null, busy = false, importBusy = false;
     const locked=()=>busy||importBusy;
     const current = () => queues.qr[positions.qr];
+    const stop=document.createElement('button');stop.id='qrStop';stop.type='button';stop.className='secondary full';stop.textContent='停止本批';stop.hidden=true;
+    stop.onclick=()=>{actions.stop?.();stop.disabled=true;stop.textContent='当前图片结束后停止';};$('qrStart').after(stop);
     const experiments=document.createElement('details');experiments.className='context-help';
     const experimentTitle=document.createElement('summary');experimentTitle.textContent='识别选项';
     experiments.append(experimentTitle);
@@ -44,7 +46,7 @@ export function createUI(actions) {
         wrapper.append(input,document.createTextNode(' '+label));experiments.append(wrapper);
     }
     const experimentNote=document.createElement('p');experimentNote.className='small';
-    experimentNote.textContent='两项默认关闭。TPS失败后继续柱面校正；精细恢复使用更高分辨率，增加耗时与内存。选项只影响下次识别，重新识别会保留此前统计并替换结果。';
+    experimentNote.textContent='两项默认关闭。TPS失败后继续柱面校正；精细恢复增加工作分辨率，并对剩余候选校准模块灰度、补做恢复后校正，耗时更长。选项只影响下次识别，重新识别会保留此前统计并替换结果。';
     const rerun=document.createElement('button');rerun.type='button';rerun.className='secondary full';
     rerun.id='qrRerun';rerun.textContent='重新识别本批';
     const getOptions=()=>normalizeQROptions(Object.fromEntries(Object.entries(experimentControls).map(([key,input])=>[key,input.checked])));
@@ -90,7 +92,9 @@ export function createUI(actions) {
                 context.strokeStyle = active ? "#f4c26b" : "#35d0a8";
                 context.lineWidth = Math.max(2, canvas.width / 400);
                 context.beginPath(); qr.points.forEach((p, i) => i ? context.lineTo(p.x*sx,p.y*sy) : context.moveTo(p.x*sx,p.y*sy)); context.closePath(); context.stroke();
-                const x = qr.center.x*sx, y = qr.center.y*sy, radius = Math.max(12,canvas.width/55);
+                const radius = Math.max(10,canvas.width/90);
+                const left=Math.min(...qr.points.map(p=>p.x*sx)),top=Math.min(...qr.points.map(p=>p.y*sy));
+                const x=Math.max(radius,Math.min(canvas.width-radius,left)),y=top>=radius*2.4?top-radius*1.3:Math.min(canvas.height-radius,Math.max(radius,top+radius));
                 context.fillStyle = active ? "#f4c26b" : "#35d0a8"; context.beginPath(); context.arc(x,y,radius,0,Math.PI*2); context.fill();
                 context.fillStyle = "#122b23"; context.font = "600 "+radius+"px system-ui"; context.textAlign = "center"; context.textBaseline = "middle"; context.fillText(qr.id,x,y);
             }
@@ -123,7 +127,7 @@ export function createUI(actions) {
             const buttons = document.createElement("div"); buttons.className = "actions";
             function button(label, handler) { const el = document.createElement("button"); el.className = "secondary"; el.textContent = label; el.onclick = handler; buttons.append(el); }
             button("定位",()=>{ selectedQR=qr.id; draw(); showResults(); actions.onChange?.(); });
-            button("复制",async event=>{try{await navigator.clipboard.writeText(qr.text);event.target.textContent="已复制";}catch{tell("复制失败，请选中结果中的文字手动复制。","qr");}});
+            button("复制",async event=>{try{await navigator.clipboard.writeText(qr.text);tell("内容已复制。");}catch{tell("复制失败，请选中结果中的文字手动复制。","qr");}});
             if (crop) button("下载裁图",async()=>{try{downloadBlob(await cropBlob(crop),item.file.name.replace(/\.[^.]+$/,"")+"-qr-"+qr.id+".png");}catch(error){tell("下载失败："+error.message,"qr");}});
             const url=parseWebURL(qr.text);
             if(url){const a=document.createElement('a');a.href=url.href;a.target='_blank';a.rel='noopener noreferrer';a.textContent='打开链接';buttons.append(a);}
@@ -132,9 +136,10 @@ export function createUI(actions) {
             card.append(text,buttons); root.append(card);
         }
         }
-        const exportable = queues.qr.some(item=>item.result), checked = $("zipOutput").checked;
+        const exportable = queues.qr.some(item=>item.result), checked = true;
         $("downloadAllZip").disabled = locked() || !checked || !exportable || actions.isExporting();
         $("downloadImageZip").disabled = locked() || !checked || !item?.result || actions.isExporting();
+        if($('normalWorkspace').dataset.running!=='true')$('qrStart').textContent=queues.qr.some(item=>item.error&&!item.result)?'重试未完成图片':'开始识别';
         $("qrStart").disabled = locked() || !queues.qr.some(item=>!item.result) || actions.isExporting();
         for(const button of statisticsButtons)button.disabled=locked()||actions.isExporting()||!queues.qr.some(item=>item.qrStatistics);
         for(const input of Object.values(experimentControls))input.disabled=locked()||actions.isExporting();
@@ -175,7 +180,7 @@ export function createUI(actions) {
     stage.ondragleave=()=>$("upload").classList.remove("drag");
     stage.ondrop=event=>{event.preventDefault();$("upload").classList.remove("drag");add([...event.dataTransfer.files]);};
     function point(event){const rect=canvas.getBoundingClientRect();return{x:Math.max(0,Math.min(canvas.width,(event.clientX-rect.left)*canvas.width/rect.width)),y:Math.max(0,Math.min(canvas.height,(event.clientY-rect.top)*canvas.height/rect.height))};}
-    canvas.onpointerdown=event=>{
+    canvas.onclick=event=>{
         if(!image)return;
         {const p=point(event),sx=canvas.width/image.naturalWidth,sy=canvas.height/image.naturalHeight;
             const qr=current()?.result?.qrcodes.find(q=>{const xs=q.points.map(v=>v.x*sx),ys=q.points.map(v=>v.y*sy);return p.x>=Math.min(...xs)&&p.x<=Math.max(...xs)&&p.y>=Math.min(...ys)&&p.y<=Math.max(...ys);});
@@ -197,7 +202,7 @@ export function createUI(actions) {
             const options=normalizeQROptions(saved.options??saved.experiments);
             for(const [key,input]of Object.entries(experimentControls))input.checked=options[key];
             for(const item of queues.qr)prepareThumbnail(item,tiles);
-            $("zipOutput").checked=saved.zipOutput!==false;
+            $("zipOutput").checked=true;
             // A refreshed page never fetches decoded links automatically.
             linkEnabled.checked=false;cancelLinkPreviews();
             await select(queues.qr.length?Math.max(0,Math.min(queues.qr.length-1,saved.position||0)):-1);
@@ -206,9 +211,10 @@ export function createUI(actions) {
             $("progressBar").style.width=percent+"%";$("progressTrack").setAttribute("aria-valuenow",String(percent));
             tell(queues.qr.length?'已恢复 '+queues.qr.length+' 张图片及已完成的识别结果。':'等待添加图片');
         },
+        task(value){const root=$('normalWorkspace');root.dataset.running=String(value);stop.hidden=!value;stop.disabled=!value;stop.textContent='停止本批';root.dispatchEvent(new CustomEvent('studio:taskchange'));},
         busy(value){busy=value;uiLock();},
         refresh(){tiles();showResults();draw();actions.onChange?.();},
-        progress(done,total){const percent=total?Math.round(done/total*100):0;$("progressBar").style.width=percent+"%";$("progressTrack").setAttribute("aria-valuenow",percent);},
+        progress(done,total){if($('normalWorkspace').dataset.running==='true')$('qrStart').textContent='识别中 '+Math.min(done+1,total)+' / '+total;const percent=total?Math.round(done/total*100):0;$("progressBar").style.width=percent+"%";$("progressTrack").setAttribute("aria-valuenow",percent);},
         detail(text){$("qrDetail").textContent=text;$("qrDetail").hidden=!text;}
     };
 }

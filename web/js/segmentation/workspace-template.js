@@ -42,7 +42,7 @@ export const workspaceTemplate=`
     <p>曲线首尾在约 12 个屏幕像素内允许自动闭合；自交、过小或过于复杂的图形会被拒绝。最多保留 30 个互不重叠的图形，橙色虚线表示待执行，绿色／红色轮廓表示最近一次保留／删除。</p>
     <p>右击时，按当前工作图蒙版透明度不低于 0.5 判断保留状态，统计图形内部像素。少数状态占比不超过 5% 才反向统一处理；超过时不修改蒙版，尚未处理的图形自动移除，方便重画。已处理图形可先移除或清除后重画。</p>
    <p>移除最近图形会撤回它的全部填充操作；清除曲线图形不清除圆形画笔。轮廓线仅辅助显示，不写入导出图片。每张图片各自保留修整，不将坐标直接套用到其他图片。</p>
-    <p>切换候选、阈值、反转或叠加预览保留画笔修改；切图保留各图修改；重新生成蒙版、改变裁剪范围或模型提示会清除当前图片的修改。</p>
+    <p>切图保留各图修改；同一裁剪范围内重新生成或切换模型时，保留画笔修整和已执行的区域清理。改变裁剪范围或通用模型提示会清除当前图片的修改。</p>
     <p>预览仅包含当前裁剪范围。叠加模式的绿色是保留区域；导出仍为透明 PNG，不包含绿色叠加、棋盘格或外围留白。</p>
    </div></details>
   </div>
@@ -51,6 +51,8 @@ export const workspaceTemplate=`
 <aside class="sam-side" aria-label="本地分割设置与导出">
  <section class="panel sam-card sam-settings">
   <h2>生成蒙版</h2><p class="sam-hint">图片在本机处理；首次使用需加载分割模型。</p>
+  <div class="sam-field"><label for="sam-engine">分割模式（用于接下来的生成）</label><select id="sam-engine"><option value="slimsam">通用对象 · SlimSAM</option><option value="modnet">人物精细抠图 · MODNet FP32</option></select></div>
+  <p class="sam-hint" id="sam-engineHelp">通用模式支持蓝框、保留点和排除点。</p>
   <button class="primary" id="sam-segment" disabled>生成当前图片蒙版</button>
   <div class="sam-actions"><button id="sam-batchGenerate" disabled>批量生成未完成图片</button><button id="sam-batchStop" disabled>停止批量任务</button></div>
   <p class="sam-hint" id="sam-batchProgress" role="status" aria-live="polite">等待批量任务</p>
@@ -65,7 +67,7 @@ export const workspaceTemplate=`
   <label class="sam-check"><input id="sam-smooth" type="checkbox" checked> 窄边缘抗锯齿</label>
   <p class="sam-maskinfo" id="sam-maskInfo" aria-live="polite">等待蒙版</p>
   <button id="sam-batchApply" disabled>将当前参数应用到已生成图片</button>
-  <p class="sam-hint">应用阈值、反转、抗锯齿和透明裁切设置；将撤销原有区域清理。</p>
+  <p class="sam-hint">反转与透明裁切对两种模型生效；阈值和抗锯齿只在同类结果间应用。将撤销原有区域清理。</p>
   <div class="sam-field"><label for="sam-minArea">最小区域面积（占裁剪图 %）</label><input id="sam-minArea" type="number" min="0" max="100" step="0.01" value="0.05" disabled></div>
   <div class="sam-actions"><button id="sam-cleanAreas" disabled>删除小于阈值的区域</button><button id="sam-undoAreas" disabled>撤销区域清理</button></div>
   <p class="sam-hint" id="sam-areaInfo" role="status" aria-live="polite">尚未执行区域清理</p>
@@ -87,7 +89,7 @@ export const workspaceTemplate=`
   <p class="sam-hint">透明 PNG 按原始裁剪尺寸导出，包含画笔修改和边缘处理。</p>
   <details class="sam-help"><summary>导出规格、限制与诊断</summary><div>
    <p>灰度蒙版使用分割工作图尺寸：白色保留，黑色删除，灰色为边缘过渡。原图已有透明度会保留。</p>
-   <p>量化模型约 13.8 MB，另有专用运行库；单线程 CPU 推理，首次编码较慢。原图允许超过 1024 像素，上限 1600 万像素、20 MiB。网页工作图长边不超过 1024；模型预处理再将长边缩放至 1024 并补齐为 1024×1024 输入。透明 PNG 映射回原始裁剪尺寸，大图可处理，不等于模型以大图的全部像素识别。</p>
+   <p>SlimSAM 通用模型约 13.8 MB；MODNet FP32 人物模型约 26 MB，按需加载、浏览器缓存。均为后台单线程 CPU WASM 推理。网页工作图长边不超过 1024，导出映射回原始裁剪尺寸；原图上限 1600 万像素、20 MiB。人物模型内部短边约 512、最长边不超过 1024，尺寸满足 32 的倍数；极狭长范围需扩大后重试。模型工作分辨率与原图导出分辨率不同，放大导出不会补回已丢失细节。</p>
    <p>批量生成顺序执行，跳过已有结果，不覆盖已修整图片。停止按钮在当前图片结束后生效；灰度蒙版用工作图尺寸。ZIP 为各图创建独立目录，并附成功、失败与尺寸的 CSV 清单，不包含原图。</p>
    <p>蒙版缓存尽可能压缩，限 128 MiB；导出图片累计上限 256 MiB。顶部显示「已保存到本机」后，刷新可恢复图片、设置与结果；清空批次会同步删除保存内容。重要结果请下载留存。切图后修改模型提示需要重新编码。</p>
    <p>背景相似、遮挡、玻璃和细小边缘可能分割不准，请检查结果后导出。</p>

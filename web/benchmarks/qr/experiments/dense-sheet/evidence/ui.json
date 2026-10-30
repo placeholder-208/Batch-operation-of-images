@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "cards": 30,
+  "unresolved": 0,
+  "decoder": "3.16-dense-sheet",
+  "checks": [
+    "actual-main-page",
+    "30-result-cards",
+    "statistics-JSON",
+    "ZIP-export",
+    "no-page-errors"
+  ]
+}

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2250" height="1050" viewBox="0 0 2250 1050" role="img">
+<title>本地分割 · 模型选择与可编辑蒙版</title>
+<defs><marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 11 5.5 L 0 11 z" fill="#627b74"/></marker></defs>
+<style>
+text{font-family:"Microsoft YaHei","SimHei","Noto Sans CJK SC",sans-serif}
+.title{font-size:39px;font-weight:700;fill:#173a32}
+.node{font-size:25px;font-weight:600;fill:#183d34;text-anchor:middle}
+.white{fill:white}
+.edge-label{font-size:20px;font-weight:700;fill:#45645b;text-anchor:middle}
+.note{font-size:20px;fill:#657b74}
+</style>
+<rect width="100%" height="100%" fill="#fcfdfb"/>
+<rect width="100%" height="10" fill="#197866"/>
+<text class="title" x="70" y="77">本地分割 · 模型选择与可编辑蒙版</text>
+
+<rect x="30" y="166" width="280" height="108" rx="17" fill="#f5f8f6" stroke="#90aaa0" stroke-width="2.5"/>
+<text class="node" x="170" y="228" style="font-size:25px">导入单张或多张图片</text>
+<rect x="370" y="162" width="300" height="116" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="520" y="211.5" style="font-size:25px">可选白框限定</text>
+<text class="node" x="520" y="244.5" style="font-size:25px">裁剪输入范围</text>
+<polygon points="875,145 985,220 875,295 765,220" fill="#fff4df" stroke="#cf9c43" stroke-width="2.5"/>
+<text class="node" x="875" y="228" style="font-size:23px">选择模型</text>
+<rect x="1080" y="97" width="340" height="116" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1250" y="146.5" style="font-size:25px">通用 SlimSAM</text>
+<text class="node" x="1250" y="179.5" style="font-size:25px">蓝框、保留点、排除点</text>
+<rect x="1080" y="332" width="340" height="116" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1250" y="381.5" style="font-size:25px">人物 MODNet FP32</text>
+<text class="node" x="1250" y="414.5" style="font-size:25px">不使用蓝框与提示点</text>
+<rect x="1485" y="202" width="350" height="116" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1660" y="251.5" style="font-size:25px">本地 WASM 推理</text>
+<text class="node" x="1660" y="284.5" style="font-size:25px">生成候选蒙版／连续透明度</text>
+<rect x="1885" y="202" width="330" height="116" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="2050" y="251.5" style="font-size:25px">通用：选候选、调阈值</text>
+<text class="node" x="2050" y="284.5" style="font-size:25px">人物：直接使用连续透明度</text>
+<polyline points="310,220 370,220" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="670,220 765,220" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="985,220 1080,220 1080,155" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1035" y="192">通用</text>
+<polyline points="875,295 875,390 1080,390" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="917" y="354">人物</text>
+<polyline points="1420,155 1485,155 1485,260" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1420,390 1460,390 1460,260 1485,260" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1835,260 1885,260" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1880" y="504" width="320" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="2040" y="551.5" style="font-size:25px">叠加预览</text>
+<text class="node" x="2040" y="584.5" style="font-size:25px">检查主体与边缘</text>
+<polyline points="2040,318 2040,504" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polygon points="1620,478 1745,560 1620,642 1495,560" fill="#fff4df" stroke="#cf9c43" stroke-width="2.5"/>
+<text class="node" x="1620" y="553" style="font-size:23px">结果</text>
+<text class="node" x="1620" y="583" style="font-size:23px">需要修整？</text>
+<polyline points="1880,560 1745,560" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1010" y="495" width="370" height="130" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1195" y="551.5" style="font-size:25px">重新调整提示并推理</text>
+<text class="node" x="1195" y="584.5" style="font-size:25px">或画笔、曲线、小区域清理</text>
+<polyline points="1495,560 1380,560" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1436" y="532">是</text>
+<polyline points="1195,495 1195,470 1990,470 1990,504" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1580" y="457">重新预览</text>
+<rect x="1420" y="840" width="400" height="130" rx="17" fill="#176d5e" stroke="#176d5e" stroke-width="2.5"/>
+<text class="node white" x="1620" y="896.5" style="font-size:25px">按原图分辨率合成</text>
+<text class="node white" x="1620" y="929.5" style="font-size:25px">透明 PNG、蒙版及批量 ZIP</text>
+<polyline points="1620,642 1620,840" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1655" y="750">否</text>
+<text class="note" x="75" y="1010">白框限制输入和输出范围；仅通用模式使用目标提示。画笔与曲线修改会进入最终导出结果。</text>
+</svg>

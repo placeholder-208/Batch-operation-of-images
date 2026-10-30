@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "checks": [
+    "lazy-load",
+    "worker-inference",
+    "continuous-alpha",
+    "brush",
+    "regeneration",
+    "refresh",
+    "PNG",
+    "gray-mask",
+    "ZIP",
+    "failed-run-preserves-result",
+    "SAM-round-trip",
+    "crop-only-input",
+    "batch-skips-completed",
+    "mixed-model-export"
+  ],
+  "errors": [],
+  "portraitModelRequests": 1
+}

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1100" viewBox="0 0 1800 1100" role="img">
+<title>总体架构</title>
+<defs><marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 11 5.5 L 0 11 z" fill="#627b74"/></marker></defs>
+<style>
+text{font-family:"Microsoft YaHei","SimHei","Noto Sans CJK SC",sans-serif}
+.title{font-size:39px;font-weight:700;fill:#173a32}
+.node{font-size:25px;font-weight:600;fill:#183d34;text-anchor:middle}
+.white{fill:white}
+.edge-label{font-size:20px;font-weight:700;fill:#45645b;text-anchor:middle}
+.note{font-size:20px;fill:#657b74}
+</style>
+<rect width="100%" height="100%" fill="#fcfdfb"/>
+<rect width="100%" height="10" fill="#197866"/>
+<text class="title" x="70" y="77">总体架构</text>
+
+<rect x="105" y="148" width="310" height="110" rx="17" fill="#f5f8f6" stroke="#90aaa0" stroke-width="2.5"/>
+<text class="node" x="260" y="194.5" style="font-size:25px">用户输入</text>
+<text class="node" x="260" y="227.5" style="font-size:25px">图片、PDF、描述与提示</text>
+<rect x="705" y="97.5" width="390" height="115" rx="17" fill="#edf2fa" stroke="#5682a5" stroke-width="2.5"/>
+<text class="node" x="900" y="146.5" style="font-size:25px">Cloudflare Workers</text>
+<text class="node" x="900" y="179.5" style="font-size:25px">提供页面、模型与运行库</text>
+<rect x="750" y="260" width="300" height="92" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="900" y="314" style="font-size:25px">浏览器工作区</text>
+<polyline points="415,203 530,203 530,306 750,306" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="900,212 900,259" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="900,352 900,413" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="220,413 1580,413" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="220,413 220,462" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="87.5" y="463" width="265" height="98" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="220" y="520" style="font-size:25px">二维码识别</text>
+<polyline points="560,413 560,462" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="427.5" y="463" width="265" height="98" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="560" y="520" style="font-size:25px">条形码识别</text>
+<polyline points="900,413 900,462" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="767.5" y="463" width="265" height="98" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="900" y="520" style="font-size:25px">二维码遮盖</text>
+<polyline points="1240,413 1240,462" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1107.5" y="463" width="265" height="98" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1240" y="520" style="font-size:25px">语义裁剪</text>
+<polyline points="1580,413 1580,462" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1447.5" y="463" width="265" height="98" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1580" y="520" style="font-size:25px">本地分割</text>
+<rect x="1099" y="597.5" width="282" height="105" rx="17" fill="#f7eef8" stroke="#9b6aa0" stroke-width="2.5"/>
+<text class="node" x="1240" y="641.5" style="font-size:25px">Worker 语义接口</text>
+<text class="node" x="1240" y="674.5" style="font-size:25px">与 Groq API</text>
+<polyline points="1240,561 1240,597" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1350" y="590">按需联网</text>
+<polyline points="220,561 220,730" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="560,561 560,730" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="900,561 900,730" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1580,561 1580,730" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="1240,703 1240,730" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="220,730 1580,730" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="900,730 900,777" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="722.5" y="777.5" width="355" height="105" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="900" y="838" style="font-size:25px">结果预览与人工修整</text>
+<rect x="485" y="949" width="310" height="82" rx="17" fill="#f5f8f6" stroke="#90aaa0" stroke-width="2.5"/>
+<text class="node" x="640" y="998" style="font-size:25px">浏览器本地保存</text>
+<rect x="1005" y="949" width="370" height="82" rx="17" fill="#176d5e" stroke="#176d5e" stroke-width="2.5"/>
+<text class="node white" x="1190" y="998" style="font-size:25px">按功能导出图片、ZIP、CSV</text>
+<polyline points="820,883 820,925 640,925 640,949" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="980,883 980,925 1190,925 1190,949" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+</svg>

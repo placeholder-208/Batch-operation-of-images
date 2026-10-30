@@ -1,0 +1,20 @@
+{
+  "images": 95,
+  "configurations": 2,
+  "rowsBefore": 190,
+  "rowsAfter": 190,
+  "allContentsAndCoordinatesIdentical": true,
+  "pageErrors": [],
+  "stageErrors": [],
+  "denseTriggersInRegression": 0,
+  "counts": {
+    "default": {
+      "before": 109,
+      "after": 109
+    },
+    "detailed": {
+      "before": 114,
+      "after": 114
+    }
+  }
+}

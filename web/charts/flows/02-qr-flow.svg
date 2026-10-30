@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2500" height="1250" viewBox="0 0 2500 1250" role="img">
+<title>二维码识别与裁剪 · 实际处理顺序</title>
+<defs><marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 11 5.5 L 0 11 z" fill="#627b74"/></marker></defs>
+<style>
+text{font-family:"Microsoft YaHei","SimHei","Noto Sans CJK SC",sans-serif}
+.title{font-size:39px;font-weight:700;fill:#173a32}
+.node{font-size:25px;font-weight:600;fill:#183d34;text-anchor:middle}
+.white{fill:white}
+.edge-label{font-size:20px;font-weight:700;fill:#45645b;text-anchor:middle}
+.note{font-size:20px;fill:#657b74}
+</style>
+<rect width="100%" height="100%" fill="#fcfdfb"/>
+<rect width="100%" height="10" fill="#197866"/>
+<text class="title" x="70" y="77">二维码识别与裁剪 · 实际处理顺序</text>
+
+<rect x="50" y="163" width="250" height="104" rx="17" fill="#f5f8f6" stroke="#90aaa0" stroke-width="2.5"/>
+<text class="node" x="175" y="223" style="font-size:25px">导入图片／PDF</text>
+<rect x="350" y="159" width="270" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="485" y="206.5" style="font-size:25px">PDF 逐页转图片</text>
+<text class="node" x="485" y="239.5" style="font-size:25px">原分辨率读入</text>
+<rect x="665" y="159" width="330" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="830" y="206.5" style="font-size:25px">整图原图 ZXing 一次</text>
+<text class="node" x="830" y="239.5" style="font-size:25px">QRCode · tryHarder</text>
+<rect x="1062.5" y="159" width="285" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1205" y="206.5" style="font-size:25px">WeChat 检测</text>
+<text class="node" x="1205" y="239.5" style="font-size:25px">整图候选区域</text>
+<polygon points="1580,135 1712.5,215 1580,295 1447.5,215" fill="#fff4df" stroke="#cf9c43" stroke-width="2.5"/>
+<text class="node" x="1580" y="208" style="font-size:23px">触发密集图</text>
+<text class="node" x="1580" y="238" style="font-size:23px">分区补检？</text>
+<rect x="1885" y="159" width="330" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="2050" y="206.5" style="font-size:25px">6 个重叠分区</text>
+<text class="node" x="2050" y="239.5" style="font-size:25px">WeChat 补检并去重</text>
+<polyline points="300,215 350,215" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="620,215 665,215" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="995,215 1062,215" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1348,215 1447,215" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1713,215 1885,215" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1800" y="187">是</text>
+<text class="note" x="75" y="1170">分区触发条件：整图已解码 ≥8 个；WeChat 候选数 ＜ 已解码数的 75%；图像宽、高均 ≥600 px。</text>
+<polygon points="1580,420 1712.5,500 1580,580 1447.5,500" fill="#fff4df" stroke="#cf9c43" stroke-width="2.5"/>
+<text class="node" x="1580" y="493" style="font-size:23px">存在未覆盖</text>
+<text class="node" x="1580" y="523" style="font-size:23px">的候选？</text>
+<polyline points="1580,295 1580,420" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1614" y="363">否</text>
+<polyline points="2050,271 2235,271 2235,500 1713,500" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="1050" y="444" width="310" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1205" y="491.5" style="font-size:25px">按候选裁剪</text>
+<text class="node" x="1205" y="524.5" style="font-size:25px">原区域 ZXing 解码</text>
+<rect x="615" y="425" width="390" height="150" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="810" y="475" style="font-size:25px">仅未解码时依次尝试</text>
+<text class="node" x="810" y="508" style="font-size:25px">灰度对比度、锐化</text>
+<text class="node" x="810" y="541" style="font-size:25px">放大后锐化、自适应二值化</text>
+<polygon points="395,420 527.5,500 395,580 262.5,500" fill="#fff4df" stroke="#cf9c43" stroke-width="2.5"/>
+<text class="node" x="395" y="493" style="font-size:23px">当前区域</text>
+<text class="node" x="395" y="523" style="font-size:23px">已解码？</text>
+<polyline points="1447,500 1360,500" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1402" y="474">是</text>
+<polyline points="1050,500 1005,500" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="615,500 528,500" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="200" y="732" width="390" height="156" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="395" y="785" style="font-size:25px">几何校正</text>
+<text class="node" x="395" y="818" style="font-size:25px">透视／柱面；TPS 可选</text>
+<text class="node" x="395" y="851" style="font-size:25px">模块二值及连续灰度采样</text>
+<rect x="685" y="747" width="340" height="126" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="855" y="801.5" style="font-size:25px">仍失败：模糊恢复</text>
+<text class="node" x="855" y="834.5" style="font-size:25px">频域滤波后重解码</text>
+<polygon points="1240,730 1365,810 1240,890 1115,810" fill="#fff4df" stroke="#cf9c43" stroke-width="2.5"/>
+<text class="node" x="1240" y="803" style="font-size:23px">开启</text>
+<text class="node" x="1240" y="833" style="font-size:23px">精细模式？</text>
+<rect x="1417.5" y="747" width="305" height="126" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1570" y="801.5" style="font-size:25px">增加结构灰度校准</text>
+<text class="node" x="1570" y="834.5" style="font-size:25px">恢复后再做几何校正</text>
+<rect x="1865" y="747" width="310" height="126" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="2020" y="801.5" style="font-size:25px">密集图未解决区域</text>
+<text class="node" x="2020" y="834.5" style="font-size:25px">尝试相位重采样</text>
+<polyline points="395,580 395,732" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="429" y="664">否</text>
+<polyline points="590,810 685,810" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1025,810 1115,810" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1365,810 1418,810" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1394" y="782">是</text>
+<polyline points="1723,810 1865,810" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1240,890 1240,975 2020,975 2020,873" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1290" y="945">否</text>
+<rect x="1870" y="1038" width="360" height="124" rx="17" fill="#176d5e" stroke="#176d5e" stroke-width="2.5"/>
+<text class="node white" x="2050" y="1091.5" style="font-size:25px">逐候选完成后</text>
+<text class="node white" x="2050" y="1124.5" style="font-size:25px">合并去重、裁图、导出</text>
+<polyline points="2020,873 2020,1038" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="263,500 150,500 150,1100 1870,1100" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="590" y="1080">是：跳过本区域后续处理</text>
+<polyline points="1713,500 2370,500 2370,1100 2230,1100" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="2310" y="475">否</text>
+<text class="note" x="75" y="1205">候选局部解码最多 8 区域；几何校正最多 2 区域。各区域一旦覆盖，就跳过其后续阶段，继续处理其他候选。</text>
+</svg>

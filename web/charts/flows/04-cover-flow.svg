@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2100" height="1000" viewBox="0 0 2100 1000" role="img">
+<title>二维码遮盖 · 自动候选与人工复查</title>
+<defs><marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 11 5.5 L 0 11 z" fill="#627b74"/></marker></defs>
+<style>
+text{font-family:"Microsoft YaHei","SimHei","Noto Sans CJK SC",sans-serif}
+.title{font-size:39px;font-weight:700;fill:#173a32}
+.node{font-size:25px;font-weight:600;fill:#183d34;text-anchor:middle}
+.white{fill:white}
+.edge-label{font-size:20px;font-weight:700;fill:#45645b;text-anchor:middle}
+.note{font-size:20px;fill:#657b74}
+</style>
+<rect width="100%" height="100%" fill="#fcfdfb"/>
+<rect width="100%" height="10" fill="#197866"/>
+<text class="title" x="70" y="77">二维码遮盖 · 自动候选与人工复查</text>
+
+<rect x="32.5" y="168" width="255" height="104" rx="17" fill="#f5f8f6" stroke="#90aaa0" stroke-width="2.5"/>
+<text class="node" x="160" y="228" style="font-size:25px">导入图片／PDF</text>
+<rect x="350" y="164" width="270" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="485" y="211.5" style="font-size:25px">PDF 逐页转图片</text>
+<text class="node" x="485" y="244.5" style="font-size:25px">建立批次列表</text>
+<polygon points="820,141 942.5,220 820,299 697.5,220" fill="#fff4df" stroke="#cf9c43" stroke-width="2.5"/>
+<text class="node" x="820" y="213" style="font-size:23px">启动自动</text>
+<text class="node" x="820" y="243" style="font-size:23px">检测？</text>
+<rect x="1030" y="114" width="320" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1190" y="161.5" style="font-size:25px">复用二维码解码流程</text>
+<text class="node" x="1190" y="194.5" style="font-size:25px">得到已解码位置</text>
+<rect x="1420" y="114" width="320" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1580" y="161.5" style="font-size:25px">WeChat 候选检测</text>
+<text class="node" x="1580" y="194.5" style="font-size:25px">保留未解码候选</text>
+<rect x="1680" y="354" width="360" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1860" y="401.5" style="font-size:25px">映射至原图坐标</text>
+<text class="node" x="1860" y="434.5" style="font-size:25px">保留所有自动遮盖框</text>
+<rect x="655" y="434" width="330" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="820" y="481.5" style="font-size:25px">直接手动画框</text>
+<text class="node" x="820" y="514.5" style="font-size:25px">或补充漏检区域</text>
+<polygon points="1490,571 1612.5,650 1490,729 1367.5,650" fill="#fff4df" stroke="#cf9c43" stroke-width="2.5"/>
+<text class="node" x="1490" y="643" style="font-size:23px">逐图复查</text>
+<text class="node" x="1490" y="673" style="font-size:23px">范围足够？</text>
+<rect x="1675" y="594" width="350" height="112" rx="17" fill="#eaf4f0" stroke="#2d806d" stroke-width="2.5"/>
+<text class="node" x="1850" y="641.5" style="font-size:25px">设黑／白填充和边距</text>
+<text class="node" x="1850" y="674.5" style="font-size:25px">原尺寸绘制实心矩形</text>
+<rect x="1685" y="819" width="330" height="112" rx="17" fill="#176d5e" stroke="#176d5e" stroke-width="2.5"/>
+<text class="node white" x="1850" y="866.5" style="font-size:25px">导出单图 PNG</text>
+<text class="node white" x="1850" y="899.5" style="font-size:25px">或批量 ZIP</text>
+<polyline points="288,220 350,220" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="620,220 698,220" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="943,220 1030,220 1030,170" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="985" y="192">是</text>
+<polyline points="1350,170 1420,170" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1740,170 1860,170 1860,354" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="820,299 820,434" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="855" y="375">否</text>
+<polyline points="1860,466 1860,545 1490,545 1490,571" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="985,490 1320,490 1320,650 1368,650" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1613,650 1675,650" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1645" y="622">是</text>
+<polyline points="1850,706 1850,819" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="1490,729 1490,795 820,795 820,546" fill="none" stroke="#627b74" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text class="edge-label" x="1160" y="780">否：补框／撤销</text>
+<text class="note" x="75" y="955">自动检测不能证明已经覆盖全部二维码；导出前需检查漏检与误盖。遮盖框以原图坐标保存。</text>
+</svg>

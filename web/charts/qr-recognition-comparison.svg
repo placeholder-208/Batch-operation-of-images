@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
+  <title id="title">二维码识别效果对比</title>
+  <desc id="desc">纯ZXing整图解码68/123，55.3%；心裁默认109/123，88.6%；心裁精细114/123，92.7%。</desc>
+  <style>
+    text { font-family: "Microsoft YaHei", "SimHei", "Noto Sans CJK SC", sans-serif; }
+    .title { fill: #18332e; font-size: 46px; font-weight: 700; }
+    .tick { fill: #6b7e78; font-size: 20px; }
+    .value { fill: #17352e; font-size: 36px; font-weight: 700; }
+    .label { fill: #243d36; font-size: 27px; font-weight: 650; }
+    .count { fill: #617771; font-size: 20px; }
+    .caption { fill: #617771; font-size: 19px; }
+  </style>
+  <rect width="1400" height="900" fill="#fcfdfb"/>
+  <text class="title" x="110" y="103">二维码识别效果对比</text>
+  <g stroke="#e0e9e4" stroke-width="2">
+    <line x1="206" y1="210" x2="1300" y2="210"/>
+    <line x1="206" y1="332.5" x2="1300" y2="332.5"/>
+    <line x1="206" y1="455" x2="1300" y2="455"/>
+    <line x1="206" y1="577.5" x2="1300" y2="577.5"/>
+    <line x1="206" y1="700" x2="1300" y2="700" stroke="#a9bbb1"/>
+  </g>
+  <g class="tick" text-anchor="end">
+    <text x="181" y="217">100%</text><text x="181" y="339">75%</text>
+    <text x="181" y="462">50%</text><text x="181" y="585">25%</text><text x="181" y="707">0%</text>
+  </g>
+  <rect x="305" y="429.0" width="190" height="271.0" rx="13" fill="#9aadaa"/>
+  <rect x="670" y="266.0" width="190" height="434.0" rx="13" fill="#2c8e7b"/>
+  <rect x="1035" y="245.8" width="190" height="454.2" rx="13" fill="#126657"/>
+  <g class="value" text-anchor="middle">
+    <text x="400" y="407">55.3%</text><text x="765" y="244">88.6%</text><text x="1130" y="224">92.7%</text>
+  </g>
+  <g text-anchor="middle">
+    <text class="label" x="400" y="753">纯 ZXing 整图</text>
+    <text class="label" x="765" y="753">心裁 · 默认</text>
+    <text class="label" x="1130" y="753">心裁 · 精细</text>
+    <text class="count" x="400" y="786">68 / 123</text>
+    <text class="count" x="765" y="786">109 / 123</text>
+    <text class="count" x="1130" y="786">114 / 123</text>
+  </g>
+  <text class="caption" x="110" y="858">图注：95 张去重图片、123 个标注位置；柱高为成功解码的位置匹配比例，非文本准确率。</text>
+</svg>

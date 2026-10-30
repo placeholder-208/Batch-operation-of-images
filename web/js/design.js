@@ -1,3 +1,4 @@
+import {setupStudioControls} from './studio-controls.js';
 // Rearrange existing nodes, never clone controls or replace canvases with active state.
 const $=id=>document.getElementById(id);
 const node=(tag,className='',text='')=>{const el=document.createElement(tag);el.className=className;if(text)el.textContent=text;return el;};
@@ -37,17 +38,27 @@ function prepareStandard(mode,rootId,listId,resultId){
  aside.append(task,results,output);
  const oldAsideHead=aside.querySelector('.panel-head');oldAsideHead.classList.add('sr-only');
  const result=$(resultId);
- if(result){const oldTitle=result.previousElementSibling;if(oldTitle?.tagName==='H2'){oldTitle.previousElementSibling?.classList.contains('divider')&&oldTitle.previousElementSibling.remove();oldTitle.remove();}results.append(result);result.classList.add('result-list');}
+ if(result){const oldTitle=result.previousElementSibling;if(oldTitle?.tagName==='H2'){oldTitle.previousElementSibling?.classList.contains('divider')&&oldTitle.previousElementSibling.remove();oldTitle.remove();}result.style.removeProperty('max-height');result.style.removeProperty('overflow');results.append(result);result.classList.add('result-list');}
  if(mode==='mask')results.append($('maskReview'));
  const exports=body.querySelector('.export-actions');if(exports){const help=exports.nextElementSibling;output.append(exports);if(help?.classList.contains('context-help'))output.append(help);}
  if(mode==='qr'){
   const network=body.querySelector('.link-controls');if(network)results.append(network);
   $('downloadAllZip').classList.replace('secondary','primary');$('downloadAllZip').before($('downloadImageZip'));
+  $('zipOutput').closest('label').hidden=true;
+  const diagnostics=node('div','maintenance-actions');
+  for(const id of ['qrStatisticsCSV','qrStatisticsJSON'])diagnostics.append($(id));
+  const note=exports.querySelector('p.small');if(note)diagnostics.append(note);
+  output.append(disclosure('识别统计与诊断',diagnostics));
  }
  if(mode==='barcode')$('barcodeAllZip').classList.replace('secondary','primary');
  if(mode==='semantic'){
   $('semanticZip').classList.replace('secondary','primary');
   const maintenance=node('div','maintenance-actions');maintenance.append($('semanticRetry'),$('semanticDiagnostic'));output.append(disclosure('重新检测与诊断',maintenance));
+ }
+ if(['qr','barcode','mask'].includes(mode)){
+  const settings=node('div','processing-settings');
+  for(const detail of body.querySelectorAll(':scope > details, :scope > .module-state > details'))settings.append(detail);
+  if(settings.children.length)body.append(disclosure('处理选项与运行详情',settings));
  }
  const description=node('p','task-description',{
   qr:'导入图片或 PDF，读取码内内容并导出裁图与 CSV。',barcode:'导入图片或 PDF，读取条形码并导出裁图与 CSV。',mask:'导入图片或 PDF，自动检测后逐图检查并补充遮盖框。',semantic:'按图填写描述，或使用统一描述批量裁剪。'
@@ -73,9 +84,15 @@ function prepareSegmentation(){
  generate.querySelector('.sam-hint')?.remove();
  $('sam-segment').before(sourceTools,magnifier);
  const refine=node('div','sam-refine-tools'),maskInfo=$('sam-maskInfo');
- const adjustment=node('div','mask-settings');for(const child of [...adjust.children])if(!child.classList.contains('inspector-heading')&&child!==maskInfo)adjustment.append(child);
+ const adjustment=node('div','mask-settings'),cleanup=node('div','mask-cleanup');
+ let inCleanup=false;
+ for(const child of [...adjust.children]){
+  if(child.classList.contains('inspector-heading')||child===maskInfo)continue;
+  if(child.contains?.($('sam-minArea')))inCleanup=true;
+  (inCleanup?cleanup:adjustment).append(child);
+ }
  const brushHelp=preview.querySelector('.sam-section');if(brushHelp)brush.append(brushHelp);
- refine.append(brush,disclosure('候选、边缘与小区域清理',adjustment));
+ refine.append(adjustment,brush,disclosure('小区域清理与说明',cleanup));
  const empty=node('p','view-help','生成蒙版后，切换到「蒙版修整」检查并编辑结果。');adjust.append(maskInfo,empty,refine);
  source.querySelector('.head').classList.add('sr-only');preview.querySelector('.head').classList.add('sr-only');
  stageScroll($('sam-stage'));stageScroll($('sam-previewStage'));
@@ -84,6 +101,7 @@ function prepareSegmentation(){
  const buttons=[];
  function select(index,focus=false){
   if(!root.dispatchEvent(new CustomEvent('sam:beforeviewchange',{cancelable:true})))return;
+  root.dataset.view=index?'mask':'source';aside.scrollTop=0;
   [source,preview].forEach((panel,i)=>{panel.hidden=i!==index;buttons[i].setAttribute('aria-selected',String(i===index));buttons[i].tabIndex=i===index?0:-1;});
   sourceTools.hidden=magnifier.hidden=index===1;refine.hidden=index===0;empty.hidden=index===1;
   $('sam-overlay').closest('label').hidden=index===0;
@@ -109,5 +127,6 @@ export function setupDesign(){
  document.querySelectorAll('.module-state').forEach(el=>{const rows=el.querySelector('.module-rows');if(!rows)return;el.querySelector('.module-caption')?.remove();const details=disclosure('引擎与运行详情',rows);details.classList.add('runtime-details');el.append(details);const note=el.parentElement.querySelector('.processing-note');if(note)details.append(note);});
  prepareStandard('qr','normalWorkspace','tiles','qrResults');prepareStandard('barcode','barcodeWorkspace','barcodeTiles','barcodeResults');prepareStandard('mask','maskWorkspace','maskTiles','maskSummary');prepareStandard('semantic','semanticWorkspace','semanticTiles','semanticResults');prepareSegmentation();
  document.querySelector('#samWorkspace .sam-help[open]')?.removeAttribute('open');
+ setupStudioControls();
  const dialog=$('guideDialog');$('openGuide').onclick=()=>dialog.showModal();$('closeGuide').onclick=()=>dialog.close();dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
 }

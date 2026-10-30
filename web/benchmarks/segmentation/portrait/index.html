@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>心裁 · 人像边缘研究</title>
+<style>
+body{font:15px/1.6 system-ui,sans-serif;max-width:1100px;margin:36px auto;padding:0 20px;color:#18342b;background:#f5f7f6}h1{font-size:26px}button{padding:10px 22px;border:0;border-radius:6px;background:#176b5b;color:white;cursor:pointer}button:disabled{opacity:.5}pre{white-space:pre-wrap;background:white;padding:16px;border-radius:8px}table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:7px;border-bottom:1px solid #cddad6;text-align:left}#status{min-height:2em}small{color:#52665d}
+</style>
+<h1>人像边缘对照实验</h1>
+<p>对比现有 SlimSAM 的连续 logits 后处理与 MODNet 的连续 alpha。仅在本机读取固定版本模型、官方配对样本；不上传图片，不修改主页面。</p>
+<p><button id="run">运行固定样本对照</button> <button id="download" disabled>下载统计 JSON</button></p>
+<p id="status">请先准备模型与配对数据，再启动本地研究服务。</p>
+<small>统一评估长边最多 1024 像素；SlimSAM 使用预先固定、与真值无关的提示；候选按模型预测分数选择。GT 仅参与评分。</small>
+<table><thead><tr><th>模型</th><th>图片</th><th>IoU ↑</th><th>边缘 F1 ↑</th><th>过渡 MAE ↓</th><th>边缘带 MAE ↓</th><th>推理 ms</th></tr></thead><tbody id="rows"></tbody></table>
+<pre id="summary"></pre>
+<script type="module" src="./benchmark.mjs"></script>
+</html>

@@ -5,7 +5,7 @@ import {storeCrop,releaseCrops} from './crop-store.js';
 import { processFile } from "./image.js";
 import { perspectiveCrop } from "./crop.js";
 import { createImageZip, createAllZip } from "./zip.js";
-import { createUI, downloadBlob } from "./ui.js?v=qr-3.12";
+import { createUI, downloadBlob } from "./ui.js?v=qr-3.16";
 import { report } from "./runtime-status.js";
 import { createMaskUI } from "./masking.js";
 import { createBarcodeUI } from "./barcode-ui.js";
@@ -13,11 +13,11 @@ import { createSemanticUI } from "./semantic-ui.js?v=feature-3.6.1";
 import { setupWorkspaceTabs } from "./workspace-tabs.js?v=sam-1.8";
 import { createSamWorkspace } from "./segmentation/workspace.js";
 
-let running = false, exporting = false, decoderPromise = null;
+let running = false, exporting = false, decoderPromise = null, stopRequested=false;
 let barcodeUI = null, semanticUI = null, samUI = null;
 let persistence = null;
 const tick = () => new Promise(resolve => setTimeout(resolve, 0));
-const ui = createUI({scan, export: exportResults, isExporting: () => exporting, onChange: () => persistence?.schedule('qr'),onBusy:()=>{maskUI.refresh();barcodeUI?.refresh();semanticUI?.refresh();samUI?.refresh();}});
+const ui = createUI({scan, stop:()=>{stopRequested=true;}, export: exportResults, isExporting: () => exporting, onChange: () => persistence?.schedule('qr'),onBusy:()=>{maskUI.refresh();barcodeUI?.refresh();semanticUI?.refresh();samUI?.refresh();}});
 const maskUI = createMaskUI({
     onChange: () => persistence?.schedule('mask'),
     isBlocked: () => running || exporting || ui.isImporting() || Boolean(barcodeUI?.isBusy()) || Boolean(semanticUI?.isBusy()) || Boolean(samUI?.isBusy()),
@@ -72,7 +72,7 @@ async function loadDecoder() {
 }
 async function scan(items, requestedOptions = {}) {
     if (running || exporting || ui.isImporting() || maskUI.isBusy() || barcodeUI.isBusy() || semanticUI.isBusy() || samUI.isBusy() || !items.length) return;
-    running = true; ui.busy(true); maskUI.refresh(); barcodeUI.refresh(); semanticUI.refresh(); samUI?.refresh(); ui.progress(0, items.length);
+    stopRequested=false;running = true;ui.task(true); ui.busy(true); maskUI.refresh(); barcodeUI.refresh(); semanticUI.refresh(); samUI?.refresh(); ui.progress(0, items.length);
     const options=normalizeQROptions(requestedOptions);
     const began = performance.now(); let succeeded = 0, failed = 0, totalCount = 0;
     const run={id:globalThis.crypto?.randomUUID?.()||String(Date.now()),
@@ -83,6 +83,7 @@ async function scan(items, requestedOptions = {}) {
         const {decodeQRCode} = await loadDecoder();
         run.decoderModuleInitMs=Math.round((performance.now()-moduleBegan)*100)/100;
         for (let index = 0; index < items.length; index++) {
+            if(stopRequested)break;
             const item = items[index]; item.processing = true; item.error = null;
             if(item.qrStatistics){
                 item.qrStatisticsHistory=[...(item.qrStatisticsHistory||[]),item.qrStatistics].slice(-8);
@@ -127,7 +128,7 @@ async function scan(items, requestedOptions = {}) {
                 item.processing=false;ui.progress(index+1,items.length);ui.refresh();await tick();
             }
         }
-        ui.tell("本次完成：" + succeeded + " 张图片，共识别 " + totalCount + " 个二维码" +
+        ui.tell((stopRequested?"已停止，本次完成：":"本次完成：") + succeeded + " 张图片，共识别 " + totalCount + " 个二维码" +
             (failed ? "；"+failed+" 张失败，可再次识别" : "") + " · " + Math.round(performance.now()-began) + " ms","qr");
     } catch(error) {
         if(run.decoderModuleInitMs===undefined){
@@ -140,7 +141,7 @@ async function scan(items, requestedOptions = {}) {
         }
         ui.tell("识别初始化失败："+(error.message||String(error)),"qr");
     } finally {
-        running=false;ui.busy(false);ui.refresh();maskUI.refresh();barcodeUI.refresh();semanticUI.refresh(); samUI?.refresh();
+        running=false;ui.task(false);ui.busy(false);ui.refresh();maskUI.refresh();barcodeUI.refresh();semanticUI.refresh(); samUI?.refresh();
     }
 }
 async function exportResults(results, single = false) {

@@ -2,9 +2,13 @@ import {readBarcodes} from './reader-client.js';
 import { measureQR, measureQRSync } from './qr-statistics.js';
 import { report } from "./runtime-status.js";
 import { detectWechatRegions } from "./wechat-detector.js";
+import {supplementDenseDetection,needsDenseDetection} from './dense-detection.js';
+import {decodeDenseSampling,DENSE_SAMPLING_LIMITS} from './dense-sampling.js';
 import { decodeCurvedRegion, analyzeCurvedImage } from "./curved-region.js";
 import { iterateBackgroundVariants } from './preprocess-client.js';
 import {decodeBlurredRegion,RESTORATION_LIMITS} from './blur-restoration.js';
+import {decodeRestoredGeometry,RESTORED_GEOMETRY_LIMITS} from './restored-geometry.js';
+import {decodeStructureRegion,STRUCTURE_DECODER_LIMITS} from './structure-decoder.js';
 
 async function cropRegion(sourceCanvas, region) {
     const width = region.right - region.x;
@@ -91,7 +95,9 @@ function convertedRegionResults(results, crop, name, variant = {}) {
 }
 
 export async function decodeWechatFallback(sourceCanvas, existing = [], trace = null, options = {}) {
-    const regions=await detectWechatRegions(sourceCanvas,trace),decoded=[],deferred=[];
+    const initialRegions=await detectWechatRegions(sourceCanvas,trace);
+    const denseEnabled=needsDenseDetection(existing,initialRegions,sourceCanvas.width,sourceCanvas.height);
+    const regions=await supplementDenseDetection(sourceCanvas,existing,initialRegions,trace),decoded=[],deferred=[];
     const records=regions.map((box,index)=>({id:index+1,box,outcome:'pending',covered:false,
         curvedAttempted:false,localVariants:[]}));
     if(trace)trace.record.regions=records;
@@ -202,6 +208,81 @@ export async function decodeWechatFallback(sourceCanvas, existing = [], trace = 
         }catch(error){
             Object.assign(record,{outcome:'error',reason:'runtime-error',error:error.message||String(error)});
             report('curved','模糊恢复失败：'+error.message,'error');
+        }
+    }
+    // Structure-calibrated sampling has its own budget. A failed attempt cannot
+    // consume the existing restoration or restored-geometry image allowance.
+    if(options.detailedRecovery===true){
+        const structureBegan=performance.now();let structureAttempted=0;
+        for(const record of records){
+            const {box,id}=record;
+            if(covered(box)||!record.crop||record.outcome==='error')continue;
+            record.structureSampling={};
+            const remaining=STRUCTURE_DECODER_LIMITS.imageMs-(performance.now()-structureBegan);
+            if(structureAttempted>=STRUCTURE_DECODER_LIMITS.maxRegions||remaining<=0){
+                Object.assign(record.structureSampling,{status:'skipped',reason:'structure-sampling-budget',attempted:0});continue;
+            }
+            structureAttempted++;
+            try{
+                report('curved','正在校准区域模块灰度…');
+                const found=await measureQR(trace,'structure_total',{regionId:id,parent:true},()=>decodeStructureRegion(sourceCanvas,record.crop,{
+                    trace,regionId:id,statistics:record.structureSampling,
+                    budgetMs:Math.min(STRUCTURE_DECODER_LIMITS.regionMs,remaining),accept:results=>results.some(qr=>isRegionCovered(box,qr))
+                }));
+                decoded.push(...found);
+                if(covered(box))Object.assign(record,{outcome:'structure-sampling-decoded',reason:null});
+                report('curved','模块校准新增 '+found.length+' 个','ready');
+            }catch(error){
+                Object.assign(record.structureSampling,{status:'error',reason:'runtime-error',error:error.message||String(error)});
+                report('curved','模块校准失败：'+record.structureSampling.error,'error');
+            }
+        }
+    }
+    // Optional extra work starts after every original recovery attempt, so it
+    // cannot consume a later region's existing restoration budget.
+    if(options.detailedRecovery===true){
+        let compositeAttempted=0;const compositeBegan=performance.now();
+        // Keep formerly eligible regions first. An absent earlier model may
+        // mean a budget skip, or that restoration makes its finders usable.
+        const candidates=records.slice().sort((a,b)=>Number(b.curved?.models>0)-Number(a.curved?.models>0));
+        for(const record of candidates){
+            const {box,id}=record;
+            if(covered(box)||!record.crop||record.outcome==='error')continue;
+            record.restoredGeometry={};
+            const remaining=RESTORED_GEOMETRY_LIMITS.imageBudgetMs-(performance.now()-compositeBegan);
+            if(compositeAttempted>=RESTORED_GEOMETRY_LIMITS.maxRegions||remaining<=0){
+                Object.assign(record.restoredGeometry,{status:'skipped',reason:'restored-geometry-budget',attempted:0});continue;
+            }
+            compositeAttempted++;
+            try{
+                report('curved','正在对恢复图补做局部校正…');
+                const found=await measureQR(trace,'restored_geometry_total',{regionId:id,parent:true},()=>decodeRestoredGeometry(sourceCanvas,record.crop,{
+                    trace,regionId:id,statistics:record.restoredGeometry,budgetMs:Math.min(RESTORED_GEOMETRY_LIMITS.budgetMs,remaining),
+                    accept:results=>results.some(qr=>isRegionCovered(box,qr))
+                }));
+                decoded.push(...found);
+                if(covered(box))Object.assign(record,{outcome:'restored-geometry-decoded',reason:null});
+                report('curved','恢复后校正新增 '+found.length+' 个','ready');
+            }catch(error){
+                Object.assign(record,{outcome:'error',reason:'runtime-error',error:error.message||String(error)});
+                report('curved','恢复后校正失败：'+record.error,'error');
+            }
+        }
+    }
+    if(denseEnabled){
+        const began=performance.now();let attempted=0;
+        for(const record of records){
+            if(covered(record.box)||!record.crop||record.outcome==='error')continue;
+            const remaining=DENSE_SAMPLING_LIMITS.imageMs-(performance.now()-began);record.denseSampling={};
+            if(attempted>=DENSE_SAMPLING_LIMITS.maxRegions||remaining<=0){Object.assign(record.denseSampling,{status:'skipped',reason:'dense-phase-budget',attempted:0});continue;}
+            attempted++;
+            try{
+                const found=await measureQR(trace,'dense_phase_total',{regionId:record.id,parent:true},()=>decodeDenseSampling(sourceCanvas,record.crop,{trace,regionId:record.id,statistics:record.denseSampling,budgetMs:Math.min(remaining,DENSE_SAMPLING_LIMITS.regionMs),accept:results=>results.some(qr=>isRegionCovered(record.box,qr))}));
+                decoded.push(...found);
+                if(covered(record.box))Object.assign(record,{outcome:'dense-phase-decoded',reason:null});
+                else record.reason=record.denseSampling.reason;
+                report('curved','密集区域重采样新增 '+found.length+' 个','ready');
+            }catch(error){Object.assign(record.denseSampling,{status:'error',reason:'runtime-error',error:error.message||String(error)});}
         }
     }
     return decoded;

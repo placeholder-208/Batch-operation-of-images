@@ -1,0 +1,352 @@
+{
+  "protocol": {
+    "images": 95,
+    "positions": 123,
+    "iou": 0.3,
+    "annotation": "position-only, no independent text truth"
+  },
+  "runs": [
+    {
+      "name": "local-3.14-control-structure",
+      "images": 95,
+      "matched": 112,
+      "blurred": 52,
+      "curved": 60,
+      "totalMs": 180091.17,
+      "runtimeErrors": 0,
+      "unmatched": 0,
+      "lostPriorPayloads": [],
+      "structureRegions": 0,
+      "structureTotalMs": 0,
+      "recovered": []
+    },
+    {
+      "name": "local-production-3.15",
+      "images": 95,
+      "matched": 109,
+      "blurred": 49,
+      "curved": 60,
+      "totalMs": 65476.24000000002,
+      "runtimeErrors": 0,
+      "unmatched": 0,
+      "lostPriorPayloads": [],
+      "structureRegions": 0,
+      "structureTotalMs": 0,
+      "recovered": []
+    },
+    {
+      "name": "local-production-3.15-detailed",
+      "images": 95,
+      "matched": 114,
+      "blurred": 54,
+      "curved": 60,
+      "totalMs": 172073.82999999993,
+      "runtimeErrors": 0,
+      "unmatched": 0,
+      "lostPriorPayloads": [],
+      "structureRegions": 13,
+      "structureTotalMs": 6691.34,
+      "recovered": [
+        {
+          "file": "blurred/image005.jpg",
+          "regionId": 2,
+          "attempted": 51,
+          "elapsedMs": 698,
+          "selected": {
+            "dimension": 25,
+            "axis": 1,
+            "curvature": 1.2,
+            "groupIndex": 0,
+            "edge": 448,
+            "black": 129.233070510687,
+            "white": 218.74076577886655,
+            "gap": 89.50769526817953,
+            "score": 0.5412405993571687,
+            "cutoff": 0.7
+          }
+        },
+        {
+          "file": "blurred/image005.jpg",
+          "regionId": 3,
+          "attempted": 3,
+          "elapsedMs": 160,
+          "selected": {
+            "dimension": 21,
+            "axis": 3,
+            "curvature": 0.4,
+            "groupIndex": 0,
+            "edge": 384,
+            "black": 123.49626508064192,
+            "white": 220.0758630981848,
+            "gap": 96.57959801754289,
+            "score": 0.6108041526886892,
+            "cutoff": 0.7
+          }
+        }
+      ]
+    },
+    {
+      "name": "local-production-3.15-detailed-confirm",
+      "images": 95,
+      "matched": 114,
+      "blurred": 54,
+      "curved": 60,
+      "totalMs": 148977.75999999992,
+      "runtimeErrors": 0,
+      "unmatched": 0,
+      "lostPriorPayloads": [],
+      "structureRegions": 13,
+      "structureTotalMs": 5101.76,
+      "recovered": [
+        {
+          "file": "blurred/image005.jpg",
+          "regionId": 2,
+          "attempted": 8,
+          "elapsedMs": 196,
+          "selected": {
+            "dimension": 25,
+            "axis": 0,
+            "curvature": 0.8,
+            "groupIndex": 0,
+            "edge": 384,
+            "black": 117.45078388260896,
+            "white": 219.28790175970653,
+            "gap": 101.83711787709757,
+            "score": 0.5675216226126485,
+            "cutoff": 0.75
+          }
+        },
+        {
+          "file": "blurred/image005.jpg",
+          "regionId": 3,
+          "attempted": 3,
+          "elapsedMs": 104,
+          "selected": {
+            "dimension": 21,
+            "axis": 3,
+            "curvature": 0.4,
+            "groupIndex": 0,
+            "edge": 384,
+            "black": 123.49626508064192,
+            "white": 220.0758630981848,
+            "gap": 96.57959801754289,
+            "score": 0.6108041526886892,
+            "cutoff": 0.7
+          }
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "file": "benchmarks/qr/results/local-3.14-control-structure-results.jsonl",
+      "sha256": "8c18572ecde2f405580be15659a47c7ef4632b71445816422afdf9687a70b2c6"
+    },
+    {
+      "file": "benchmarks/qr/results/local-production-3.15-results.jsonl",
+      "sha256": "a79e53389a7b91cceae9e04ae70fbd6d99648a392699ed0c1214053f91f9b5ab"
+    },
+    {
+      "file": "benchmarks/qr/results/local-production-3.15-detailed-results.jsonl",
+      "sha256": "59b527e6332e6aae07d2cecbb35685f2f9049789d1c87d379094b6c11bcfec4c"
+    },
+    {
+      "file": "benchmarks/qr/results/local-production-3.15-detailed-confirm-results.jsonl",
+      "sha256": "c75bb8639e40e4dbfd854eec8f8c0eb9dc3392ddf9eeabe0c86e4681ca00b44a"
+    }
+  ],
+  "ablation": [
+    {
+      "file": "blurred/image005.jpg",
+      "regionId": 2,
+      "source": "local-production-3.14-detailed",
+      "edge": 384,
+      "counts": {
+        "old": {
+          "attempts": 44,
+          "successfulVariants": 0
+        },
+        "oldCenter": {
+          "attempts": 44,
+          "successfulVariants": 0
+        },
+        "rawCenter": {
+          "attempts": 44,
+          "successfulVariants": 1
+        },
+        "calibrated": {
+          "attempts": 44,
+          "successfulVariants": 3
+        }
+      }
+    },
+    {
+      "file": "blurred/image005.jpg",
+      "regionId": 2,
+      "source": "local-production-3.14-detailed",
+      "edge": 448,
+      "counts": {
+        "old": {
+          "attempts": 48,
+          "successfulVariants": 0
+        },
+        "oldCenter": {
+          "attempts": 48,
+          "successfulVariants": 1
+        },
+        "rawCenter": {
+          "attempts": 48,
+          "successfulVariants": 3
+        },
+        "calibrated": {
+          "attempts": 48,
+          "successfulVariants": 11
+        }
+      }
+    },
+    {
+      "file": "blurred/image005.jpg",
+      "regionId": 3,
+      "source": "local-production-3.14-detailed",
+      "edge": 384,
+      "counts": {
+        "old": {
+          "attempts": 48,
+          "successfulVariants": 0
+        },
+        "oldCenter": {
+          "attempts": 48,
+          "successfulVariants": 0
+        },
+        "rawCenter": {
+          "attempts": 48,
+          "successfulVariants": 1
+        },
+        "calibrated": {
+          "attempts": 48,
+          "successfulVariants": 3
+        }
+      }
+    },
+    {
+      "file": "blurred/image005.jpg",
+      "regionId": 3,
+      "source": "local-production-3.14-detailed",
+      "edge": 448,
+      "counts": {
+        "old": {
+          "attempts": 48,
+          "successfulVariants": 0
+        },
+        "oldCenter": {
+          "attempts": 48,
+          "successfulVariants": 0
+        },
+        "rawCenter": {
+          "attempts": 48,
+          "successfulVariants": 0
+        },
+        "calibrated": {
+          "attempts": 48,
+          "successfulVariants": 0
+        }
+      }
+    },
+    {
+      "file": "blurred/image005.jpg",
+      "regionId": 2,
+      "source": "local-structure-candidate",
+      "edge": 384,
+      "counts": {
+        "old": {
+          "attempts": 44,
+          "successfulVariants": 0
+        },
+        "oldCenter": {
+          "attempts": 44,
+          "successfulVariants": 0
+        },
+        "rawCenter": {
+          "attempts": 44,
+          "successfulVariants": 0
+        },
+        "calibrated": {
+          "attempts": 44,
+          "successfulVariants": 0
+        }
+      }
+    },
+    {
+      "file": "blurred/image005.jpg",
+      "regionId": 2,
+      "source": "local-structure-candidate",
+      "edge": 448,
+      "counts": {
+        "old": {
+          "attempts": 48,
+          "successfulVariants": 0
+        },
+        "oldCenter": {
+          "attempts": 48,
+          "successfulVariants": 0
+        },
+        "rawCenter": {
+          "attempts": 48,
+          "successfulVariants": 2
+        },
+        "calibrated": {
+          "attempts": 48,
+          "successfulVariants": 7
+        }
+      }
+    },
+    {
+      "file": "blurred/image005.jpg",
+      "regionId": 3,
+      "source": "local-structure-candidate",
+      "edge": 384,
+      "counts": {
+        "old": {
+          "attempts": 48,
+          "successfulVariants": 0
+        },
+        "oldCenter": {
+          "attempts": 48,
+          "successfulVariants": 0
+        },
+        "rawCenter": {
+          "attempts": 48,
+          "successfulVariants": 1
+        },
+        "calibrated": {
+          "attempts": 48,
+          "successfulVariants": 3
+        }
+      }
+    },
+    {
+      "file": "blurred/image005.jpg",
+      "regionId": 3,
+      "source": "local-structure-candidate",
+      "edge": 448,
+      "counts": {
+        "old": {
+          "attempts": 48,
+          "successfulVariants": 0
+        },
+        "oldCenter": {
+          "attempts": 48,
+          "successfulVariants": 0
+        },
+        "rawCenter": {
+          "attempts": 48,
+          "successfulVariants": 0
+        },
+        "calibrated": {
+          "attempts": 48,
+          "successfulVariants": 0
+        }
+      }
+    }
+  ]
+}

@@ -1,5 +1,9 @@
 # 本地分割精度对照
 
+人物/发丝专项对照已在 [portrait/](portrait/README.md) 完成，含真实人像、MODNet FP32/q8 和 SlimSAM 对照，见 [2026-10-28 报告](portrait/REPORT.md)。下文保留早期 SlimSAM 几何冒烟协议，不能用其合成图结果替代人物评估。
+
+MODNet FP32 的可选主页面模式已于 2026-10-29 接入，见 [接入与测试记录](portrait/INTEGRATION.md)。
+
 本目录承接模型选型讨论中尚未完成的第一步：同一 SlimSAM-77-uniform、相同输入与提示，对照 q8 与 FP32。它独立于产品入口，整个 `benchmarks/` 已从 Cloudflare 静态部署中排除。应用模型、工作区存储与用户图片均不由此工具修改。
 
 ## 启动

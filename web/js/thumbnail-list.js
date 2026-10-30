@@ -1,3 +1,8 @@
+export function setBatchSize(list,total){
+ const root=list.closest('.workspace');if(!root||root.dataset.total===String(total))return;
+ root.dataset.total=String(total);root.dataset.single=String(total<2);
+ root.dispatchEvent(new CustomEvent('studio:batchchange',{detail:{total},bubbles:true}));
+}
 let queue=Promise.resolve();
 export function prepareThumbnail(item,changed){
  queue=queue.then(async()=>{
@@ -23,17 +28,20 @@ export function createThumbnailItem(onSelect){
  return {button,img,index,badge,name};
 }
 export function updateThumbnailItem(node,item,index,selected,label,extraClass=''){
+ const previousState=node.button.dataset.state;
  const detail=typeof label==='object'&&label!==null?label:{text:label};
  const status=detail.text??'',state=detail.state||(item.error?'error':item.processing?'processing':item.result||item.detected||item.hasResult?'complete':'pending');
  const description=typeof status==='number'?status+' 个结果':String(status);
  node.button.className='tile'+(extraClass?' '+extraClass:'')+(selected?' active':'');node.button.dataset.state=state;
  node.button.setAttribute('aria-label',(index+1)+'. '+item.file.name+'，'+description);node.button.setAttribute('aria-pressed',String(selected));node.button.title=item.file.name+' · '+description;
- node.index.textContent=String(index+1);node.badge.textContent=String(detail.count??status);node.name.textContent=item.file.name;
+ node.index.textContent=String(index+1);node.badge.textContent=(state==='error'?'! ':state==='processing'?'◌ ':'')+String(detail.count??status);node.name.textContent=item.file.name;
+ if(previousState!==state)node.button.closest('.workspace')?.dispatchEvent(new CustomEvent('studio:taskchange'));
  if(item.thumbnailURL){if(node.img.getAttribute('src')!==item.thumbnailURL)node.img.src=item.thumbnailURL;node.img.hidden=false;}
 }
 export function createTileList(root,onSelect,label){
  const nodes=new Map();
  return (items,selected)=>{
+  setBatchSize(root,items.length);
   const wanted=new Set(items);
   for(const [item,node] of nodes)if(!wanted.has(item)){node.button.remove();nodes.delete(item);}
   root.hidden=items.length<1;

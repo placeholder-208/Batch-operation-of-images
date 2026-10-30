@@ -1,0 +1,1387 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-28T10:40:52.379Z",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+  "backend": "wasm",
+  "threads": 1,
+  "hardwareConcurrency": 16,
+  "data": {
+    "dataset": "PPM-100",
+    "source": "https://github.com/ZHKKKe/PPM",
+    "archiveUrl": "https://drive.usercontent.google.com/download?id=1JUx-EPoV9QAhQgmW0AyOen-xKQUzZia-&export=download&confirm=t",
+    "archiveBytes": 262319198,
+    "selection": "image entries in ZIP order at zero-based indices 0,10,...,90; fixed before inference",
+    "selectedIndices": [
+      0,
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90
+    ],
+    "alphaLicense": "CC-BY-NC-SA-4.0",
+    "imageLicense": "See official PPM Flickr attribution/license information",
+    "purpose": "local non-commercial research only; not application assets",
+    "groundTruthFormat": "original official JPEG alpha; continuous grayscale, includes JPEG compression artifacts",
+    "samples": [
+      {
+        "id": "13179159164_1a4ae8d085_o",
+        "archiveImageIndex": 0,
+        "image": "image/13179159164_1a4ae8d085_o.jpg",
+        "imageSourceEntry": "PPM-100/image/13179159164_1a4ae8d085_o.jpg",
+        "imageBytes": 4327251,
+        "imageSha256": "fb48e36f0b987334c015c91f4ef01b595686405cfb4af436392607ac0cac033f",
+        "alpha": "alpha/13179159164_1a4ae8d085_o.jpg",
+        "alphaSourceEntry": "PPM-100/matte/13179159164_1a4ae8d085_o.jpg",
+        "alphaBytes": 516947,
+        "alphaSha256": "3621bbcb6e497231c71a90094cbbd7c27cb4411ffc5f887675c8a833a8048f93",
+        "width": 4843,
+        "height": 3229
+      },
+      {
+        "id": "16731963546_3148ea2b33_o",
+        "archiveImageIndex": 10,
+        "image": "image/16731963546_3148ea2b33_o.jpg",
+        "imageSourceEntry": "PPM-100/image/16731963546_3148ea2b33_o.jpg",
+        "imageBytes": 2368373,
+        "imageSha256": "1a4211ad1c768baf2e4ea86e1e36a9d565c1672e88afdb1d3e4d919c1ae7d862",
+        "alpha": "alpha/16731963546_3148ea2b33_o.jpg",
+        "alphaSourceEntry": "PPM-100/matte/16731963546_3148ea2b33_o.jpg",
+        "alphaBytes": 194263,
+        "alphaSha256": "d700f6eb0fea7c5522f8f03be1a3abe43c34ffc2d32b20310ca16828581d0106",
+        "width": 3264,
+        "height": 2448
+      },
+      {
+        "id": "2133184216_18d38525a2_o",
+        "archiveImageIndex": 20,
+        "image": "image/2133184216_18d38525a2_o.jpg",
+        "imageSourceEntry": "PPM-100/image/2133184216_18d38525a2_o.jpg",
+        "imageBytes": 1057921,
+        "imageSha256": "a29c22305c370ace1cf57a61c1ddce710eddc4385382f91e55d75ffe2840ef41",
+        "alpha": "alpha/2133184216_18d38525a2_o.jpg",
+        "alphaSourceEntry": "PPM-100/matte/2133184216_18d38525a2_o.jpg",
+        "alphaBytes": 162395,
+        "alphaSha256": "6fa922ecd0377eaddedf62c44ba92de6cac7a81c9ad8e63892e8941af6fd0ac6",
+        "width": 3030,
+        "height": 2014
+      },
+      {
+        "id": "2712595293_2a811baf51_o",
+        "archiveImageIndex": 30,
+        "image": "image/2712595293_2a811baf51_o.jpg",
+        "imageSourceEntry": "PPM-100/image/2712595293_2a811baf51_o.jpg",
+        "imageBytes": 487366,
+        "imageSha256": "f7e1eb6b0e9b16c1d20e679bf1aefd7a5665d81931318583a3cf0d03f14ddf93",
+        "alpha": "alpha/2712595293_2a811baf51_o.jpg",
+        "alphaSourceEntry": "PPM-100/matte/2712595293_2a811baf51_o.jpg",
+        "alphaBytes": 98070,
+        "alphaSha256": "95551ee3b666fb5cbc8d5388e5dd1fd1adfb4095588483b490c1f8b00aaac04c",
+        "width": 2048,
+        "height": 1536
+      },
+      {
+        "id": "32552705987_fbc78cd29e_o",
+        "archiveImageIndex": 40,
+        "image": "image/32552705987_fbc78cd29e_o.jpg",
+        "imageSourceEntry": "PPM-100/image/32552705987_fbc78cd29e_o.jpg",
+        "imageBytes": 1248043,
+        "imageSha256": "2da93c7a585b11237063a2b6ded43ea290c958b0bcd209e183fe936239b65dd3",
+        "alpha": "alpha/32552705987_fbc78cd29e_o.jpg",
+        "alphaSourceEntry": "PPM-100/matte/32552705987_fbc78cd29e_o.jpg",
+        "alphaBytes": 128340,
+        "alphaSha256": "5e93ff4d0c6ed858b75d6d7f610675d1689d5341995965fbd5d92810a225eb60",
+        "width": 2400,
+        "height": 1600
+      },
+      {
+        "id": "36959512493_b6c1cc8e4e_o",
+        "archiveImageIndex": 50,
+        "image": "image/36959512493_b6c1cc8e4e_o.jpg",
+        "imageSourceEntry": "PPM-100/image/36959512493_b6c1cc8e4e_o.jpg",
+        "imageBytes": 4685371,
+        "imageSha256": "95000f113013fdeb31a2bfd9dae7dd0d390e258323f581c150cb3ce309b33cdd",
+        "alpha": "alpha/36959512493_b6c1cc8e4e_o.jpg",
+        "alphaSourceEntry": "PPM-100/matte/36959512493_b6c1cc8e4e_o.jpg",
+        "alphaBytes": 284102,
+        "alphaSha256": "c6e9978eeceae5fb43bd8cf609d2d3d43b53640b9f5e05bf052ba2b7ff1e6493",
+        "width": 2934,
+        "height": 4393
+      },
+      {
+        "id": "48035016352_7cda75fccd_o",
+        "archiveImageIndex": 60,
+        "image": "image/48035016352_7cda75fccd_o.jpg",
+        "imageSourceEntry": "PPM-100/image/48035016352_7cda75fccd_o.jpg",
+        "imageBytes": 964554,
+        "imageSha256": "b2d18cbce0cde1b5cf32b8d32bc3377e775ef96d25f7dbb6f6364003a1bc015a",
+        "alpha": "alpha/48035016352_7cda75fccd_o.jpg",
+        "alphaSourceEntry": "PPM-100/matte/48035016352_7cda75fccd_o.jpg",
+        "alphaBytes": 101526,
+        "alphaSha256": "a1def2596b6de732e6a3535004d71d37059b4cad8247b26ea329f535aedf4476",
+        "width": 1488,
+        "height": 2640
+      },
+      {
+        "id": "50238484256_6c8d245d7a_o",
+        "archiveImageIndex": 70,
+        "image": "image/50238484256_6c8d245d7a_o.jpg",
+        "imageSourceEntry": "PPM-100/image/50238484256_6c8d245d7a_o.jpg",
+        "imageBytes": 7182730,
+        "imageSha256": "19541cc0734bf9606a07a70120043e19ce44b101b4a65b596aef4c92abc003de",
+        "alpha": "alpha/50238484256_6c8d245d7a_o.jpg",
+        "alphaSourceEntry": "PPM-100/matte/50238484256_6c8d245d7a_o.jpg",
+        "alphaBytes": 413964,
+        "alphaSha256": "5312178d217448059af8940dc4058c4d7b36783922868df4c81ad16931a63aa7",
+        "width": 3535,
+        "height": 5302
+      },
+      {
+        "id": "5856163574_fd870a0e1d_o",
+        "archiveImageIndex": 80,
+        "image": "image/5856163574_fd870a0e1d_o.jpg",
+        "imageSourceEntry": "PPM-100/image/5856163574_fd870a0e1d_o.jpg",
+        "imageBytes": 778131,
+        "imageSha256": "7f3da6436753064d75e3967d68f538b7148ba6b1513641cc8082c784a042ad52",
+        "alpha": "alpha/5856163574_fd870a0e1d_o.jpg",
+        "alphaSourceEntry": "PPM-100/matte/5856163574_fd870a0e1d_o.jpg",
+        "alphaBytes": 86454,
+        "alphaSha256": "71448d805944ceec77b9c33b91e1be22d934046019f36c0de9f8dc173ba0dc72",
+        "width": 2048,
+        "height": 2048
+      },
+      {
+        "id": "7933140068_61793b7f1e_o",
+        "archiveImageIndex": 90,
+        "image": "image/7933140068_61793b7f1e_o.jpg",
+        "imageSourceEntry": "PPM-100/image/7933140068_61793b7f1e_o.jpg",
+        "imageBytes": 5934090,
+        "imageSha256": "5b17b2785bdcf758acb421d46d7f452a5393c06ec5626725b63b878aa0e4be60",
+        "alpha": "alpha/7933140068_61793b7f1e_o.jpg",
+        "alphaSourceEntry": "PPM-100/matte/7933140068_61793b7f1e_o.jpg",
+        "alphaBytes": 448080,
+        "alphaSha256": "f01f501ecba68f83f2110146ede5b421c5f9bfd71d395abaf5b5023846c81e43",
+        "width": 5616,
+        "height": 3744
+      }
+    ],
+    "transferredBytesThisRun": 30308263
+  },
+  "protocol": {
+    "maxEvaluationEdge": 1024,
+    "rgbResize": "canvas-high-quality",
+    "alphaResize": "continuous-bilinear-half-pixel",
+    "samPrompt": "fixed-before-inference-RGB-only-box-if-present-otherwise-full-image",
+    "candidate": "highest-predicted-IoU",
+    "gtUsage": "scoring-only-no-prompts-no-candidate-selection",
+    "warmupsPerVariant": 1,
+    "repeats": 1,
+    "modnetPreprocess": "frozen-HF-processor-shortest-edge-512-divisible-32",
+    "memory": "not-measured",
+    "artifacts": "8-bit-alpha-previews-only-metrics-use-float32",
+    "rgb": "original-composite-RGB-no-foreground-unmixing"
+  },
+  "assets": {
+    "slimsam": {
+      "repository": "Xenova/slimsam-77-uniform",
+      "revision": "5850ab45f587c112167512ffef949107115e26a0",
+      "files": {
+        "onnx/vision_encoder.onnx": {
+          "bytes": 23276014,
+          "sha256": "9f8433273a6750b587779baa0cf5508111001bf7e7acfcf585d370139fd366d0",
+          "fits25MiB": true
+        },
+        "onnx/prompt_encoder_mask_decoder.onnx": {
+          "bytes": 16557892,
+          "sha256": "f4514391764fbd56e08e119060d874ecd7d52994bfb1968af159e12d4943b5bb",
+          "fits25MiB": true
+        },
+        "onnx/vision_encoder_quantized.onnx": {
+          "bytes": 8882165,
+          "sha256": "cce23c7b2e5d4f330932738fb67ba518e04b0d99ccdd1cccd22a7da4e01f2971",
+          "fits25MiB": true
+        },
+        "onnx/prompt_encoder_mask_decoder_quantized.onnx": {
+          "bytes": 4903810,
+          "sha256": "cb90b279f549d2cab7fd6e20c38522438c65d84bdcca3d2a764cff7d857fdce2",
+          "fits25MiB": true
+        },
+        "config.json": {
+          "bytes": 379,
+          "sha256": "6339884f168658d3ca6473b486973913fb33e84e625e06ae2dd7b4a808187419"
+        },
+        "preprocessor_config.json": {
+          "bytes": 466,
+          "sha256": "225545a743c654e3c495ec6f545a0eaba57c8ba3fbbd8483b3cb1c0fc58db517"
+        },
+        "LICENSE.txt": {
+          "bytes": 11357,
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        }
+      }
+    },
+    "modnet": {
+      "repository": "Xenova/modnet",
+      "revision": "fa2fa546052fba4c08921230a26cc69a333fca12",
+      "license": "Apache-2.0",
+      "files": {
+        "onnx/model.onnx": {
+          "bytes": 25888640,
+          "sha256": "07c308cf0fc7e6e8b2065a12ed7fc07e1de8febb7dc7839d7b7f15dd66584df9",
+          "fits25MiB": true
+        },
+        "onnx/model_quantized.onnx": {
+          "bytes": 6632188,
+          "sha256": "92e49898c3e05a6d7a944fc67a8cb87c4aad754ffb6ebd949528c7d1105fee3a",
+          "fits25MiB": true
+        },
+        "config.json": {
+          "bytes": 83,
+          "sha256": "e144d8af9b1f09649785c77f592a76bbc69504ae02e43700663b2a9f00d9c8a2",
+          "fits25MiB": true
+        },
+        "preprocessor_config.json": {
+          "bytes": 365,
+          "sha256": "07d83634b1fdd20142ca6e3fe55ab92b558f56d1b0f005ff3a7926f1c9e1165d",
+          "fits25MiB": true
+        }
+      },
+      "licenseSource": "https://github.com/ZHKKKe/MODNet/blob/master/LICENSE"
+    }
+  },
+  "samples": [
+    {
+      "id": "13179159164_1a4ae8d085_o",
+      "originalWidth": 4843,
+      "originalHeight": 3229,
+      "width": 1024,
+      "height": 683,
+      "maxGrayDeviation": 0,
+      "promptBox": [
+        0,
+        0,
+        1024,
+        683
+      ],
+      "promptSource": "full-image-box-no-GT"
+    },
+    {
+      "id": "16731963546_3148ea2b33_o",
+      "originalWidth": 3264,
+      "originalHeight": 2448,
+      "width": 1024,
+      "height": 768,
+      "maxGrayDeviation": 0,
+      "promptBox": [
+        0,
+        0,
+        1024,
+        768
+      ],
+      "promptSource": "full-image-box-no-GT"
+    },
+    {
+      "id": "2133184216_18d38525a2_o",
+      "originalWidth": 3030,
+      "originalHeight": 2014,
+      "width": 1024,
+      "height": 681,
+      "maxGrayDeviation": 0,
+      "promptBox": [
+        0,
+        0,
+        1024,
+        681
+      ],
+      "promptSource": "full-image-box-no-GT"
+    },
+    {
+      "id": "2712595293_2a811baf51_o",
+      "originalWidth": 2048,
+      "originalHeight": 1536,
+      "width": 1024,
+      "height": 768,
+      "maxGrayDeviation": 0,
+      "promptBox": [
+        0,
+        0,
+        1024,
+        768
+      ],
+      "promptSource": "full-image-box-no-GT"
+    },
+    {
+      "id": "32552705987_fbc78cd29e_o",
+      "originalWidth": 2400,
+      "originalHeight": 1600,
+      "width": 1024,
+      "height": 683,
+      "maxGrayDeviation": 0,
+      "promptBox": [
+        0,
+        0,
+        1024,
+        683
+      ],
+      "promptSource": "full-image-box-no-GT"
+    },
+    {
+      "id": "36959512493_b6c1cc8e4e_o",
+      "originalWidth": 2934,
+      "originalHeight": 4393,
+      "width": 684,
+      "height": 1024,
+      "maxGrayDeviation": 0,
+      "promptBox": [
+        0,
+        0,
+        684,
+        1024
+      ],
+      "promptSource": "full-image-box-no-GT"
+    },
+    {
+      "id": "48035016352_7cda75fccd_o",
+      "originalWidth": 1488,
+      "originalHeight": 2640,
+      "width": 577,
+      "height": 1024,
+      "maxGrayDeviation": 0,
+      "promptBox": [
+        0,
+        0,
+        577,
+        1024
+      ],
+      "promptSource": "full-image-box-no-GT"
+    },
+    {
+      "id": "50238484256_6c8d245d7a_o",
+      "originalWidth": 3535,
+      "originalHeight": 5302,
+      "width": 683,
+      "height": 1024,
+      "maxGrayDeviation": 0,
+      "promptBox": [
+        0,
+        0,
+        683,
+        1024
+      ],
+      "promptSource": "full-image-box-no-GT"
+    },
+    {
+      "id": "5856163574_fd870a0e1d_o",
+      "originalWidth": 2048,
+      "originalHeight": 2048,
+      "width": 1024,
+      "height": 1024,
+      "maxGrayDeviation": 0,
+      "promptBox": [
+        0,
+        0,
+        1024,
+        1024
+      ],
+      "promptSource": "full-image-box-no-GT"
+    },
+    {
+      "id": "7933140068_61793b7f1e_o",
+      "originalWidth": 5616,
+      "originalHeight": 3744,
+      "width": 1024,
+      "height": 683,
+      "maxGrayDeviation": 0,
+      "promptBox": [
+        0,
+        0,
+        1024,
+        683
+      ],
+      "promptSource": "full-image-box-no-GT"
+    }
+  ],
+  "variants": [
+    {
+      "id": "slimsam-q8",
+      "model": "slimsam",
+      "dtype": "q8",
+      "status": "complete",
+      "loadMs": 971.3000000007451,
+      "warmupMs": 10202.699999999255
+    },
+    {
+      "id": "slimsam-fp32",
+      "model": "slimsam",
+      "dtype": "fp32",
+      "status": "complete",
+      "loadMs": 607,
+      "warmupMs": 8879.099999997765
+    },
+    {
+      "id": "modnet-fp32",
+      "model": "modnet",
+      "dtype": "fp32",
+      "status": "failed",
+      "loadMs": 126.30000000074506,
+      "error": "Alpha must be finite and within [0,1]"
+    },
+    {
+      "id": "modnet-q8",
+      "model": "modnet",
+      "dtype": "q8",
+      "status": "failed",
+      "loadMs": 146.30000000074506,
+      "error": "Alpha must be finite and within [0,1]"
+    }
+  ],
+  "rows": [
+    {
+      "variant": "slimsam-q8",
+      "sample": "13179159164_1a4ae8d085_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 0,
+      "scores": [
+        0.9381414651870728,
+        0.8462775349617004,
+        0.5305153131484985
+      ],
+      "preprocessMs": 117.30000000074506,
+      "encodeMs": 7883,
+      "decodeMs": 242.19999999925494,
+      "postprocessMs": 80.40000000223517,
+      "inferencePipelineMs": 8323,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0.00000732880999180639,
+      "boundaryPrecision": 0.02457956015523933,
+      "boundaryRecall": 0.030073150907613113,
+      "boundaryF1": 0.02705025267424262,
+      "alphaMAE": 0.9733603280371297,
+      "alphaMSE": 0.9669563225531648,
+      "tolerancePixels": 2,
+      "sad": 680.7604265465442,
+      "transitionMAE": 0.6614482247230534,
+      "transitionMSE": 0.5582547396404647,
+      "transitionPixels": 40552,
+      "edgeBandMAE": 0.6847537960859761,
+      "edgeBandMSE": 0.594274243164543,
+      "edgeBandPixels": 46954,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 46.30000000074506
+    },
+    {
+      "variant": "slimsam-q8",
+      "sample": "16731963546_3148ea2b33_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 2,
+      "scores": [
+        0.6662687063217163,
+        0.704761266708374,
+        0.9054714441299438
+      ],
+      "preprocessMs": 103.30000000074506,
+      "encodeMs": 7912.89999999851,
+      "decodeMs": 246.60000000149012,
+      "postprocessMs": 91.80000000074506,
+      "inferencePipelineMs": 8355,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0,
+      "boundaryPrecision": 0,
+      "boundaryRecall": 0,
+      "boundaryF1": 0,
+      "alphaMAE": 0.38111770954253205,
+      "alphaMSE": 0.3788200236471008,
+      "tolerancePixels": 2,
+      "sad": 299.72316255095257,
+      "transitionMAE": 0.7135482783813126,
+      "transitionMSE": 0.6698672873428466,
+      "transitionPixels": 40425,
+      "edgeBandMAE": 0.6459954392090382,
+      "edgeBandMSE": 0.6119925495529737,
+      "edgeBandPixels": 51931,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 41.899999998509884
+    },
+    {
+      "variant": "slimsam-q8",
+      "sample": "2133184216_18d38525a2_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 1,
+      "scores": [
+        0.8317040801048279,
+        0.9175634980201721,
+        0.8392455577850342
+      ],
+      "preprocessMs": 101.40000000223517,
+      "encodeMs": 7780.099999997765,
+      "decodeMs": 231.19999999925494,
+      "postprocessMs": 77.19999999925494,
+      "inferencePipelineMs": 8190,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0,
+      "boundaryPrecision": 0,
+      "boundaryRecall": 0,
+      "boundaryF1": 0,
+      "alphaMAE": 0.6261147896536982,
+      "alphaMSE": 0.6225681447574222,
+      "tolerancePixels": 2,
+      "sad": 436.61739187626847,
+      "transitionMAE": 0.5845742965947227,
+      "transitionMSE": 0.5192910267284051,
+      "transitionPixels": 34243,
+      "edgeBandMAE": 0.6234665310243159,
+      "edgeBandMSE": 0.5758497168807677,
+      "edgeBandPixels": 47642,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 40.099999997764826
+    },
+    {
+      "variant": "slimsam-q8",
+      "sample": "2712595293_2a811baf51_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 1,
+      "scores": [
+        0.5633779168128967,
+        0.7907419800758362,
+        0.45437875390052795
+      ],
+      "preprocessMs": 106.20000000298023,
+      "encodeMs": 8967.39999999851,
+      "decodeMs": 244.60000000149012,
+      "postprocessMs": 84.39999999850988,
+      "inferencePipelineMs": 9402.800000000745,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0.0011828379031461353,
+      "boundaryPrecision": 0.050340136054421766,
+      "boundaryRecall": 0.05470459518599562,
+      "boundaryF1": 0.052431697086498134,
+      "alphaMAE": 0.47524150858402603,
+      "alphaMSE": 0.46907712297290577,
+      "tolerancePixels": 2,
+      "sad": 373.74513007875277,
+      "transitionMAE": 0.5438371716468542,
+      "transitionMSE": 0.46492171244968106,
+      "transitionPixels": 54880,
+      "edgeBandMAE": 0.5680508780728822,
+      "edgeBandMSE": 0.49544172858978053,
+      "edgeBandPixels": 59914,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 39.400000002235174
+    },
+    {
+      "variant": "slimsam-q8",
+      "sample": "32552705987_fbc78cd29e_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 1,
+      "scores": [
+        0.6122956871986389,
+        0.8943853378295898,
+        0.6305236220359802
+      ],
+      "preprocessMs": 96.59999999776483,
+      "encodeMs": 8511.400000002235,
+      "decodeMs": 241.80000000074506,
+      "postprocessMs": 77.80000000074506,
+      "inferencePipelineMs": 8927.89999999851,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0,
+      "boundaryPrecision": 0,
+      "boundaryRecall": 0,
+      "boundaryF1": 0,
+      "alphaMAE": 0.5107139439909426,
+      "alphaMSE": 0.5057401382887223,
+      "tolerancePixels": 2,
+      "sad": 357.18924671571335,
+      "transitionMAE": 0.6603456472991399,
+      "transitionMSE": 0.5856540929727616,
+      "transitionPixels": 34319,
+      "edgeBandMAE": 0.6560391285122027,
+      "edgeBandMSE": 0.5927165111275959,
+      "edgeBandPixels": 40485,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 41.900000002235174
+    },
+    {
+      "variant": "slimsam-q8",
+      "sample": "36959512493_b6c1cc8e4e_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 1,
+      "scores": [
+        0.7513552904129028,
+        0.8903053402900696,
+        0.6217561960220337
+      ],
+      "preprocessMs": 95.80000000074506,
+      "encodeMs": 7669.199999999255,
+      "decodeMs": 254.19999999925494,
+      "postprocessMs": 79.10000000149012,
+      "inferencePipelineMs": 8098.5,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0.0002110384200997434,
+      "boundaryPrecision": 0.0003453038674033149,
+      "boundaryRecall": 0.00033189512114171923,
+      "boundaryF1": 0.0003384667456422406,
+      "alphaMAE": 0.25696146741940695,
+      "alphaMSE": 0.2546406886611377,
+      "tolerancePixels": 2,
+      "sad": 179.97992316403136,
+      "transitionMAE": 0.8248192846214041,
+      "transitionMSE": 0.793917967795236,
+      "transitionPixels": 39901,
+      "edgeBandMAE": 0.6909238715917401,
+      "edgeBandMSE": 0.6673477614160632,
+      "edgeBandPixels": 52604,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 43
+    },
+    {
+      "variant": "slimsam-q8",
+      "sample": "48035016352_7cda75fccd_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 0,
+      "scores": [
+        0.6886821985244751,
+        0.5337082147598267,
+        0.4719637930393219
+      ],
+      "preprocessMs": 96.10000000149012,
+      "encodeMs": 8144,
+      "decodeMs": 242.60000000149012,
+      "postprocessMs": 78.80000000074506,
+      "inferencePipelineMs": 8561.60000000149,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0.00012725789186073495,
+      "boundaryPrecision": 0.01016862977713753,
+      "boundaryRecall": 0.036869144756724086,
+      "boundaryF1": 0.015940749193435112,
+      "alphaMAE": 0.9040753485503908,
+      "alphaMSE": 0.8987148500187677,
+      "tolerancePixels": 2,
+      "sad": 534.1711115403014,
+      "transitionMAE": 0.7509374382867442,
+      "transitionMSE": 0.7128701654727251,
+      "transitionPixels": 28499,
+      "edgeBandMAE": 0.7082371891994077,
+      "edgeBandMSE": 0.6759075248504344,
+      "edgeBandPixels": 42320,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 39.5
+    },
+    {
+      "variant": "slimsam-q8",
+      "sample": "50238484256_6c8d245d7a_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 1,
+      "scores": [
+        0.8084809184074402,
+        0.9130575656890869,
+        0.5959116220474243
+      ],
+      "preprocessMs": 107.5,
+      "encodeMs": 7875.89999999851,
+      "decodeMs": 235.30000000074506,
+      "postprocessMs": 77,
+      "inferencePipelineMs": 8296.10000000149,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0.00007002114638620863,
+      "boundaryPrecision": 0.00790326692646684,
+      "boundaryRecall": 0.042353392104254504,
+      "boundaryF1": 0.013320828304031095,
+      "alphaMAE": 0.5101997612482035,
+      "alphaMSE": 0.5018753167265894,
+      "tolerancePixels": 2,
+      "sad": 356.8296314189036,
+      "transitionMAE": 0.5537885107312627,
+      "transitionMSE": 0.5064363247879405,
+      "transitionPixels": 12783,
+      "edgeBandMAE": 0.5734351592179316,
+      "edgeBandMSE": 0.5512956579405172,
+      "edgeBandPixels": 49170,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 33.19999999925494
+    },
+    {
+      "variant": "slimsam-q8",
+      "sample": "5856163574_fd870a0e1d_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 0,
+      "scores": [
+        0.6980973482131958,
+        0.6077747344970703,
+        0.45757877826690674
+      ],
+      "preprocessMs": 100.89999999850988,
+      "encodeMs": 8031.300000000745,
+      "decodeMs": 215.80000000074506,
+      "postprocessMs": 116.5,
+      "inferencePipelineMs": 8465.199999999255,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0,
+      "boundaryPrecision": 0.0004893736017897092,
+      "boundaryRecall": 0.002362470469119136,
+      "boundaryF1": 0.0008107951583946257,
+      "alphaMAE": 0.8703827803796618,
+      "alphaMSE": 0.8670846224331804,
+      "tolerancePixels": 2,
+      "sad": 912.6624943193842,
+      "transitionMAE": 0.7386722048763819,
+      "transitionMSE": 0.7022671443545329,
+      "transitionPixels": 29482,
+      "edgeBandMAE": 0.6572003571081129,
+      "edgeBandMSE": 0.6269856868051309,
+      "edgeBandPixels": 40411,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 50.400000002235174
+    },
+    {
+      "variant": "slimsam-q8",
+      "sample": "7933140068_61793b7f1e_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 1,
+      "scores": [
+        0.9021485447883606,
+        0.9324588179588318,
+        0.485321968793869
+      ],
+      "preprocessMs": 108.09999999776483,
+      "encodeMs": 7687.800000000745,
+      "decodeMs": 232.5,
+      "postprocessMs": 79.19999999925494,
+      "inferencePipelineMs": 8107.699999999255,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0,
+      "boundaryPrecision": 0.0012948336138806163,
+      "boundaryRecall": 0.0032562683165092803,
+      "boundaryF1": 0.0018528812303131369,
+      "alphaMAE": 0.4611447881698037,
+      "alphaMSE": 0.4575916446352109,
+      "tolerancePixels": 2,
+      "sad": 322.5209756876553,
+      "transitionMAE": 0.8261395850823271,
+      "transitionMSE": 0.7999405969881307,
+      "transitionPixels": 40064,
+      "edgeBandMAE": 0.7091247099790228,
+      "edgeBandMSE": 0.6869923960578511,
+      "edgeBandPixels": 53188,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 37.5
+    },
+    {
+      "variant": "slimsam-fp32",
+      "sample": "13179159164_1a4ae8d085_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 0,
+      "scores": [
+        0.9607465267181396,
+        0.8110935688018799,
+        0.576858639717102
+      ],
+      "preprocessMs": 98.19999999925494,
+      "encodeMs": 8393.599999997765,
+      "decodeMs": 450.79999999701977,
+      "postprocessMs": 76,
+      "inferencePipelineMs": 9018.79999999702,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0.000005897069598689671,
+      "boundaryPrecision": 0.008753202391118702,
+      "boundaryRecall": 0.00948252506095909,
+      "boundaryF1": 0.009103279400896372,
+      "alphaMAE": 0.9679356762607332,
+      "alphaMSE": 0.961422657705645,
+      "tolerancePixels": 2,
+      "sad": 676.9664684913467,
+      "transitionMAE": 0.6309692622630945,
+      "transitionMSE": 0.5280317175781631,
+      "transitionPixels": 40552,
+      "edgeBandMAE": 0.6511190807227738,
+      "edgeBandMSE": 0.5610696780583233,
+      "edgeBandPixels": 46954,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 33.5
+    },
+    {
+      "variant": "slimsam-fp32",
+      "sample": "16731963546_3148ea2b33_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 1,
+      "scores": [
+        0.7131885290145874,
+        0.8461844325065613,
+        0.6555773019790649
+      ],
+      "preprocessMs": 155.60000000149012,
+      "encodeMs": 8004.699999999255,
+      "decodeMs": 456.69999999925494,
+      "postprocessMs": 85.10000000149012,
+      "inferencePipelineMs": 8702.300000000745,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0,
+      "boundaryPrecision": 0.0007680491551459293,
+      "boundaryRecall": 0.0005932957579353308,
+      "boundaryF1": 0.0006694560669456067,
+      "alphaMAE": 0.41279818080304764,
+      "alphaMSE": 0.4099625852722513,
+      "tolerancePixels": 2,
+      "sad": 324.63769892530235,
+      "transitionMAE": 0.7139588290699079,
+      "transitionMSE": 0.6701578377615945,
+      "transitionPixels": 40425,
+      "edgeBandMAE": 0.6516638494367557,
+      "edgeBandMSE": 0.6170924207034325,
+      "edgeBandPixels": 51931,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 30.800000000745058
+    },
+    {
+      "variant": "slimsam-fp32",
+      "sample": "2133184216_18d38525a2_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 2,
+      "scores": [
+        0.7759976387023926,
+        0.8519205451011658,
+        0.9289201498031616
+      ],
+      "preprocessMs": 115.30000000074506,
+      "encodeMs": 7996.10000000149,
+      "decodeMs": 436.9000000022352,
+      "postprocessMs": 83.19999999925494,
+      "inferencePipelineMs": 8634.10000000149,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0,
+      "boundaryPrecision": 0,
+      "boundaryRecall": 0,
+      "boundaryF1": 0,
+      "alphaMAE": 0.642799772992752,
+      "alphaMSE": 0.6385965578962334,
+      "tolerancePixels": 2,
+      "sad": 448.25256489785767,
+      "transitionMAE": 0.5843219033301593,
+      "transitionMSE": 0.5191228052830785,
+      "transitionPixels": 34243,
+      "edgeBandMAE": 0.6195283323970767,
+      "edgeBandMSE": 0.5720386410795565,
+      "edgeBandPixels": 47642,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 26.800000000745058
+    },
+    {
+      "variant": "slimsam-fp32",
+      "sample": "2712595293_2a811baf51_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 1,
+      "scores": [
+        0.6921142935752869,
+        0.8125767707824707,
+        0.5765702724456787
+      ],
+      "preprocessMs": 104.09999999776483,
+      "encodeMs": 8022.60000000149,
+      "decodeMs": 444.30000000074506,
+      "postprocessMs": 110.09999999776483,
+      "inferencePipelineMs": 8681.099999997765,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0.0013831295222781705,
+      "boundaryPrecision": 0.05350553505535055,
+      "boundaryRecall": 0.06455142231947483,
+      "boundaryF1": 0.05851172970385062,
+      "alphaMAE": 0.47972109836304605,
+      "alphaMSE": 0.47344262601236536,
+      "tolerancePixels": 2,
+      "sad": 377.26802282784706,
+      "transitionMAE": 0.5441012698862229,
+      "transitionMSE": 0.4652286139075816,
+      "transitionPixels": 54880,
+      "edgeBandMAE": 0.5682132410979388,
+      "edgeBandMSE": 0.4956340185302968,
+      "edgeBandPixels": 59914,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 33
+    },
+    {
+      "variant": "slimsam-fp32",
+      "sample": "32552705987_fbc78cd29e_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 1,
+      "scores": [
+        0.8671647906303406,
+        0.971871554851532,
+        0.6234922409057617
+      ],
+      "preprocessMs": 102.5,
+      "encodeMs": 7997.10000000149,
+      "decodeMs": 440,
+      "postprocessMs": 73.89999999850988,
+      "inferencePipelineMs": 8613.699999999255,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0,
+      "boundaryPrecision": 0,
+      "boundaryRecall": 0,
+      "boundaryF1": 0,
+      "alphaMAE": 0.5009957417917227,
+      "alphaMSE": 0.496186757149065,
+      "tolerancePixels": 2,
+      "sad": 350.39241384319655,
+      "transitionMAE": 0.6736696226039289,
+      "transitionMSE": 0.5990711585634406,
+      "transitionPixels": 34319,
+      "edgeBandMAE": 0.6673954997452921,
+      "edgeBandMSE": 0.6041449840690494,
+      "edgeBandPixels": 40485,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 28.700000002980232
+    },
+    {
+      "variant": "slimsam-fp32",
+      "sample": "36959512493_b6c1cc8e4e_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 1,
+      "scores": [
+        0.8029228448867798,
+        0.9309425354003906,
+        0.5874000787734985
+      ],
+      "preprocessMs": 100.10000000149012,
+      "encodeMs": 8014.199999999255,
+      "decodeMs": 443.5,
+      "postprocessMs": 73.60000000149012,
+      "inferencePipelineMs": 8631.60000000149,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0.000050692801622169653,
+      "boundaryPrecision": 0,
+      "boundaryRecall": 0,
+      "boundaryF1": 0,
+      "alphaMAE": 0.25339599997235684,
+      "alphaMSE": 0.2512088022835844,
+      "tolerancePixels": 2,
+      "sad": 177.48261271663827,
+      "transitionMAE": 0.8255224886946065,
+      "transitionMSE": 0.7947570240952588,
+      "transitionPixels": 39901,
+      "edgeBandMAE": 0.6912454979494886,
+      "edgeBandMSE": 0.6677758314528833,
+      "edgeBandPixels": 52604,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 28.899999998509884
+    },
+    {
+      "variant": "slimsam-fp32",
+      "sample": "48035016352_7cda75fccd_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 0,
+      "scores": [
+        0.9058363437652588,
+        0.7797122001647949,
+        0.5259555578231812
+      ],
+      "preprocessMs": 100.90000000223517,
+      "encodeMs": 8053.099999997765,
+      "decodeMs": 430.80000000074506,
+      "postprocessMs": 62.29999999701977,
+      "inferencePipelineMs": 8647.199999999255,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0.0002260604758479603,
+      "boundaryPrecision": 0.01458686241294937,
+      "boundaryRecall": 0.04684194620731339,
+      "boundaryF1": 0.022246142805884463,
+      "alphaMAE": 0.9056624565378909,
+      "alphaMSE": 0.9006390250028276,
+      "tolerancePixels": 2,
+      "sad": 535.1088511204998,
+      "transitionMAE": 0.7546133758532491,
+      "transitionMSE": 0.7158529881433712,
+      "transitionPixels": 28499,
+      "edgeBandMAE": 0.7341440539069329,
+      "edgeBandMSE": 0.7001934542234669,
+      "edgeBandPixels": 42320,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 27.5
+    },
+    {
+      "variant": "slimsam-fp32",
+      "sample": "50238484256_6c8d245d7a_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 1,
+      "scores": [
+        0.7065556049346924,
+        0.7461555600166321,
+        0.6124199628829956
+      ],
+      "preprocessMs": 106.80000000074506,
+      "encodeMs": 8064.800000000745,
+      "decodeMs": 445.8999999985099,
+      "postprocessMs": 76.30000000074506,
+      "inferencePipelineMs": 8693.900000002235,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0.05757876847649701,
+      "boundaryPrecision": 0.08042399259695465,
+      "boundaryRecall": 0.18359524722115753,
+      "boundaryF1": 0.11185141517355052,
+      "alphaMAE": 0.3509741145489242,
+      "alphaMSE": 0.34692254173600884,
+      "tolerancePixels": 2,
+      "sad": 245.46848792260116,
+      "transitionMAE": 0.527281426750976,
+      "transitionMSE": 0.4754830771578593,
+      "transitionPixels": 12783,
+      "edgeBandMAE": 0.52256690718958,
+      "edgeBandMSE": 0.5004673724058506,
+      "edgeBandPixels": 49170,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 32
+    },
+    {
+      "variant": "slimsam-fp32",
+      "sample": "5856163574_fd870a0e1d_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 0,
+      "scores": [
+        0.8245713114738464,
+        0.702511191368103,
+        0.7919492721557617
+      ],
+      "preprocessMs": 107.69999999925494,
+      "encodeMs": 8045.800000000745,
+      "decodeMs": 407,
+      "postprocessMs": 109.80000000074506,
+      "inferencePipelineMs": 8673,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0,
+      "boundaryPrecision": 0.001862445124384728,
+      "boundaryRecall": 0.004724940938238272,
+      "boundaryF1": 0.0026717557251908397,
+      "alphaMAE": 0.9141657413831786,
+      "alphaMSE": 0.9122179964605724,
+      "tolerancePixels": 2,
+      "sad": 958.572256436608,
+      "transitionMAE": 0.743338060059709,
+      "transitionMSE": 0.7061844705777608,
+      "transitionPixels": 29482,
+      "edgeBandMAE": 0.6712039688909249,
+      "edgeBandMSE": 0.6396315900620361,
+      "edgeBandPixels": 40411,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 37
+    },
+    {
+      "variant": "slimsam-fp32",
+      "sample": "7933140068_61793b7f1e_o",
+      "repeat": 0,
+      "status": "ok",
+      "selectedCandidate": 0,
+      "scores": [
+        0.8865029215812683,
+        0.8643638491630554,
+        0.6800283193588257
+      ],
+      "preprocessMs": 101.60000000149012,
+      "encodeMs": 8055.39999999851,
+      "decodeMs": 446.20000000298023,
+      "postprocessMs": 75.29999999701977,
+      "inferencePipelineMs": 8678.5,
+      "inputShape": [
+        1,
+        3,
+        1024,
+        1024
+      ],
+      "rawMaskShape": [
+        1,
+        1,
+        3,
+        256,
+        256
+      ],
+      "alphaType": "production-logits-threshold-narrow-antialias",
+      "iou": 0,
+      "boundaryPrecision": 0,
+      "boundaryRecall": 0,
+      "boundaryF1": 0,
+      "alphaMAE": 0.46312548544260007,
+      "alphaMSE": 0.4580852826915494,
+      "tolerancePixels": 2,
+      "sad": 323.9062595146709,
+      "transitionMAE": 0.8391539723748334,
+      "transitionMSE": 0.8121318925383957,
+      "transitionPixels": 40064,
+      "edgeBandMAE": 0.7115291270062657,
+      "edgeBandMSE": 0.6893985878582075,
+      "edgeBandPixels": 53188,
+      "edgeBandRadiusPixels": 5,
+      "metricsMs": 34.20000000298023
+    }
+  ],
+  "status": "partial",
+  "browserErrors": [],
+  "failedRequests": []
+}

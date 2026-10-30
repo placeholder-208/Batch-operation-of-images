@@ -47,6 +47,7 @@ export function createSemanticUI(actions) {
     const updateTiles=createTileList($('semanticTiles'),select,item=>item.error?'失败':item.result?item.result.objects.length:item.processing?'检测中':effectivePrompt(item)?'待检测':'待写描述');
     const navigation=bindBatchNavigation(root,'semantic',()=>({index:position,total:items.length}),select);
     function refresh() {
+        if(root.dataset.running!==String(busy)){root.dataset.running=String(busy);root.dispatchEvent(new CustomEvent('studio:taskchange'));}
         $('semanticCount').textContent=items.length+' 张图片';
         for(const id of ['semanticAdd','semanticChoose','semanticReset','semanticPrompt','semanticToken','semanticConsent','semanticSam','semanticSharedPrompt'])$(id).disabled=blocked();
         $('semanticPrompt').disabled=blocked()||(!useShared&&!current());
@@ -194,7 +195,7 @@ export function createSemanticUI(actions) {
     $('semanticStart').onclick=scan;$('semanticStop').onclick=()=>controller?.abort();$('semanticZip').onclick=exportZIP;
     $('semanticCSV').onclick=()=>{if(!blocked())downloadBlob(new Blob([semanticCSV(items)],{type:'text/csv;charset=utf-8'}),'semantic-results.csv');};
     $('semanticDiagnostic').onclick=()=>{if(!blocked())downloadBlob(new Blob([JSON.stringify(diagnostics(),null,2)],{type:'application/json'}),'semantic-diagnostics.json');};
-    canvas.onpointerdown=event=>{if(!image)return;const rect=canvas.getBoundingClientRect(),x=(event.clientX-rect.left)/rect.width*1000,y=(event.clientY-rect.top)/rect.height*1000;
+    canvas.onclick=event=>{if(!image)return;const rect=canvas.getBoundingClientRect(),x=(event.clientX-rect.left)/rect.width*1000,y=(event.clientY-rect.top)/rect.height*1000;
         const found=current()?.result?.objects.find(o=>x>=o.bbox[0]&&x<=o.bbox[2]&&y>=o.bbox[1]&&y<=o.bbox[3]);if(found){active=found.id;refresh();}};
     function snapshot(){return {version:1,items:items.map(item=>{const saved=packItem(item);if(item.processing&&item.result)saved.cropError='上次裁图未全部完成，已保留检测坐标及已生成的裁图。';return saved;}),position,active,options:{promptMode:useShared?'shared':'individual',sharedPrompt,autoSam:$('semanticSam').checked}};}
     async function restore(state){

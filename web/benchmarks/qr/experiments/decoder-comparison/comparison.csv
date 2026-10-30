@@ -1,0 +1,7 @@
+reader,version,whole_matched,regions_matched,combined_matched,added_to_product,whole_decode_ms,regions_decode_ms,runtime_errors
+zxing-cpp,3.1.4,68,78,78,0,4391,1962,0
+jsqr,1.4.0,27,59,59,0,71691,38367,0
+zbar,0.11.0,44,63,63,0,24644,14594,0
+quirc,1.0.0-alpha.4,28,52,52,0,6273,3519,0
+zxing-js,0.23.0,30,60,60,0,22130,8996,0
+zxing-cpp-new,3.1.6,68,78,78,0,4277,1657,0

@@ -22,6 +22,7 @@ export function startWorkspaceSession(controllers) {
             document.getElementById(saved.maskView ? 'sam-maskView' : 'sam-sourceView')?.click();
         }
     };
+    let lastState='',lastSaved=null;
     const persistence = createWorkspacePersistence({ ...controllers, page }, error => {
         notice.hidden = false;
         notice.textContent = error?.name === 'QuotaExceededError'
@@ -30,7 +31,12 @@ export function startWorkspaceSession(controllers) {
     }, state => {
         label.dataset.state = state;
         label.textContent = { restoring: '正在恢复工作…', saving: '正在保存…', saved: '已保存到本机', error: '有修改未保存' }[state];
-        if (state === 'saved') notice.hidden = true;
+        if (state === 'saved') {
+            notice.hidden = true;
+            if(lastState==='saving'||lastState==='restoring')lastSaved=new Date();
+            if(lastSaved){const time=lastSaved.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});label.textContent='已保存 '+time;label.title='已保存到本机 · '+lastSaved.toLocaleString('zh-CN')+'。清空批次会删除该批保存内容。';}
+        }
+        lastState=state;
     });
     document.addEventListener('workspace:change', () => persistence.schedule('page'));
     document.getElementById('samWorkspace').addEventListener('sam:viewchange', () => persistence.schedule('page'));
@@ -42,6 +48,15 @@ export function startWorkspaceSession(controllers) {
     });
     // Prevent input from racing asynchronous restoration and replacing the queue.
     shell.inert = true;shell.setAttribute('aria-busy', 'true');
-    void persistence.restore().finally(() => { shell.inert = false;shell.removeAttribute('aria-busy'); });
+    void persistence.restore().then(() => {
+        for(const id of ['normalWorkspace','barcodeWorkspace','maskWorkspace','semanticWorkspace','samWorkspace']){
+            const root=document.getElementById(id),count=Number(root.dataset.total||0);if(!count)continue;
+            const banner=document.createElement('div');banner.className='restored-banner';banner.setAttribute('role','status');
+            const text=document.createElement('span');text.textContent='已恢复上次的 '+count+' 张图片及保存的结果。';
+            const clear=document.createElement('button');clear.className='secondary';clear.type='button';clear.textContent='清空本批';clear.title='再次确认后删除本批图片和本机保存状态';clear.onclick=()=>{const target=root.querySelector('.stage-toolbar button[id$="Reset"],#resetImages,#sam-clearBatch');target?.click();clear.textContent=target?.textContent||'清空本批';};
+            const close=document.createElement('button');close.className='secondary';close.type='button';close.textContent='关闭';close.onclick=()=>banner.remove();banner.append(text,clear,close);root.querySelector('.stage-toolbar').after(banner);
+            root.addEventListener('studio:batchchange',event=>{if(!event.detail.total)banner.remove();});
+        }
+    }).finally(() => { shell.inert = false;shell.removeAttribute('aria-busy'); });
     return persistence;
 }

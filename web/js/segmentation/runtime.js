@@ -1,19 +1,12 @@
 import { boxPrompt, candidateOrder } from './mask-utils.js';
+import { loadSegmentationLibrary } from './runtime-library.js';
 let library,model,processor,loading;
 export async function loadSlimSAM(report=()=>{}) {
     if(model)return {library,model,processor};
     if(!loading)loading=(async()=>{
         report('加载独立浏览器运行库…');
-        library=await import('../../vendor/segmentation/transformers.local.js');
-        const {env,SamModel,AutoProcessor}=library;
-        env.allowRemoteModels=false;env.allowLocalModels=true;
-        env.localModelPath=new URL('../../models/segmentation/',import.meta.url).href;
-        env.useBrowserCache=true;
-        env.backends.onnx.wasm.numThreads=1;env.backends.onnx.wasm.proxy=false;
-        env.backends.onnx.wasm.wasmPaths={
-            mjs:new URL('../../vendor/segmentation/ort-wasm-simd-threaded.mjs',import.meta.url).href,
-            wasm:new URL('../../vendor/segmentation/ort-wasm-simd-threaded.wasm',import.meta.url).href
-        };
+        library=await loadSegmentationLibrary();
+        const {SamModel,AutoProcessor}=library;
         const progress_callback=event=>{
             if(event.status==='progress')report('下载 '+event.file+' · '+Math.round(event.progress||0)+'%');
             else if(event.status==='initiate')report('准备 '+event.file);
@@ -39,6 +32,9 @@ export async function encodeImage(canvas,report) {
 export function releaseEncoding(encoded) {
     for(const tensor of Object.values(encoded?.embeddings||{}))tensor?.dispose?.();
 }
+export async function releaseSlimSAM(){
+    await model?.dispose();model=null;processor=null;loading=null;
+}
 export async function segmentBox(encoded,box,points,originalWidth,originalHeight) {
     if(!model||!processor)throw new Error('模型尚未加载');
     const began=performance.now(),{coords,labels}=boxPrompt(box,points,encoded.width/originalWidth,encoded.height/originalHeight);
@@ -51,7 +47,7 @@ export async function segmentBox(encoded,box,points,originalWidth,originalHeight
         const tensor=masks[0],size=encoded.width*encoded.height,scores=Array.from(outputs.iou_scores.data);
         if(tensor.data.length!==size*scores.length)throw new Error('模型输出蒙版维度不符合预期');
         const candidates=scores.map((score,index)=>({index,score,logits:Float32Array.from(tensor.data.subarray(index*size,(index+1)*size))}));
-        return {candidates,order:candidateOrder(scores),width:encoded.width,height:encoded.height,elapsedMs:Math.round(performance.now()-began)};
+        return {valueType:'logits',engine:'slimsam',candidates,order:candidateOrder(scores),width:encoded.width,height:encoded.height,elapsedMs:Math.round(performance.now()-began)};
     } finally {
         input_points.dispose?.();input_labels.dispose?.();
         outputs?.pred_masks?.dispose?.();outputs?.iou_scores?.dispose?.();

@@ -31,6 +31,10 @@ export function encodeImage(canvas,report){
 export function segmentBox(encoded,box,points,width,height){
  return request('segment',{handle:encoded.handle,box,points,width,height});
 }
+export function mattePortrait(canvas,report){
+ const pixels=canvas.getContext('2d',{willReadFrequently:true}).getImageData(0,0,canvas.width,canvas.height).data;
+ return request('portrait',{width:canvas.width,height:canvas.height,pixels:pixels.buffer},[pixels.buffer],report);
+}
 export function releaseEncoding(encoded){
  if(encoded&&worker)request('release',{handle:encoded.handle}).catch(error=>console.warn('[释放分割编码]',error));
 }
